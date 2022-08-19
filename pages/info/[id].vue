@@ -1,0 +1,184 @@
+<template>
+    <div class="info-wrapper">
+        <div ref="bg" class="bg"></div>
+        <div class="gradient"></div>
+        <div class="overall-wrapper">
+            <div class="details-wrapper">
+                <div class="poster-wrapper">
+                    <div ref="poster_image" class="poster-image"></div>
+                    <h1 v-if="anilistJson != null" class="rating">Rating: {{ this.anilistJson.rating / 10 }} / 10</h1>
+                    <h1 v-if="anilistJson != null" class="released">Released : {{ this.anilistJson.releaseDate }}</h1>
+                </div>
+                <div v-if="anilistJson != null" class="info-wrapper">
+                    <h1 class="duration">{{ this.anilistJson.duration }} min / Episode</h1>
+                    <h1 class="status">Episodes: <span class="red-text">{{ this.anilistJson.episodes.length }}</span> -
+                        Status: <span class="red-text">{{ this.anilistJson.status }}</span></h1>
+                    <h1 class="title">{{ this.anilistJson.title.english }}</h1>
+                    <h1 class="title-native">{{ this.anilistJson.title.native }}</h1>
+                    <p class="description"><span v-html="anilistJson.description"></span></p>
+                </div>
+            </div>
+            <div class="lower-part">
+
+                <div class="genre-list">
+                    <div v-if="anilistJson != null" class="genre" v-for="genre in anilistJson.genres" v-html="genre"></div>
+                </div>
+                <div v-if="anilistJson.nextAiringEpisode != null" class="next-episode"></div>
+            </div>
+
+        </div>
+    </div>
+
+</template>
+
+<script>
+export default {
+    data: () => ({
+        anilistID: null,
+        anilistJson: null,
+    }),
+    beforeMount() {
+        console.log(this.$route.params.id)
+        this.anilistID = this.$route.params.id
+        this.fetch()
+    },
+    methods: {
+        async fetch() {
+            this.anilistJson = await fetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + this.anilistID + '?provider=zoro').then(function (response) {
+                // The response is a Response instance.
+                // You parse the data into a useable format using `.json()`
+                return response.json();
+            }).then(function (data) {
+                // `data` is the parsed version of the JSON returned from the above endpoint.
+                console.log(data)
+                return data; // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+            });
+            this.$refs.bg.style.backgroundImage = 'url(' + this.anilistJson.cover + ')'
+            this.$refs.poster_image.style.backgroundImage = 'url(' + this.anilistJson.image + ')'
+            this.head()
+        },
+    },
+    
+    head: {
+        title: 'Info of',
+        meta: [
+                {
+                    hid: 'description',
+                    name: 'description',
+                    content: 'Home page description'
+                }
+            ],
+        }
+    }
+</script>
+
+<style>
+.bg {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);
+}
+
+.gradient {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, rgba(22, 21, 26, 0) 0%, rgba(22, 21, 26, 0.9) 72.92%, #16151A 100%);
+}
+
+.overall-wrapper {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.details-wrapper {
+    width: 100vw;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+}
+
+.poster-wrapper {
+    padding-left: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 40px;
+}
+
+.poster-image {
+    width: 220px;
+    height: 320px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 24px;
+    margin-bottom: 12px;
+    -webkit-box-shadow: 0px 0px 12px 5px #000000; 
+box-shadow: 0px 0px 12px 5px #000000;
+}
+
+.rating {
+    font-size: 26px;
+}
+
+.released {
+    color: #999999;
+    font-size: 18px;
+}
+
+.duration {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.status {
+    font-size: 22px;
+    font-weight: normal;
+}
+
+.title {
+    font-size: 52px;
+    padding: 0;
+}
+
+.title-native {
+    margin-bottom: 12px;
+}
+
+.description {
+    font-size: 14px;
+    font-weight: 400;
+    width: 800px;
+}
+
+.red-text {
+    color: #DC1623;
+    text-transform: uppercase;
+}
+
+.genre-list {
+    display: flex;
+    
+    padding-left: 120px;
+}
+
+.genre {
+    display: flex;
+    justify-content: center;
+    height: 40px;
+    padding: 0 30px;
+    background-color: black;
+    text-transform: uppercase;
+    border-radius: 20px;
+    align-items: center;
+    margin-right: 20px;
+}
+</style>

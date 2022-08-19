@@ -1,0 +1,11 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+/* From Public Directory */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter.ttf');
+  font-style: medium;
+  font-weight: normal;
+  font-display: swap;
+}
