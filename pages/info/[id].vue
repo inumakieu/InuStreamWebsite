@@ -21,11 +21,13 @@
             <div class="lower-part">
 
                 <div class="genre-list">
-                    <div v-if="anilistJson != null" class="genre" v-for="genre in anilistJson.genres" v-html="genre"></div>
+                    <div v-if="anilistJson != null" class="genre" v-for="genre in anilistJson.genres" v-html="genre">
+                    </div>
                 </div>
-                <div v-if="anilistJson.nextAiringEpisode != null" class="next-episode"></div>
             </div>
-
+            <nuxt-link v-if="anilistJson != null"
+                :to="{ path: '/stream/' + this.anilistJson.id + '/' + this.anilistJson.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + this.anilistJson.episodes[0].number }">
+                STREAM TEST</nuxt-link>
         </div>
     </div>
 
@@ -36,6 +38,7 @@ export default {
     data: () => ({
         anilistID: null,
         anilistJson: null,
+        airingTime: null
     }),
     beforeMount() {
         console.log(this.$route.params.id)
@@ -53,23 +56,30 @@ export default {
                 console.log(data)
                 return data; // { "userId": 1, "id": 1, "title": "...", "body": "..." }
             });
+
+
             this.$refs.bg.style.backgroundImage = 'url(' + this.anilistJson.cover + ')'
             this.$refs.poster_image.style.backgroundImage = 'url(' + this.anilistJson.image + ')'
-            this.head()
         },
+        getAiringTime() {
+            if (this.anilistJson != null) {
+                //console.log(Date.now())
+                this.airingTime = this.anilistJson.nextAiringEpisode.timeUntilAiring
+            }
+        }
     },
-    
+
     head: {
         title: 'Info of',
         meta: [
-                {
-                    hid: 'description',
-                    name: 'description',
-                    content: 'Home page description'
-                }
-            ],
-        }
+            {
+                hid: 'description',
+                name: 'description',
+                content: 'Home page description'
+            }
+        ],
     }
+}
 </script>
 
 <style>
@@ -121,8 +131,8 @@ export default {
     background-position: center;
     border-radius: 24px;
     margin-bottom: 12px;
-    -webkit-box-shadow: 0px 0px 12px 5px #000000; 
-box-shadow: 0px 0px 12px 5px #000000;
+    -webkit-box-shadow: 0px 0px 12px 5px #000000;
+    box-shadow: 0px 0px 12px 5px #000000;
 }
 
 .rating {
@@ -166,7 +176,7 @@ box-shadow: 0px 0px 12px 5px #000000;
 
 .genre-list {
     display: flex;
-    
+
     padding-left: 120px;
 }
 

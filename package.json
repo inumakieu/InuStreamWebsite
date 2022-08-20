@@ -12,6 +12,9 @@
   "dependencies": {
     "@nuxt/http": "^0.6.4",
     "@nuxtjs/google-fonts": "^3.0.0-0",
+    "@nuxtjs/moment": "^1.6.1",
+    "artplayer": "^4.5.4",
+    "hls.js": "^1.2.1",
     "nuxt-seo": "^1.6.1"
   }
 }
