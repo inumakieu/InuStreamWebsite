@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="spacer"></div>
-                <div class="description">
+                <div v-if="this.anilistJson != null" class="description">
                     {{ anilistJson.episodes[episodeNumber - 1].description != null ? anilistJson.episodes[episodeNumber
                             -
                             1].description : 'This is Episode ' + episodeNumber + ' of ' + anilistJson.title.english
@@ -85,9 +85,67 @@
     </div>
 </template>
 
+<script setup>
+import {useFetch, useHead, useRoute} from '#app';
+
+const route = useRoute();
+
+console.log('testing')
+
+var parameters = route.path.replace("/stream/", "").split('/');
+var episodeNumber = parameters[1].split('-ep-')[1];
+
+console.log(parameters);
+
+const { error, data: episode } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + parameters[0] + '?provider=zoro');
+if (error.value || !episode.value) {
+  throw createError({ statusCode: 404, message: "Episode not found" })
+}
+
+console.log(episode.value);
+
+var anime = episode.value;
+
+useHead({
+    title: `${anime.title.english}`,
+  meta: [
+    {
+      name: "og:title",
+      content: `${anime.title.english} Episode ${episodeNumber}`
+    },
+    {
+      name: "og:type",
+      content: "website"
+    },
+    {
+      name: "og:url",
+      content: `https://inu.watch/stream/${anime.id}/${anime.title.english.toLowerCase().replaceAll(' ', '-')}`
+    },
+    {
+      name: "og:image",
+      content: anime.episodes[episodeNumber - 1].image || anime.cover || anime.image
+    },
+    {
+      name: "og:description",
+      content: `Watch ${anime.title.english} Episode ${episodeNumber}${anime.episodes[episodeNumber - 1].title ? ` - ${anime.episodes[episodeNumber - 1].title}` : ""} online on Inu's Stream ${anime.episodes[episodeNumber - 1].description ? ` - ${anime.episodes[episodeNumber - 1].description}` : ""}`
+    },
+    {
+      name: "twitter:card",
+      content: "summary_large_image"
+    },
+    {
+      name: "theme-color",
+      content: "#1AAEFE"
+    }
+  ]
+});
+
+</script>
+
 <script>
 import Artplayer from "../../../components/Artplayer.vue";
 import Hls from 'hls.js';
+import consolaGlobalInstance from 'consola';
 
 export default {
     data() {
@@ -123,8 +181,8 @@ export default {
                 },
             },
             stylesObject: {
-                width: "78vw",
-                height: "70vh",
+                width: "100%",
+                height: "100%",
             },
             anilistJson: null,
             episodeNumber: 0,
@@ -204,31 +262,18 @@ export default {
                     if (!this.fullscreenBool) {
                         this.fullscreenBool = true
                         video_wrapper.requestFullscreen()
-                        gradient.style.width = '100vw'
-                        gradient.style.height = '100vh'
-                        subs.style.width = '100vw'
-                        subs.style.height = '100vh'
                         subs.style.bottom = 'calc(50px)'
-                        artplayerElement.style.width = '100vw'
-                        artplayerElement.style.height = '100vh'
                     } else {
                         this.fullscreenBool = false
                         window.document.exitFullscreen()
-                        gradient.style.width = '78vw'
-                        gradient.style.height = '70vh'
-                        subs.style.width = '78vw'
-                        subs.style.height = '70vh'
                         subs.style.bottom = 'calc(30vh + 20px)'
-                        artplayerElement.style.width = '78vw'
-                        artplayerElement.style.height = '70vh'
                     }
                 });
 
                 window.document.addEventListener('fullscreenchange', function () {
                     if (!window.document.fullscreenElement) {
                         this.fullscreenBool = false
-                        gradient.style.width = '78vw'
-                        gradient.style.height = '70vh'
+                        subs.style.bottom = 'calc(30vh + 20px)'
                     }
                 });
 
@@ -316,7 +361,7 @@ export default {
         this.$el.querySelector('.expand-button').addEventListener("click", function () {
             this.$el.querySelector('.expand-button').requestFullscreen()
         });
-    }
+    },
 };
 </script>
 
@@ -324,7 +369,7 @@ export default {
 .left-side {
     margin: 0;
     padding: 0;
-    width: 78vw;
+    width: 70vw;
     height: 100vh;
     display: flex;
     justify-content: flex-start;
@@ -333,7 +378,8 @@ export default {
 }
 
 .video-wrapper {
-    width: 78vw;
+    position: relative;
+    width: 70vw;
     height: 70vh;
     margin: 40px;
     margin-bottom: 0px;
@@ -358,8 +404,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    width: 78vw;
-    height: 70vh;
+    width: 100%;
+    height: 100%;
     bottom: calc(30vh + 20px);
     font-family: 'Trebuchet MS';
     pointer-events: none;
@@ -387,8 +433,8 @@ export default {
     position: absolute;
     z-index: 21;
     border-radius: 12px;
-    width: 78vw;
-    height: 70vh;
+    width: 100%;
+    height: 100%;
     transition: 0.3s all ease;
     background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
 }
@@ -434,7 +480,7 @@ export default {
 .time-text {
     font-weight: 400;
     font-size: 14px;
-    width: 124px;
+    width: 150px;
     color: white;
     margin-left: 40px;
 }
@@ -451,7 +497,7 @@ export default {
 
 .episode-info {
     margin: 20px 40px;
-    width: 78vw;
+    width: 70vw;
 }
 
 .anime-title {
