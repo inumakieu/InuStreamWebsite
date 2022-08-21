@@ -148,8 +148,21 @@ export default {
                 await this.fetch()
                 art.switchUrl(this.streamingData.sources[0].url, '')
 
+                var englishSubs = null
+                for (var subLang in this.streamingData.subtitles) {
+                    console.log(subLang)
+                    if (this.streamingData.subtitles[subLang].lang == 'English') {
+                        englishSubs = this.streamingData.subtitles[subLang]
+                    }
+                }
+
                 setTimeout(() => {
-                    art.subtitle.url = this.streamingData.subtitles[0].url;
+                    if (englishSubs != null) {
+                        art.subtitle.url = englishSubs.url;
+                    } else {
+
+                        art.subtitle.url = this.streamingData.subtitles[0].url;
+                    }
                 }, 100);
 
                 var subtitle = this.$el.querySelector('.art-subtitle').style.display = 'none'
@@ -157,6 +170,17 @@ export default {
 
                 var controls = this.$el.querySelector('.custom-controls')
                 var gradient = this.$el.querySelector('.gradient-controls')
+
+                var progress_indicattion = this.$el.querySelector('.progress-bar').onclick = function clickEvent(e) {
+                    // e = Mouse click event.
+                    var rect = e.target.getBoundingClientRect();
+                    var x = e.clientX - rect.left; //x position within the element.
+                    console.log(art.duration * (x / rect.width))
+                    art.seek = (art.duration * (x / rect.width))
+
+                    //var y = e.clientY - rect.top;  //y position within the element.
+                    //console.log("Left? : " + x + " ; Top? : " + y + ".");
+                }
 
 
                 controls.addEventListener('mouseover', (event) => {
@@ -323,16 +347,16 @@ export default {
 }
 
 .progress-bar {
-    height: 8px;
-    border-radius: 4px;
+    height: 6px;
+    border-radius: 3px;
     width: 100%;
     background-color: white;
 }
 
 .progress {
-    height: 8px;
-    border-radius: 4px;
-    width: 50%;
+    height: 6px;
+    border-radius: 3px;
+    width: 0%;
     background-color: #FF4242;
 }
 
@@ -380,6 +404,7 @@ export default {
 }
 
 .description {
+    width: 60vw;
     font-size: 18px;
     font-weight: 400;
     color: white;
