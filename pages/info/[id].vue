@@ -6,27 +6,27 @@
             <div class="details-wrapper">
                 <div class="poster-wrapper">
                     <div ref="poster_image" class="poster-image"></div>
-                    <h1 v-if="anilistJson != null" class="rating">Rating: {{ this.anilistJson.rating / 10 }} / 10</h1>
-                    <h1 v-if="anilistJson != null" class="released">Released : {{ this.anilistJson.releaseDate }}</h1>
+                    <h1 v-if="anime != null" class="rating">Rating: {{ anime.rating / 10 }} / 10</h1>
+                    <h1 v-if="anime != null" class="released">Released : {{ anime.releaseDate }}</h1>
                 </div>
-                <div v-if="anilistJson != null" class="info-wrapper">
-                    <h1 class="duration">{{ this.anilistJson.duration }} min / Episode</h1>
-                    <h1 class="status">Episodes: <span class="red-text">{{ this.anilistJson.episodes.length }}</span> -
-                        Status: <span class="red-text">{{ this.anilistJson.status }}</span></h1>
-                    <h1 class="title">{{ this.anilistJson.title.english }}</h1>
-                    <h1 class="title-native">{{ this.anilistJson.title.native }}</h1>
-                    <p class="description"><span v-html="anilistJson.description"></span></p>
+                <div v-if="anime != null" class="info-wrapper">
+                    <h1 class="duration">{{ anime.duration }} min / Episode</h1>
+                    <h1 class="status">Episodes: <span class="red-text">{{ anime.episodes.length }}</span> -
+                        Status: <span class="red-text">{{ anime.status }}</span></h1>
+                    <h1 class="title">{{ anime.title.english }}</h1>
+                    <h1 class="title-native">{{ anime.title.native }}</h1>
+                    <p class="description"><span v-html="anime.description"></span></p>
                 </div>
             </div>
             <div class="lower-part">
 
                 <div class="genre-list">
-                    <div v-if="anilistJson != null" class="genre" v-for="genre in anilistJson.genres" v-html="genre">
+                    <div v-if="anime != null" class="genre" v-for="genre in anime.genres" v-html="genre">
                     </div>
                 </div>
             </div>
             <div class="info-episode-list">
-                <div v-if="anilistJson != null" v-for="episode in anilistJson.episodes" class="episode-card-info"
+                <div v-if="anime != null" v-for="episode in anime.episodes" class="episode-card-info"
                     v-on:click="loadEpisode(episode)">
                     <div class="image-wrapper-info">
                         <img class="episode-bg-info" :src="episode.image">
@@ -47,6 +47,62 @@
     </div>
 
 </template>
+
+
+<script setup>
+import {useFetch, useHead, useRoute} from '#app';
+
+const route = useRoute();
+
+console.log('testing')
+
+var id = route.path.replace("/info/", "");
+var episodeNumber = 1;
+
+const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + id + '?provider=zoro');
+if (error.value || !episodes.value) {
+  throw createError({ statusCode: 404, message: "Episode not found" })
+}
+
+console.log(episodes.value);
+
+var anime = episodes.value;
+
+useHead({
+    title: `Info of ${anime.title.english}`,
+  meta: [
+    {
+      name: "og:title",
+      content: `${anime.title.english}`
+    },
+    {
+      name: "og:type",
+      content: "website"
+    },
+    {
+      name: "og:url",
+      content: `https://inu.watch/info/${anime.id}`
+    },
+    {
+      name: "og:image",
+      content: anime.cover || anime.image
+    },
+    {
+      name: "og:description",
+      content: `${anime.description}`
+    },
+    {
+      name: "twitter:card",
+      content: "summary_large_image"
+    },
+    {
+      name: "theme-color",
+      content: anime.color ?? '#000000'
+    }
+  ]
+});
+
+</script>
 
 <script>
 
@@ -93,17 +149,6 @@ export default {
             }
         }
     },
-
-    head: {
-        title: 'Info of',
-        meta: [
-            {
-                hid: 'description',
-                name: 'description',
-                content: 'Home page description'
-            }
-        ],
-    }
 }
 </script>
 

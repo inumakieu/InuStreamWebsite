@@ -36,13 +36,6 @@ export default {
         animeName: null,
         searchJson: null
     }),
-    asyncData({ $seo }) {
-            $seo({
-                title: this.animeName,
-                templateTitle: '%name% - %title%',
-                description: 'Hello World Page'
-            })
-        },
     methods: {
         async fetch() {
             this.searchJson = await fetch('https://consumet-api.herokuapp.com/meta/anilist/' + this.animeName + '?provider=zoro').then(function (response) {

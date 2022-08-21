@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="spacer"></div>
-                <div v-if="anime != null" class="description">
+                <div v-if="anime != null" class="description-watch">
                     {{ anime.episodes[episodeNumber - 1].description != null ? anime.episodes[episodeNumber
                             -
                             1].description : 'This is Episode ' + episodeNumber + ' of ' + anime.title.english
@@ -102,8 +102,6 @@ if (error.value || !episodes.value) {
   throw createError({ statusCode: 404, message: "Episode not found" })
 }
 
-console.log(episodes.value);
-
 var anime = episodes.value;
 
 useHead({
@@ -135,7 +133,7 @@ useHead({
     },
     {
       name: "theme-color",
-      content: anime.color
+      content: anime.color ?? '#000000'
     }
   ]
 });
@@ -520,7 +518,7 @@ export default {
     background-color: #3a383d;
 }
 
-.description {
+.description-watch {
     width: 60vw;
     font-size: 18px;
     font-weight: 400;

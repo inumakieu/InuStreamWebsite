@@ -7,16 +7,32 @@
                 <li class="list-item">My List</li>
             </ul>
             <div class="right-side-nav">
-                <div class="search">
-                    <svg style="padding-right: 12px;" width="16px" height="16px" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512">
-                        <path fill="white"
-                            d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z" />
-                    </svg>
-                    <form @submit.stop.prevent="searchAnime">
-                        <input type="search" autocomplete="off" placeholder="Search..." ref="search" name="search"
-                            id="search-field">
-                    </form>
+                <div class="search-wrapper">
+                    <div class="search">
+                        <svg style="padding-right: 12px;" width="16px" height="16px" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512">
+                            <path fill="white"
+                                d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z" />
+                        </svg>
+                        <form @submit.stop.prevent="goToSearch">
+                            <input type="search" autocomplete="off" placeholder="Search..." ref="search" name="search"
+                                id="search-field" v-model="animeName" v-on:input="searchAnime">
+                        </form>
+                    </div>
+                        <div class="searchSuggestions">
+                            <div ref="search_result" class="search-result" v-on:click="goToInfo(anime.id)" v-for="anime in searchJson" v-bind:key="anime.id">
+                                <img class="anime-image-nav" :src="anime.image" alt="">
+                                <div class="result-text-nav">
+                                    <h1 class="result-title-nav">
+                                        {{ anime.title.userPreferred }}
+                                    </h1>
+                                    <h2 class="result-date-nav">
+
+                                        {{ anime.releaseDate }}
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
                 </div>
                 <div class="avatar"></div>
             </div>
@@ -33,10 +49,10 @@
                 <div class="gradient"></div>
                 <div class="featured-details">
                     <h3 class="duration">23 min / Episode</h3>
-                    <h2 class="episode-count">Episodes: <span class="red-text">13</span> - Status: <span
+                    <h2 class="episode-count">Episodes: <span class="red-text">7</span> - Status: <span
                             class="red-text">CURRENTLY AIRING</span></h2>
                     <h1 class="title">Yofukashi no Uta</h1>
-                    <h4 class="description">Wracked by insomnia and wanderlust, Kou Yamori is driven onto the moonlit
+                    <h4 class="description-home">Wracked by insomnia and wanderlust, Kou Yamori is driven onto the moonlit
                         streets every night in an aimless search for something he can’t seem to name. His nightly ritual
                         is
                         marked by purposeless introspection — until he meets Nazuna, who might just be a vampire! Kou’s
@@ -61,6 +77,13 @@ export default {
         name: 'home',
         mode: 'out-in'
     },
+    data() {
+        return {
+            animeName: null,
+            searchJson: null,
+            magic_flag: false,
+        }
+    },
     methods: {
         handleScroll() {
             // Your scroll handling here
@@ -75,11 +98,59 @@ export default {
             }
         },
         async searchAnime() {
+            this.searchJson = await fetch('https://consumet-api.herokuapp.com/meta/anilist/' + this.animeName + '?provider=zoro').then(function (response) {
+                // The response is a Response instance.
+                // You parse the data into a useable format using `.json()`
+                return response.json();
+            }).then(function (data) {
+                // `data` is the parsed version of the JSON returned from the above endpoint.
+                //console.log(data)
+                var results = data.results
+                for (let index = 0; index < data.results.length; index++) {
+                    if (data.results[index].status === "Not yet aired") {
+                        results.splice(index, 1)
+                    }
+                }
+                //console.log(results)
+                return results; // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+            });
+
+            console.log(this.searchJson)
+
+            if(this.searchJson != null && this.searchJson.length != 0) {
+                this.$el.querySelector('.searchSuggestions').classList.add('display')
+                this.$el.querySelector('.suggestionClipper').classList.add('display')
+            } else {
+                this.$el.querySelector('.searchSuggestions').classList.remove('display')
+                this.$el.querySelector('.suggestionClipper').classList.remove('display')
+            }
+        },
+        async goToSearch() {
             await navigateTo('/search/' + this.$refs.search.value.toLowerCase().replaceAll(' ', '-'), { replace: false })
-        }
+        },
+        async goToInfo(id) {
+            await navigateTo('/info/' + id, { replace: false })
+        },
+    },
+    mounted() {
+        const password = document.querySelector('input[type="search"]');
+        const suggestionClipper = document.querySelector('.suggestionClipper');
+        const searchSuggestions = document.querySelector('.searchSuggestions');
+
+        password.addEventListener('focus', (event) => {
+            searchSuggestions.style.overflow.y = 'scroll';
+            //this.searchAnime()
+        });
+
+        password.addEventListener('blur', (event) => {
+            suggestionClipper.classList.remove('display');
+            searchSuggestions.classList.remove('display');
+            searchSuggestions.style.overflow = 'hidden';
+        });
     },
     beforeMount() {
         window.addEventListener('scroll', this.handleScroll)
+        
     },
     beforeDestroy() {
         window.removeEventListener('scroll', this.handleScroll)
@@ -123,6 +194,7 @@ html {
 
 body {
     background-color: #16151A;
+    overflow-x: hidden;
 }
 
 /* width */
@@ -187,6 +259,47 @@ body {
     align-items: center;
 }
 
+.search-result {
+    display: flex;
+    padding: 20px;
+}
+
+
+.result-data-nav {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+    align-items: center;
+}
+
+.anime-image-nav {
+    width: 60px;
+    height: 90px;
+    border-radius: 6px;
+    margin-right: 12px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.result-text-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.result-title-nav {
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
+.result-date-nav {
+    color: #999999;
+    font-size: 12px;
+}
+
 
 
 .search {
@@ -203,6 +316,7 @@ body {
     width: 80px;
     color: white;
     background-color: transparent;
+    height: 40px;
     outline: none;
     border: none;
     transition: 0.3s all ease;
@@ -210,6 +324,29 @@ body {
 
 #search-field:focus {
     width: 200px;
+}
+
+.search-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+
+.searchSuggestions {
+    width: 320px;
+    height: 0px;
+}
+
+.searchSuggestions.display {
+    height: 180px;
+    width: 300px;
+    top: 54px;
+    border-radius: 12px;
+    position: absolute;
+    background-color: #16151A;
+    overflow-y: scroll;
+    transition: 0.3s all ease;
 }
 
 .avatar {
@@ -280,9 +417,10 @@ h2 {
     padding-bottom: 20px;
 }
 
-.description {
-    font-size: 12px;
+.description-home {
+    font-size: 14px;
     font-weight: normal;
+    width: 40vw;
 }
 
 .red-text {
