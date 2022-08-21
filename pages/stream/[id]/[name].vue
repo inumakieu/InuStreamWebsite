@@ -127,7 +127,7 @@ useHead({
     },
     {
       name: "og:description",
-      content: `Watch ${anime.title.english} Episode ${episodeNumber}${anime.episodes[episodeNumber - 1].title ? ` - ${anime.episodes[episodeNumber - 1].title}` : ""} online on Inu's Stream ${anime.episodes[episodeNumber - 1].description ? ` - ${anime.episodes[episodeNumber - 1].description}` : ""}`
+      content: `Watch Episode ${episodeNumber}${anime.episodes[episodeNumber - 1].title ? `\n${anime.episodes[episodeNumber - 1].title}` : ""} of ${anime.title.english} online on Inu's Stream ${anime.episodes[episodeNumber - 1].description ? ` - ${anime.episodes[episodeNumber - 1].description}` : ""}`
     },
     {
       name: "twitter:card",
@@ -135,7 +135,7 @@ useHead({
     },
     {
       name: "theme-color",
-      content: "#1AAEFE"
+      content: anime.color
     }
   ]
 });
