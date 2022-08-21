@@ -36,15 +36,15 @@
                     </div>
                 </div>
             </div>
-            <div v-if="this.anilistJson != null" class="episode-info">
+            <div v-if="anime != null" class="episode-info">
                 <div class="top-info">
                     <div class="title-wrapper">
 
                         <div class="anime-title">
-                            {{ anilistJson.title.english }}
+                            {{ anime.title.english }}
                         </div>
-                        <div v-if="anilistJson.episodes[episodeNumber - 1].title != null" class="episode-title">
-                            {{ anilistJson.episodes[episodeNumber -
+                        <div v-if="anime.episodes[episodeNumber - 1].title != null" class="episode-title">
+                            {{ anime.episodes[episodeNumber -
                                     1].description.title
                             }}
                         </div>
@@ -54,10 +54,10 @@
                     </div>
                 </div>
                 <div class="spacer"></div>
-                <div v-if="this.anilistJson != null" class="description">
-                    {{ anilistJson.episodes[episodeNumber - 1].description != null ? anilistJson.episodes[episodeNumber
+                <div v-if="anime != null" class="description">
+                    {{ anime.episodes[episodeNumber - 1].description != null ? anime.episodes[episodeNumber
                             -
-                            1].description : 'This is Episode ' + episodeNumber + ' of ' + anilistJson.title.english
+                            1].description : 'This is Episode ' + episodeNumber + ' of ' + anime.title.english
                     }}
                 </div>
             </div>
@@ -66,7 +66,7 @@
             <h1 class="episode-list-title">
                 Next Episodes
             </h1>
-            <div v-if="this.anilistJson != null" v-for="episode in anilistJson.episodes" class="episode-list">
+            <div v-if="anime != null" v-for="episode in anime.episodes" class="episode-list">
                 <div v-if="episode.number > episodeNumber" class="episode-card" v-on:click="loadEpisode(episode)">
                     <div class="image-wrapper">
                         <img class="episode-bg" :src="episode.image">
@@ -97,14 +97,14 @@ var episodeNumber = parameters[1].split('-ep-')[1];
 
 console.log(parameters);
 
-const { error, data: episode } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + parameters[0] + '?provider=zoro');
-if (error.value || !episode.value) {
+const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + parameters[0] + '?provider=zoro');
+if (error.value || !episodes.value) {
   throw createError({ statusCode: 404, message: "Episode not found" })
 }
 
-console.log(episode.value);
+console.log(episodes.value);
 
-var anime = episode.value;
+var anime = episodes.value;
 
 useHead({
     title: `${anime.title.english}`,
