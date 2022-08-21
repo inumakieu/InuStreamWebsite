@@ -1,8 +1,8 @@
 <template>
-    <div style="display: flex; justify-content: space-between;">
+    <div class="body" style="display: flex; justify-content: space-between;">
         <div class="left-side">
             <div class="video-wrapper">
-                <Artplayer class="artplayer" @get-instance="getInstance" :option="option" :style="style" />
+                <Artplayer class="artplayer" @get-instance="getInstance" :option="option" :style="stylesObject" />
                 <div class="subtitles">
                     <h2 class="subtitle-shadow"></h2>
                     <h2 class="subtitle-text"></h2>
@@ -122,7 +122,7 @@ export default {
                     },
                 },
             },
-            style: {
+            stylesObject: {
                 width: "78vw",
                 height: "70vh",
             },
@@ -172,6 +172,7 @@ export default {
                 var controls = this.$el.querySelector('.custom-controls')
                 var gradient = this.$el.querySelector('.gradient-controls')
                 var subs = this.$el.querySelector('.subtitles')
+                var artplayerElement = this.$el.querySelector('.artplayer')
 
                 var progress_indicattion = this.$el.querySelector('.progress-bar').onclick = function clickEvent(e) {
                     // e = Mouse click event.
@@ -205,11 +206,21 @@ export default {
                         video_wrapper.requestFullscreen()
                         gradient.style.width = '100vw'
                         gradient.style.height = '100vh'
+                        subs.style.width = '100vw'
+                        subs.style.height = '100vh'
+                        subs.style.bottom = 'calc(50px)'
+                        artplayerElement.style.width = '100vw'
+                        artplayerElement.style.height = '100vh'
                     } else {
                         this.fullscreenBool = false
                         window.document.exitFullscreen()
                         gradient.style.width = '78vw'
                         gradient.style.height = '70vh'
+                        subs.style.width = '78vw'
+                        subs.style.height = '70vh'
+                        subs.style.bottom = 'calc(30vh + 20px)'
+                        artplayerElement.style.width = '78vw'
+                        artplayerElement.style.height = '70vh'
                     }
                 });
 
@@ -220,6 +231,31 @@ export default {
                         gradient.style.height = '70vh'
                     }
                 });
+
+                var timeout;
+                var isHidden = false;
+
+                document.addEventListener("mousemove", magicMouse);
+
+                function magicMouse() {
+                    if (timeout) {
+                        clearTimeout(timeout);
+                    }
+                    timeout = setTimeout(function () {
+                        if (!isHidden) {
+                            document.querySelector("body").style.cursor = "none";
+                            controls.style.opacity = '0'
+                            gradient.style.opacity = '0'
+                            isHidden = true;
+                        }
+                    }, 5000);
+                    if (isHidden) {
+                        document.querySelector("body").style.cursor = "auto";
+                        controls.style.opacity = '1'
+                        gradient.style.opacity = '1'
+                        isHidden = false;
+                    }
+                };
 
             });
 
@@ -334,6 +370,7 @@ export default {
     padding-left: 2px;
     margin-top: 2px;
     font-size: 30px;
+    position: absolute;
     color: black;
     text-shadow: rgb(0, 0, 0) 4px 0px 0px, rgb(0, 0, 0) 3.87565px 0.989616px 0px, rgb(0, 0, 0) 3.51033px 1.9177px 0px, rgb(0, 0, 0) 2.92676px 2.72656px 0px, rgb(0, 0, 0) 2.16121px 3.36588px 0px, rgb(0, 0, 0) 1.26129px 3.79594px 0px, rgb(0, 0, 0) 0.282949px 3.98998px 0px, rgb(0, 0, 0) -0.712984px 3.93594px 0px, rgb(0, 0, 0) -1.66459px 3.63719px 0px, rgb(0, 0, 0) -2.51269px 3.11229px 0px, rgb(0, 0, 0) -3.20457px 2.39389px 0px, rgb(0, 0, 0) -3.69721px 1.52664px 0px, rgb(0, 0, 0) -3.95997px 0.56448px 0px, rgb(0, 0, 0) -3.97652px -0.432781px 0px, rgb(0, 0, 0) -3.74583px -1.40313px 0px, rgb(0, 0, 0) -3.28224px -2.28625px 0px, rgb(0, 0, 0) -2.61457px -3.02721px 0px, rgb(0, 0, 0) -1.78435px -3.57996px 0px, rgb(0, 0, 0) -0.843183px -3.91012px 0px, rgb(0, 0, 0) 0.150409px -3.99717px 0px, rgb(0, 0, 0) 1.13465px -3.8357px 0px, rgb(0, 0, 0) 2.04834px -3.43574px 0px, rgb(0, 0, 0) 2.83468px -2.82216px 0px, rgb(0, 0, 0) 3.44477px -2.03312px 0px, rgb(0, 0, 0) 3.84068px -1.11766px 0px, rgb(0, 0, 0) 3.9978px -0.132717px 0px;
 }
