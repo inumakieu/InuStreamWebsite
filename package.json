@@ -10,6 +10,7 @@
     "nuxt": "3.0.0-rc.8"
   },
   "dependencies": {
+    "@consumet/extensions": "^1.0.10",
     "@nuxt/http": "^0.6.4",
     "@nuxtjs/google-fonts": "^3.0.0-0",
     "@nuxtjs/moment": "^1.6.1",

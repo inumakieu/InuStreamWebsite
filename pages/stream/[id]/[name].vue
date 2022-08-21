@@ -406,7 +406,7 @@ export default {
 
 
 .image-wrapper {
-    width: 200px;
+    width: 240px;
     aspect-ratio: 16/9;
     display: flex;
     justify-content: flex-end;
@@ -414,7 +414,7 @@ export default {
 
 .episode-bg {
     position: absolute;
-    width: 200px;
+    width: 240px;
     aspect-ratio: 16/9;
     background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%);
     background-position: 0;
@@ -428,7 +428,7 @@ export default {
 .episode-gradient {
     position: absolute;
     border-radius: 12px;
-    width: 200px;
+    width: 240px;
     aspect-ratio: 16/9;
     background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%);
 }
@@ -446,6 +446,11 @@ export default {
     font-size: 16px;
     padding-left: 8px;
     margin-top: 4px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    width: 240px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
 }
 </style>

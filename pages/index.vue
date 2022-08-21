@@ -1,53 +1,57 @@
 <template>
-<div>
-    <header class="nav-bar">
-        <ul class="left-side">
-            <li class="list-item active">Home</li>
-            <li class="list-item">Series</li>
-            <li class="list-item">My List</li>
-        </ul>
-        <div class="right-side">
-            <div class="search">
-                <svg style="padding-right: 12px;" width="16px" height="16px" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512">
-                    <path fill="white"
-                        d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z" />
-                </svg>
-                <form @submit.stop.prevent="searchAnime">
-                    <input type="search" autocomplete="off" placeholder="Search..." ref="search" name="search"
-                        id="search-field">
-                </form>
-            </div>
-            <div class="avatar"></div>
-        </div>
-    </header>
     <div>
-        <div class="featured-content">
-            <div class="clipper">
-                <div class="iframe-wrapper">
-                    <iframe class="iframe-class"
-                        src="https://www.youtube.com/embed/CFuuCA0duQU?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=CFuuCA0duQU"
-                        frameborder="0"></iframe>
+        <header class="nav-bar">
+            <ul class="left-side-nav">
+                <li class="list-item active">Home</li>
+                <li class="list-item">Series</li>
+                <li class="list-item">My List</li>
+            </ul>
+            <div class="right-side-nav">
+                <div class="search">
+                    <svg style="padding-right: 12px;" width="16px" height="16px" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512">
+                        <path fill="white"
+                            d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z" />
+                    </svg>
+                    <form @submit.stop.prevent="searchAnime">
+                        <input type="search" autocomplete="off" placeholder="Search..." ref="search" name="search"
+                            id="search-field">
+                    </form>
+                </div>
+                <div class="avatar"></div>
+            </div>
+        </header>
+        <div>
+            <div class="featured-content">
+                <div class="clipper">
+                    <div class="iframe-wrapper">
+                        <iframe class="iframe-class"
+                            src="https://www.youtube.com/embed/CFuuCA0duQU?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=CFuuCA0duQU"
+                            frameborder="0"></iframe>
+                    </div>
+                </div>
+                <div class="gradient"></div>
+                <div class="featured-details">
+                    <h3 class="duration">23 min / Episode</h3>
+                    <h2 class="episode-count">Episodes: <span class="red-text">13</span> - Status: <span
+                            class="red-text">CURRENTLY AIRING</span></h2>
+                    <h1 class="title">Yofukashi no Uta</h1>
+                    <h4 class="description">Wracked by insomnia and wanderlust, Kou Yamori is driven onto the moonlit
+                        streets every night in an aimless search for something he can’t seem to name. His nightly ritual
+                        is
+                        marked by purposeless introspection — until he meets Nazuna, who might just be a vampire! Kou’s
+                        new
+                        companion could offer him dark gifts and a vampire’s immortality. But there are conditions that
+                        must
+                        be met before Kou can sink his teeth into vampirism, and he’ll have to discover just how far
+                        he’s
+                        willing to go to satisfy his desires before he can heed the Call of the Night!<br><br>(Source:
+                        Sentai Filmworks)</h4>
                 </div>
             </div>
-            <div class="gradient"></div>
-            <div class="featured-details">
-                <h3 class="duration">23 min / Episode</h3>
-                <h2 class="episode-count">Episodes: <span class="red-text">13</span> - Status: <span
-                        class="red-text">CURRENTLY AIRING</span></h2>
-                <h1 class="title">Yofukashi no Uta</h1>
-                <h4 class="description">Wracked by insomnia and wanderlust, Kou Yamori is driven onto the moonlit
-                    streets every night in an aimless search for something he can’t seem to name. His nightly ritual is
-                    marked by purposeless introspection — until he meets Nazuna, who might just be a vampire! Kou’s new
-                    companion could offer him dark gifts and a vampire’s immortality. But there are conditions that must
-                    be met before Kou can sink his teeth into vampirism, and he’ll have to discover just how far he’s
-                    willing to go to satisfy his desires before he can heed the Call of the Night!<br><br>(Source:
-                    Sentai Filmworks)</h4>
-            </div>
+
+            <div style="height: 800px;width: 800px;color: red;">{{ slug }}</div>
         </div>
-        <nuxt-link :to="{ path: '/info/110'}">Contact</nuxt-link>
-        <div style="height: 800px;width: 800px;color: red;">{{ slug }}</div>
-    </div>
     </div>
 </template>
 
@@ -155,7 +159,7 @@ body {
     transition: 0.4s all ease;
 }
 
-.left-side {
+.left-side-nav {
     display: flex;
     height: 60px;
     width: 300px;
@@ -175,7 +179,7 @@ body {
     opacity: 1;
 }
 
-.right-side {
+.right-side-nav {
     width: 500px;
     padding-right: 120px;
     display: flex;
