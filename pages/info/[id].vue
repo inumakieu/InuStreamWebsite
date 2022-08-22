@@ -30,8 +30,7 @@
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
                     class="episode-card-info" ref="episodeCardInfo" v-on:click="loadEpisode(episode, anime)">
                     <div class="image-wrapper-info">
-                        <img v-on:load="animateList(this.$refs.episodeCardInfo)" class="episode-bg-info"
-                            :src="episode.image">
+                        <img v-on:load="animateList(this)" class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
                         <h3 class="episode-number-text-info">{{ episode.number }}</h3>
                     </div>
@@ -81,12 +80,13 @@ watch(episodes, () => {
 })
 
 function animateList(element) {
+    console.log(element)
     if (!loadedEpisodes) {
 
-        console.log(element)
-        for (var index in element) {
-            element[index].style.transitionDelay = index / 6 + 's'
-            element[index].classList.add('loaded')
+        console.log(element.$refs.episodeCardInfo)
+        for (var index in element.$refs.episodeCardInfo) {
+            element.$refs.episodeCardInfo[index].style.transitionDelay = index / 6 + 's'
+            element.$refs.episodeCardInfo[index].classList.add('loaded')
 
         }
         loadedEpisodes = true
