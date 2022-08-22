@@ -83,10 +83,10 @@ function animateList(element) {
     console.log(document.querySelectorAll('.episode-card-info'))
     if (!loadedEpisodes) {
 
-        console.log(element.$refs.episodeCardInfo)
-        for (var index in element.$refs.episodeCardInfo) {
-            element.$refs.episodeCardInfo[index].style.transitionDelay = index / 6 + 's'
-            element.$refs.episodeCardInfo[index].classList.add('loaded')
+        console.log(document.querySelectorAll('.episode-card-info'))
+        for (var index in document.querySelectorAll('.episode-card-info')) {
+            document.querySelectorAll('.episode-card-info').style.transitionDelay = index / 6 + 's'
+            document.querySelectorAll('.episode-card-info').classList.add('loaded')
 
         }
         loadedEpisodes = true
