@@ -25,6 +25,14 @@
                 </div>
             </div>
             <div v-my-directive class="info-episode-list">
+                <div class="loading-wrapper">
+                    <div class="lds-ellipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -81,6 +89,7 @@ const vMyDirective = {
         function loadEpisodes() {
             if (episodeResponse.value) {
                 episodeList = episodeResponse.value;
+                el.innerHTML = ''
                 for (var episode in episodeList) {
                     console.log(episode)
                     el.appendChild(createElementFromHTML(`<div class="episode-card-info" id="episode-card-${episode}"><div class="image-wrapper-info"><img class="episode-bg-info" src="${episodeList[episode].image}"><div class="episode-gradient-info"></div><h3 class="episode-number-text-info">${episodeList[episode].number}</h3></div><div class="episode-info-wrapper-info"><div class="episode-title-text-info">${episodeList[episode].title != null ? episodeList[episode].title : 'Episode ' + episodeList[episode].number}</div><div class="episode-title-text-info"></div></div></div>`));
@@ -149,6 +158,81 @@ useHead({
 </script>
 
 <style>
+.loading-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.lds-ellipsis div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fff;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0);
+    }
+}
+
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(24px, 0);
+    }
+}
+
+
 /* width */
 ::-webkit-scrollbar {
     height: 8px;
