@@ -97,7 +97,7 @@ const vMyDirective = {
             return div.firstChild;
         }
 
-        const { episodeError, data: episodeResponse } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro');
+        const { episodeError, data: episodeResponse } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: id });
         function loadEpisodes() {
             if (episodeResponse.value) {
                 el.firstChild.innerHTML = '';
