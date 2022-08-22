@@ -11,7 +11,7 @@
                 </div>
                 <div v-if="anime != null" class="info-wrapper">
                     <h1 class="duration">{{ anime.duration }} min / Episode</h1>
-                    <h1 class="status">Episodes: <span class="red-text">PLACEHOLDER</span> -
+                    <h1 class="status">Episodes: <span class="red-text">{{ anime.totalEpisodes }}</span> -
                         Status: <span class="red-text">{{ anime.status }}</span></h1>
                     <h1 class="title">{{ anime.title.english }}</h1>
                     <h1 class="title-native">{{ anime.title.native }}</h1>
@@ -28,9 +28,10 @@
                 <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
-                    class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
+                    class="episode-card-info" ref="episodeCardInfo" v-on:click="loadEpisode(episode, anime)">
                     <div class="image-wrapper-info">
-                        <img class="episode-bg-info" :src="episode.image">
+                        <img v-on:load="animateList(this.$refs.episodeCardInfo)" class="episode-bg-info"
+                            :src="episode.image">
                         <div class="episode-gradient-info"></div>
                         <h3 class="episode-number-text-info">{{ episode.number }}</h3>
                     </div>
@@ -79,6 +80,19 @@ watch(episodes, () => {
     loadAnime()
 })
 
+function animateList(element) {
+    if (!loadedEpisodes) {
+
+        console.log(element)
+        for (var index in element) {
+            element[index].style.transitionDelay = index / 6 + 's'
+            element[index].classList.add('loaded')
+
+        }
+        loadedEpisodes = true
+    }
+}
+
 const vMyDirective = {
     mounted: async (el) => {
 
@@ -86,34 +100,11 @@ const vMyDirective = {
 
         console.log('GETTING EPISODES')
 
-        function createElementFromHTML(htmlString) {
-            var div = document.createElement('div');
-            div.innerHTML = htmlString.trim();
-
-            // Change this to div.childNodes to support multiple top-level nodes.
-            return div.firstChild;
-        }
-
         const { episodeError, data: episodeResponse } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
         function loadEpisodes() {
             if (episodeResponse.value) {
                 loadingHtml.value = '';
                 episodeList.value = episodeResponse.value;
-                /* for (var episode in episodeList) {
-                    console.log(episode)
-                    el.appendChild(createElementFromHTML(`<div class="episode-card-info" id="episode-card-${episode}"><div class="image-wrapper-info"><img class="episode-bg-info" src="${episodeList[episode].image}"><div class="episode-gradient-info"></div><h3 class="episode-number-text-info">${episodeList[episode].number}</h3></div><div class="episode-info-wrapper-info"><div class="episode-title-text-info">${episodeList[episode].title != null ? episodeList[episode].title : 'Episode ' + episodeList[episode].number}</div><div class="episode-title-text-info"></div></div></div>`));
-
-                    
-                }
-                    const cbox = document.querySelectorAll(".episode-card-info");
-                for (let i = 0; i < cbox.length; i++) {
-                        cbox[i].addEventListener("click", function () {
-                            loadEpisode(episodeList[i], anime)
-                            console.log(i)
-                            //cbox[i].classList.toggle("red");
-                        });
-                    } */
-                console.log(episodeList[0]);
             }
         }
         loadEpisodes()
@@ -406,6 +397,13 @@ useHead({
     position: relative;
     margin-top: 20px;
     padding-right: 30px;
+    transform: scale(0.0);
+    transition: 0.4s ease all;
+}
+
+.episode-card-info.loaded {
+    transform: scale(1.0);
+    transition: 0.4s ease all;
 }
 
 .image-wrapper-info {

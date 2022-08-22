@@ -7,6 +7,7 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.0.5",
     "nuxt": "3.0.0-rc.8"
   },
   "dependencies": {
