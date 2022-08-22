@@ -1,7 +1,7 @@
 <template>
     <div class="info-wrapper">
         <img v-if="anime != null" ref="bg" class="bg" :src="anime.cover">
-        <div class="gradient"></div>
+        <div class="gradient-info"></div>
         <div class="overall-wrapper">
             <div class="details-wrapper">
                 <div class="poster-wrapper">
@@ -277,7 +277,7 @@ useHead({
     filter: blur(8px);
 }
 
-.gradient {
+.gradient-info {
     position: absolute;
     width: 100vw;
     height: 100vh;
