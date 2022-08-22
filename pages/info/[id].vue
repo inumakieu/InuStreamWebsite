@@ -85,8 +85,8 @@ function animateList(element) {
 
         console.log(cards)
         for (var index in cards) {
-            cards.style.transitionDelay = index / 6 + 's'
-            cards.classList.add('loaded')
+            cards[index].style.transitionDelay = index / 6 + 's'
+            cards[index].classList.add('loaded')
 
         }
         loadedEpisodes = true
