@@ -33,7 +33,7 @@
                         <div></div>
                     </div>
                 </div>
-                <div v-if="episodeList != null" v-for="episode in episodeList" class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
+                <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList" class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
                     <div class="image-wrapper-info">
                         <img class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
@@ -61,7 +61,7 @@ console.log('testing')
 
 var id = route.path.replace("/info/", "");
 var episodeNumber = 1;
-var episodeList = useState('episodeList', () => null);
+var episodeList = useState('episodeList', () => []);
 var loadedEpisodes = false;
 
 const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/data/' + id, { key: id });
