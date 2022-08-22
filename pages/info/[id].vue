@@ -30,7 +30,7 @@
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
                     class="episode-card-info" ref="episodeCardInfo" v-on:click="loadEpisode(episode, anime)">
                     <div class="image-wrapper-info">
-                        <img v-on:load="animateList(this)" class="episode-bg-info" :src="episode.image">
+                        <img v-on:load="animateList(self)" class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
                         <h3 class="episode-number-text-info">{{ episode.number }}</h3>
                     </div>
