@@ -324,7 +324,7 @@ export default {
                 var new_sub = this.$el.querySelector('.subtitle-text')
                 var new_sub_shadow = this.$el.querySelector('.subtitle-shadow')
                 if (subtitle.firstChild != undefined) {
-                    subtitle.firstChild.innerHTML = subtitle.firstChild.innerHTML.replace('&lt;i&gt;', '<i>').replace('&lt;/i&gt;', '</i>')
+                    subtitle.firstChild.innerHTML = subtitle.firstChild.innerHTML.replace('&lt;i&gt;', '<i>').replace('&lt;/i&gt;', '</i>').replace('&lt;b&gt;', '<b>').replace('&lt;/b&gt;', '</b>')
                     new_sub.innerHTML = subtitle.firstChild.innerHTML
                     new_sub_shadow.innerHTML = subtitle.firstChild.innerHTML
                 } else {
@@ -403,7 +403,7 @@ export default {
     align-items: flex-end;
     width: 100%;
     height: 100%;
-    bottom: calc(30vh + 20px);
+    bottom: calc(50px);
     font-family: 'Trebuchet MS';
     pointer-events: none;
 }
