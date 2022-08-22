@@ -61,7 +61,10 @@ console.log('testing')
 
 var id = route.path.replace("/info/", "");
 var episodeNumber = 1;
-var episodeList = useState('episodeList', () => []);
+
+const { episodeError, data: episodeResponse } = await useFetch('', { key: 'episodes' + id });
+        
+var episodeList = useState('episodeList', () => episodeResponse.value);
 var loadedEpisodes = false;
 
 const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/data/' + id, { key: id });
