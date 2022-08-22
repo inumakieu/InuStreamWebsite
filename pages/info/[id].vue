@@ -80,7 +80,7 @@ watch(episodes, () => {
 })
 
 function animateList(element) {
-    console.log(element)
+    console.log(document.querySelectorAll('.episode-card-info'))
     if (!loadedEpisodes) {
 
         console.log(element.$refs.episodeCardInfo)
