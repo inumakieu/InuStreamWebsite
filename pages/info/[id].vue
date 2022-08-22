@@ -33,16 +33,18 @@
                         <div></div>
                     </div>
                 </div>
-                <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList" class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
+                <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
+                    class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
                     <div class="image-wrapper-info">
                         <img class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
-                        <h3 class="episode-number-text-info">{{episode.number}}</h3>
+                        <h3 class="episode-number-text-info">{{ episode.number }}</h3>
                     </div>
                     <div class="episode-info-wrapper-info">
                         <div class="episode-title-text-info">
                             {{ episode.title ?? 'Episode ' + episode.number }}
-                        </div><div class="episode-title-text-info"></div>
+                        </div>
+                        <div class="episode-title-text-info"></div>
                     </div>
                 </div>
             </div>
@@ -61,10 +63,7 @@ console.log('testing')
 
 var id = route.path.replace("/info/", "");
 var episodeNumber = 1;
-
-const { episodeError, data: episodeResponse } = await useFetch('', { key: 'episodes' + id });
-        
-var episodeList = useState('episodeList', () => episodeResponse.value);
+var episodeList = ref([]);
 var loadedEpisodes = false;
 
 const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/data/' + id, { key: id });
