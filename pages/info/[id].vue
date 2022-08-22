@@ -25,13 +25,7 @@
                 </div>
             </div>
             <div v-my-directive class="info-episode-list">
-                <div class="loading-wrapper">
-                    <div class="lds-ellipsis">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
+                <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
                     class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
@@ -63,6 +57,7 @@ console.log('testing')
 
 var id = route.path.replace("/info/", "");
 var episodeNumber = 1;
+var loadingHtml = ref('<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
 var episodeList = ref([]);
 var loadedEpisodes = false;
 
@@ -102,7 +97,7 @@ const vMyDirective = {
         const { episodeError, data: episodeResponse } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
         function loadEpisodes() {
             if (episodeResponse.value) {
-                el.firstChild.innerHTML = '';
+                loadingHtml.value = '';
                 episodeList.value = episodeResponse.value;
                 /* for (var episode in episodeList) {
                     console.log(episode)
