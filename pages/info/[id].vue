@@ -1,17 +1,17 @@
 <template>
     <div class="info-wrapper">
-        <div ref="bg" class="bg"></div>
+        <img v-if="anime != null" ref="bg" class="bg" :src="anime.cover">
         <div class="gradient"></div>
         <div class="overall-wrapper">
             <div class="details-wrapper">
                 <div class="poster-wrapper">
-                    <div ref="poster_image" class="poster-image"></div>
+                    <img v-if="anime != null" ref="poster_image" class="poster-image" :src="anime.image">
                     <h1 v-if="anime != null" class="rating">Rating: {{ anime.rating / 10 }} / 10</h1>
                     <h1 v-if="anime != null" class="released">Released : {{ anime.releaseDate }}</h1>
                 </div>
                 <div v-if="anime != null" class="info-wrapper">
                     <h1 class="duration">{{ anime.duration }} min / Episode</h1>
-                    <h1 class="status">Episodes: <span class="red-text">{{ anime.episodes.length }}</span> -
+                    <h1 class="status">Episodes: <span class="red-text">PLACEHOLDER</span> -
                         Status: <span class="red-text">{{ anime.status }}</span></h1>
                     <h1 class="title">{{ anime.title.english }}</h1>
                     <h1 class="title-native">{{ anime.title.native }}</h1>
@@ -25,8 +25,8 @@
                     </div>
                 </div>
             </div>
-            <div class="info-episode-list">
-                <div v-if="anime != null" v-for="episode in anime.episodes" class="episode-card-info"
+            <div v-if="this.episodeList != null"  class="info-episode-list">
+                <div v-for="episode in this.episodeList" class="episode-card-info"
                     v-on:click="loadEpisode(episode)">
                     <div class="image-wrapper-info">
                         <img class="episode-bg-info" :src="episode.image">
@@ -59,12 +59,10 @@ console.log('testing')
 var id = route.path.replace("/info/", "");
 var episodeNumber = 1;
 
-const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + id + '?provider=zoro');
+const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/data/' + id);
 if (error.value || !episodes.value) {
   throw createError({ statusCode: 404, message: "Episode not found" })
 }
-
-console.log(episodes.value);
 
 var anime = episodes.value;
 
@@ -102,6 +100,23 @@ useHead({
   ]
 });
 
+const vMyDirective = {
+  mounted: async (el) => {
+    var id = route.path.replace("/info/", "");
+
+    console.log('GETTING EPISODES')
+
+    const { episodeError, data: episodeResponse } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro');
+    console.log(episodeResponse.value);
+    if (!episodeResponse.value) {
+        throw createError({ statusCode: 404, message: "Episode not found" })
+    }
+
+
+    var episodeList = episodeResponse.value;
+  }
+}
+
 </script>
 
 <script>
@@ -110,36 +125,30 @@ export default {
     data: () => ({
         anilistID: null,
         anilistJson: null,
-        airingTime: null
+        airingTime: null,
+        episodeList: null
     }),
     beforeMount() {
         console.log(this.$route.params.id)
         this.anilistID = this.$route.params.id
-        this.fetch()
+    },
+    async mounted() {
+        await this.fetch()
     },
     methods: {
         async loadEpisode(episode) {
             await navigateTo('/stream/' + this.anilistJson.id + '/' + this.anilistJson.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number)
         },
         async fetch() {
-            /* this.anilistJson = await anilistProvider.fetchAnimeInfo(this.anilistID).then(function (data) {
-                console.log(data)
-                return data;
-            }); */
-
-            this.anilistJson = await fetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + this.anilistID + '?provider=zoro').then(function (response) {
-                // The response is a Response instance.
-                // You parse the data into a useable format using `.json()`
+            console.log('EPISODES')
+            this.episodeList = await fetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + this.anilistID + '?provider=zoro').then(function (response) {
                 return response.json();
             }).then(function (data) {
-                // `data` is the parsed version of the JSON returned from the above endpoint.
-                console.log(data)
-                return data; // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+                return data;
             });
 
-
-            this.$refs.bg.style.backgroundImage = 'url(' + this.anilistJson.cover + ')'
-            this.$refs.poster_image.style.backgroundImage = 'url(' + this.anilistJson.image + ')'
+            this.$refs.bg.style.backgroundImage = 'url(' + anime.cover + ')'
+            this.$refs.poster_image.style.backgroundImage = 'url(' + anime.image + ')'
 
         },
         getAiringTime() {
@@ -182,8 +191,8 @@ export default {
     width: 100vw;
     height: 100vh;
     background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
+    object-position: center;
     filter: blur(8px);
 }
 
