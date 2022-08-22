@@ -19,30 +19,13 @@
                 </div>
             </div>
             <div class="lower-part">
-
                 <div class="genre-list">
                     <div v-if="anime != null" class="genre" v-for="genre in anime.genres" v-html="genre">
                     </div>
                 </div>
             </div>
-            <div v-if="this.episodeList != null"  class="info-episode-list">
-                <div v-for="episode in this.episodeList" class="episode-card-info"
-                    v-on:click="loadEpisode(episode)">
-                    <div class="image-wrapper-info">
-                        <img class="episode-bg-info" :src="episode.image">
-                        <div class="episode-gradient-info"></div>
-                        <h3 class="episode-number-text-info">{{ episode.number }}</h3>
-                    </div>
-                    <div class="episode-info-wrapper-info">
-                        <div class="episode-title-text-info">
-                            {{ episode.title != null ? episode.title : 'Episode ' + episode.number }}
-                        </div>
-                        <div class="episode-title-text-info"></div>
-                    </div>
-                </div>
+            <div v-my-directive class="info-episode-list">
             </div>
-
-
         </div>
     </div>
 
@@ -50,7 +33,7 @@
 
 
 <script setup>
-import {useFetch, useHead, useRoute} from '#app';
+import { useFetch, useHead, useRoute } from '#app';
 
 const route = useRoute();
 
@@ -58,107 +41,111 @@ console.log('testing')
 
 var id = route.path.replace("/info/", "");
 var episodeNumber = 1;
+var episodeList = null;
+var loadedEpisodes = false;
 
-const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/data/' + id);
+const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/data/' + id, { key: id });
 if (error.value || !episodes.value) {
-  throw createError({ statusCode: 404, message: "Episode not found" })
+    throw createError({ statusCode: 404, message: "Episode not found" })
 }
 
-var anime = episodes.value;
+var anime = null
+
+function loadAnime() {
+    if (episodes.value) {
+        anime = episodes.value;
+    }
+}
+loadAnime()
+
+watch(episodes, () => {
+    loadAnime()
+})
+
+const vMyDirective = {
+    mounted: async (el) => {
+
+        var id = route.path.replace("/info/", "");
+
+        console.log('GETTING EPISODES')
+
+        function createElementFromHTML(htmlString) {
+            var div = document.createElement('div');
+            div.innerHTML = htmlString.trim();
+
+            // Change this to div.childNodes to support multiple top-level nodes.
+            return div.firstChild;
+        }
+
+        const { episodeError, data: episodeResponse } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro');
+        function loadEpisodes() {
+            if (episodeResponse.value) {
+                episodeList = episodeResponse.value;
+                for (var episode in episodeList) {
+                    console.log(episode)
+                    el.appendChild(createElementFromHTML(`<div class="episode-card-info" id="episode-card-${episode}"><div class="image-wrapper-info"><img class="episode-bg-info" src="${episodeList[episode].image}"><div class="episode-gradient-info"></div><h3 class="episode-number-text-info">${episodeList[episode].number}</h3></div><div class="episode-info-wrapper-info"><div class="episode-title-text-info">${episodeList[episode].title != null ? episodeList[episode].title : 'Episode ' + episodeList[episode].number}</div><div class="episode-title-text-info"></div></div></div>`));
+                    const cbox = document.querySelectorAll(".episode-card-info");
+
+                    for (let i = 0; i < cbox.length; i++) {
+                        cbox[i].addEventListener("click", function () {
+                            loadEpisode(episodeList[i], anime)
+                            console.log(i)
+                            //cbox[i].classList.toggle("red");
+                        });
+                    }
+                }
+                console.log(episodeList[0]);
+            }
+        }
+        loadEpisodes()
+
+        watch(episodeResponse, () => {
+            loadEpisodes()
+        })
+    },
+}
+
+watch(episodeList, () => {
+    console.log(episodeList)
+})
+
+async function loadEpisode(episode, anime) {
+    await navigateTo('/stream/' + anime.id + '/' + anime.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number)
+}
 
 useHead({
     title: `Info of ${anime.title.english}`,
-  meta: [
-    {
-      name: "og:title",
-      content: `${anime.title.english}`
-    },
-    {
-      name: "og:type",
-      content: "website"
-    },
-    {
-      name: "og:url",
-      content: `https://inu.watch/info/${anime.id}`
-    },
-    {
-      name: "og:image",
-      content: anime.cover || anime.image
-    },
-    {
-      name: "og:description",
-      content: `${anime.description}`
-    },
-    {
-      name: "twitter:card",
-      content: "summary_large_image"
-    },
-    {
-      name: "theme-color",
-      content: anime.color ?? '#000000'
-    }
-  ]
-});
-
-const vMyDirective = {
-  mounted: async (el) => {
-    var id = route.path.replace("/info/", "");
-
-    console.log('GETTING EPISODES')
-
-    const { episodeError, data: episodeResponse } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro');
-    console.log(episodeResponse.value);
-    if (!episodeResponse.value) {
-        throw createError({ statusCode: 404, message: "Episode not found" })
-    }
-
-
-    var episodeList = episodeResponse.value;
-  }
-}
-
-</script>
-
-<script>
-
-export default {
-    data: () => ({
-        anilistID: null,
-        anilistJson: null,
-        airingTime: null,
-        episodeList: null
-    }),
-    beforeMount() {
-        console.log(this.$route.params.id)
-        this.anilistID = this.$route.params.id
-    },
-    async mounted() {
-        await this.fetch()
-    },
-    methods: {
-        async loadEpisode(episode) {
-            await navigateTo('/stream/' + this.anilistJson.id + '/' + this.anilistJson.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number)
+    meta: [
+        {
+            name: "og:title",
+            content: `${anime.title.english}`
         },
-        async fetch() {
-            console.log('EPISODES')
-            this.episodeList = await fetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + this.anilistID + '?provider=zoro').then(function (response) {
-                return response.json();
-            }).then(function (data) {
-                return data;
-            });
-
-            this.$refs.bg.style.backgroundImage = 'url(' + anime.cover + ')'
-            this.$refs.poster_image.style.backgroundImage = 'url(' + anime.image + ')'
-
+        {
+            name: "og:type",
+            content: "website"
         },
-        getAiringTime() {
-            if (this.anilistJson != null) {
-                //console.log(Date.now())
-                this.airingTime = this.anilistJson.nextAiringEpisode.timeUntilAiring
-            }
+        {
+            name: "og:url",
+            content: `https://inu.watch/info/${anime.id}`
+        },
+        {
+            name: "og:image",
+            content: anime.cover || anime.image
+        },
+        {
+            name: "og:description",
+            content: `${anime.description}`
+        },
+        {
+            name: "twitter:card",
+            content: "summary_large_image"
+        },
+        {
+            name: "theme-color",
+            content: anime.color ?? '#000000'
         }
-    },
-}
+    ]
+});
 </script>
 
 <style>
@@ -296,6 +283,7 @@ export default {
 
 .info-episode-list {
     display: flex;
+    flex-direction: row;
     margin-left: 120px;
     width: 90vw;
     height: 230px;
