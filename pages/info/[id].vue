@@ -33,6 +33,18 @@
                         <div></div>
                     </div>
                 </div>
+                <div v-if="episodeList != null" v-for="episode in episodeList" class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
+                    <div class="image-wrapper-info">
+                        <img class="episode-bg-info" :src="episode.image">
+                        <div class="episode-gradient-info"></div>
+                        <h3 class="episode-number-text-info">{{episode.number}}</h3>
+                    </div>
+                    <div class="episode-info-wrapper-info">
+                        <div class="episode-title-text-info">
+                            {{ episode.title ?? 'Episode ' + episode.number }}
+                        </div><div class="episode-title-text-info"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -49,7 +61,7 @@ console.log('testing')
 
 var id = route.path.replace("/info/", "");
 var episodeNumber = 1;
-var episodeList = null;
+var episodeList = useState('episodeList', () => null);
 var loadedEpisodes = false;
 
 const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/data/' + id, { key: id });
@@ -88,21 +100,22 @@ const vMyDirective = {
         const { episodeError, data: episodeResponse } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro');
         function loadEpisodes() {
             if (episodeResponse.value) {
-                episodeList = episodeResponse.value;
-                el.innerHTML = ''
-                for (var episode in episodeList) {
+                el.firstChild.innerHTML = '';
+                episodeList.value = episodeResponse.value;
+                /* for (var episode in episodeList) {
                     console.log(episode)
                     el.appendChild(createElementFromHTML(`<div class="episode-card-info" id="episode-card-${episode}"><div class="image-wrapper-info"><img class="episode-bg-info" src="${episodeList[episode].image}"><div class="episode-gradient-info"></div><h3 class="episode-number-text-info">${episodeList[episode].number}</h3></div><div class="episode-info-wrapper-info"><div class="episode-title-text-info">${episodeList[episode].title != null ? episodeList[episode].title : 'Episode ' + episodeList[episode].number}</div><div class="episode-title-text-info"></div></div></div>`));
-                    const cbox = document.querySelectorAll(".episode-card-info");
 
-                    for (let i = 0; i < cbox.length; i++) {
+                    
+                }
+                    const cbox = document.querySelectorAll(".episode-card-info");
+                for (let i = 0; i < cbox.length; i++) {
                         cbox[i].addEventListener("click", function () {
                             loadEpisode(episodeList[i], anime)
                             console.log(i)
                             //cbox[i].classList.toggle("red");
                         });
-                    }
-                }
+                    } */
                 console.log(episodeList[0]);
             }
         }
