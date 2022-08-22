@@ -39,13 +39,12 @@
             <div v-if="anime != null" class="episode-info">
                 <div class="top-info">
                     <div class="title-wrapper">
-
                         <div class="anime-title">
                             {{ anime.title.english }}
                         </div>
                         <div v-if="anime.episodes[episodeNumber - 1].title != null" class="episode-title">
                             {{ anime.episodes[episodeNumber -
-                                    1].description.title
+                                    1].title
                             }}
                         </div>
                     </div>
