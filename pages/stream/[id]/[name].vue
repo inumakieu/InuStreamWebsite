@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import {useFetch, useHead, useRoute} from '#app';
+import { useFetch, useHead, useRoute } from '#app';
 
 const route = useRoute();
 
@@ -98,43 +98,43 @@ console.log(parameters);
 
 const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + parameters[0] + '?provider=zoro');
 if (error.value || !episodes.value) {
-  throw createError({ statusCode: 404, message: "Episode not found" })
+    throw createError({ statusCode: 404, message: "Episode not found" })
 }
 
 var anime = episodes.value;
 
 useHead({
     title: `${anime.title.english}`,
-  meta: [
-    {
-      name: "og:title",
-      content: `${anime.title.english} Episode ${episodeNumber}`
-    },
-    {
-      name: "og:type",
-      content: "website"
-    },
-    {
-      name: "og:url",
-      content: `https://inu.watch/stream/${anime.id}/${anime.title.english.toLowerCase().replaceAll(' ', '-')}`
-    },
-    {
-      name: "og:image",
-      content: anime.episodes[episodeNumber - 1].image || anime.cover || anime.image
-    },
-    {
-      name: "og:description",
-      content: `Watch Episode ${episodeNumber}${anime.episodes[episodeNumber - 1].title ? `\n${anime.episodes[episodeNumber - 1].title}` : ""} of ${anime.title.english} online on Inu's Stream ${anime.episodes[episodeNumber - 1].description ? ` - ${anime.episodes[episodeNumber - 1].description}` : ""}`
-    },
-    {
-      name: "twitter:card",
-      content: "summary_large_image"
-    },
-    {
-      name: "theme-color",
-      content: anime.color ?? '#000000'
-    }
-  ]
+    meta: [
+        {
+            name: "og:title",
+            content: `${anime.title.english} Episode ${episodeNumber}`
+        },
+        {
+            name: "og:type",
+            content: "website"
+        },
+        {
+            name: "og:url",
+            content: `https://inu.watch/stream/${anime.id}/${anime.title.english.toLowerCase().replaceAll(' ', '-')}`
+        },
+        {
+            name: "og:image",
+            content: anime.episodes[episodeNumber - 1].image || anime.cover || anime.image
+        },
+        {
+            name: "og:description",
+            content: `Watch Episode ${episodeNumber}${anime.episodes[episodeNumber - 1].title ? `\n${anime.episodes[episodeNumber - 1].title}` : ""} of ${anime.title.english} online on Inu's Stream ${anime.episodes[episodeNumber - 1].description ? ` - ${anime.episodes[episodeNumber - 1].description}` : ""}`
+        },
+        {
+            name: "twitter:card",
+            content: "summary_large_image"
+        },
+        {
+            name: "theme-color",
+            content: anime.color ?? '#000000'
+        }
+    ]
 });
 
 </script>
@@ -299,6 +299,26 @@ export default {
                     }
                 };
 
+                document.addEventListener('keydown', (e) => {
+                    if (e.code == 'Space') {
+                        art.toggle()
+                    }
+                    if (e.code == 'KeyM') {
+                        // toggle mute
+                    }
+                    if (e.code == 'KeyF') {
+                        if (!this.fullscreenBool) {
+                            this.fullscreenBool = true
+                            video_wrapper.requestFullscreen()
+                            subs.style.bottom = 'calc(50px)'
+                        } else {
+                            this.fullscreenBool = false
+                            window.document.exitFullscreen()
+                            subs.style.bottom = 'calc(30vh + 20px)'
+                        }
+                    }
+                })
+
             });
 
             art.on('video:timeupdate', () => {
@@ -366,8 +386,9 @@ export default {
 .left-side {
     margin: 0;
     padding: 0;
-    width: 70vw;
+    width: 80vw;
     height: 100vh;
+    overflow: hidden;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -376,8 +397,8 @@ export default {
 
 .video-wrapper {
     position: relative;
-    width: 70vw;
-    height: 70vh;
+    width: 77vw;
+    height: 77vh;
     margin: 40px;
     margin-bottom: 0px;
     box-shadow: 0px 0px 15px 5px black;
@@ -529,8 +550,9 @@ export default {
     margin: 0;
     padding-left: 40px;
     padding: 0;
-    width: 26vw;
+    width: 20vw;
     height: 100vh;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -541,6 +563,10 @@ export default {
     margin-top: 50px;
     font-size: 28px;
     margin-bottom: 30px;
+}
+
+.episode-card {
+    position: relative;
 }
 
 

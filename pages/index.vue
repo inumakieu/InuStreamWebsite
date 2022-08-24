@@ -35,7 +35,86 @@
                         </div>
                     </div>
                 </div>
-                <div class="avatar"></div>
+                <div class="avatar-wrapper">
+                    <div class="avatar" v-on:click="changeShowDropdown()"></div>
+                    <div class="dropdown-menu opened">
+                        <div class="main-dropdown selected">
+                            <ul>
+                                <div class="dropdown-item">
+                                    <div class="dropdown-left-wrapper">
+                                        <div class="left-icon" style="background-color: red"></div>
+                                        <li>USER</li>
+                                    </div>
+                                </div>
+                                <div class="dropdown-item" v-on:click="changeSubmenu('settings')">
+                                    <div class="dropdown-left-wrapper">
+                                        <div class="left-icon">
+                                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 512 512">
+                                                <path fill="white"
+                                                    d="M495.9 166.6C499.2 175.2 496.4 184.9 489.6 191.2L446.3 230.6C447.4 238.9 448 247.4 448 256C448 264.6 447.4 273.1 446.3 281.4L489.6 320.8C496.4 327.1 499.2 336.8 495.9 345.4C491.5 357.3 486.2 368.8 480.2 379.7L475.5 387.8C468.9 398.8 461.5 409.2 453.4 419.1C447.4 426.2 437.7 428.7 428.9 425.9L373.2 408.1C359.8 418.4 344.1 427 329.2 433.6L316.7 490.7C314.7 499.7 307.7 506.1 298.5 508.5C284.7 510.8 270.5 512 255.1 512C241.5 512 227.3 510.8 213.5 508.5C204.3 506.1 197.3 499.7 195.3 490.7L182.8 433.6C167 427 152.2 418.4 138.8 408.1L83.14 425.9C74.3 428.7 64.55 426.2 58.63 419.1C50.52 409.2 43.12 398.8 36.52 387.8L31.84 379.7C25.77 368.8 20.49 357.3 16.06 345.4C12.82 336.8 15.55 327.1 22.41 320.8L65.67 281.4C64.57 273.1 64 264.6 64 256C64 247.4 64.57 238.9 65.67 230.6L22.41 191.2C15.55 184.9 12.82 175.3 16.06 166.6C20.49 154.7 25.78 143.2 31.84 132.3L36.51 124.2C43.12 113.2 50.52 102.8 58.63 92.95C64.55 85.8 74.3 83.32 83.14 86.14L138.8 103.9C152.2 93.56 167 84.96 182.8 78.43L195.3 21.33C197.3 12.25 204.3 5.04 213.5 3.51C227.3 1.201 241.5 0 256 0C270.5 0 284.7 1.201 298.5 3.51C307.7 5.04 314.7 12.25 316.7 21.33L329.2 78.43C344.1 84.96 359.8 93.56 373.2 103.9L428.9 86.14C437.7 83.32 447.4 85.8 453.4 92.95C461.5 102.8 468.9 113.2 475.5 124.2L480.2 132.3C486.2 143.2 491.5 154.7 495.9 166.6V166.6zM256 336C300.2 336 336 300.2 336 255.1C336 211.8 300.2 175.1 256 175.1C211.8 175.1 176 211.8 176 255.1C176 300.2 211.8 336 256 336z" />
+                                            </svg>
+                                        </div>
+                                        <li>Settings</li>
+                                    </div>
+                                    <div class="right-icon">
+                                        <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 320 512">
+                                            <path fill="white"
+                                                d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="dropdown-item">
+                                    <div class="dropdown-left-wrapper">
+                                        <div class="left-icon">
+                                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 512 512">
+                                                <path fill="white"
+                                                    d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z" />
+                                            </svg>
+                                        </div>
+                                        <li>About</li>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+                        <div class="settings-dropdown">
+                            <ul>
+                                <div class="dropdown-item" v-on:click="changeSubmenu('main')">
+                                    <div class="dropdown-left-wrapper">
+                                        <div class="left-icon">
+                                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 320 512">
+                                                <path fill="white"
+                                                    d="M224 480c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25l192-192c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l169.4 169.4c12.5 12.5 12.5 32.75 0 45.25C240.4 476.9 232.2 480 224 480z" />
+                                            </svg>
+                                        </div>
+                                        <li>Back</li>
+                                    </div>
+                                </div>
+                                <div class="dropdown-item">
+                                    <div class="dropdown-left-wrapper">
+                                        <div class="left-icon">
+                                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="white"
+                                                    d="M384 112v288c0 26.51-21.49 48-48 48h-288c-26.51 0-48-21.49-48-48v-288c0-26.51 21.49-48 48-48h288C362.5 64 384 85.49 384 112zM576 127.5v256.9c0 25.5-29.17 40.39-50.39 25.79L416 334.7V177.3l109.6-75.56C546.9 87.13 576 102.1 576 127.5z" />
+                                            </svg>
+                                        </div>
+                                        <li>Use 'Netflix' Player</li>
+
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" v-model="videoPlayerDesign"
+                                            v-on:click="changeVideoPlayer(this)">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
         <div>
@@ -74,6 +153,7 @@
 </template>
 
 <script>
+
 export default {
     transition: {
         name: 'home',
@@ -84,6 +164,9 @@ export default {
             animeName: null,
             searchJson: null,
             magic_flag: false,
+            showDropdown: false,
+            currentDropdown: 'main',
+            videoPlayerDesign: false,
         }
     },
     methods: {
@@ -122,16 +205,11 @@ export default {
             const searchSuggestions = document.querySelector('.searchSuggestions');
 
             if (this.searchJson != null && this.searchJson.length != 0) {
-                if (suggestionClipper != null && searchSuggestions != null) {
-
-                    suggestionClipper.classList.add('display')
-                    searchSuggestions.classList.add('display')
-                }
+                suggestionClipper.classList.add('display')
+                searchSuggestions.classList.add('display')
             } else {
-                if (suggestionClipper != null && searchSuggestions != null) {
-                    suggestionClipper.classList.remove('display')
-                    searchSuggestions.classList.remove('display')
-                }
+                suggestionClipper.classList.remove('display')
+                searchSuggestions.classList.remove('display')
             }
         },
         async goToSearch() {
@@ -140,6 +218,37 @@ export default {
         async goToInfo(id) {
             await navigateTo('/info/' + id, { replace: false })
         },
+        changeSubmenu(nextSubmenu) {
+            this.currentDropdown = nextSubmenu;
+            var newHeight = '0px';
+            switch (nextSubmenu) {
+                case 'main':
+                    document.querySelector('.settings-dropdown').classList.remove('selected')
+                    document.querySelector('.main-dropdown').classList.add('selected')
+                    newHeight = (document.querySelector('.main-dropdown > ul').children.length * 60) + 'px';
+                    break
+                case 'settings':
+                    document.querySelector('.main-dropdown').classList.remove('selected')
+                    document.querySelector('.settings-dropdown').classList.add('selected')
+                    newHeight = (document.querySelector('.settings-dropdown > ul').children.length * 60) + 'px';
+                    break
+            }
+            document.querySelector('.dropdown-menu').style.height = newHeight;
+        },
+        changeVideoPlayer(checkbox) {
+            console.log('Checkbox value: ' + this.videoPlayerDesign)
+        },
+        changeShowDropdown() {
+            if (this.showDropdown) {
+                document.querySelector('.dropdown-menu').style.height = '0px'
+                document.querySelector('.dropdown-menu').classList.remove('opened')
+                this.showDropdown = false
+            } else {
+                document.querySelector('.dropdown-menu').style.height = (document.querySelector('.main-dropdown > ul').children.length * 60) + 'px';
+                document.querySelector('.dropdown-menu').classList.add('opened')
+                this.showDropdown = true
+            }
+        }
     },
     mounted() {
         const password = document.querySelector('input[type="search"]');
@@ -317,6 +426,175 @@ body {
     font-size: 12px;
 }
 
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin-right: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #1c0d58;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #1c0d58;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(23px);
+    -ms-transform: translateX(23px);
+    transform: translateX(23px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.avatar-wrapper {
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.dropdown-menu {
+    position: absolute;
+    display: flex;
+    width: 320px;
+    min-width: 320px;
+    transform: translate(-60%, 20px);
+    transition: 0.4s all ease;
+    overflow: hidden;
+}
+
+.dropdown-menu.opened {
+    display: flex;
+    width: 320px;
+    min-width: 320px;
+    height: auto;
+    border-radius: 14px;
+    background-color: black;
+    position: absolute;
+    transform: translate(-60%, 30px);
+    transition: 0.4s all ease;
+    overflow: hidden;
+}
+
+.main-dropdown.selected {
+    width: 320px;
+    min-width: 320px;
+    transform: translateX(0%);
+    transition: 0.4s all ease;
+}
+
+.main-dropdown {
+    width: 320px;
+    transform: translateX(-100%);
+    transition: 0.4s all ease;
+}
+
+.settings-dropdown {
+    width: 320px;
+    min-width: 320px;
+    transform: translateX(0%);
+    transition: 0.4s all ease;
+}
+
+.settings-dropdown.selected {
+    width: 320px;
+    min-width: 320px;
+    transform: translateX(-68%);
+    transition: 0.4s all ease;
+}
+
+.left-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgb(66, 66, 66);
+    margin: 0px 20px;
+}
+
+.right-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgb(66, 66, 66);
+    margin: 0px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    background-color: transparent;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s all ease;
+}
+
+ul {
+    list-style: none;
+}
+
+.dropdown-item:hover {
+    background-color: #0c0b11;
+}
+
+.dropdown-left-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 
 .search {
@@ -367,8 +645,10 @@ body {
 }
 
 .avatar {
+    position: absolute;
     width: 40px;
     margin-left: 20px;
+    top: 10px;
     aspect-ratio: 1;
     border-radius: 20px;
     background-color: red;

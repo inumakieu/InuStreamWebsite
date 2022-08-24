@@ -27,9 +27,6 @@
             <div v-my-directive class="info-episode-list" :ref="episodeListRef">
                 <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
-
-
-
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
                     class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
                     <div class="image-wrapper-info">
