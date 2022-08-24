@@ -24,13 +24,16 @@
                     </div>
                 </div>
             </div>
-            <div v-my-directive class="info-episode-list">
+            <div v-my-directive class="info-episode-list" :ref="episodeListRef">
                 <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
+
+
+
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
-                    class="episode-card-info" ref="episodeCardInfo" v-on:click="loadEpisode(episode, anime)">
+                    class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
                     <div class="image-wrapper-info">
-                        <img v-on:load="animateList()" class="episode-bg-info" :src="episode.image">
+                        <img class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
                         <h3 class="episode-number-text-info">{{ episode.number }}</h3>
                     </div>
@@ -79,14 +82,17 @@ watch(episodes, () => {
     loadAnime()
 })
 
-function animateList(element) {
-    var cards = document.querySelectorAll('.episode-card-info')
+function animateList() {
+    var cards = document.querySelectorAll('.episode-card-info');
+    console.log('ANIMATING');
     if (!loadedEpisodes) {
 
         console.log(cards)
         for (var index in cards) {
-            cards[index].style.transitionDelay = index / 6 + 's'
-            cards[index].classList.add('loaded')
+            if (cards[index] != null) {
+                cards[index].style.transitionDelay = index / 10 + 's'
+                cards[index].classList.add('loaded')
+            }
 
         }
         loadedEpisodes = true
@@ -105,6 +111,23 @@ const vMyDirective = {
             if (episodeResponse.value) {
                 loadingHtml.value = '';
                 episodeList.value = episodeResponse.value;
+                setTimeout(() => {
+                    var cards = document.querySelectorAll('.episode-card-info');
+                    console.log('ANIMATING');
+                    if (!loadedEpisodes) {
+
+                        console.log(cards)
+                        for (var index in cards) {
+                            if (cards[index] != null) {
+                                cards[index].style.transitionDelay = index / 5 + 's'
+                                cards[index].classList.add('loaded')
+                            }
+
+                        }
+                        loadedEpisodes = true
+                    }
+                }, "100")
+
             }
         }
         loadEpisodes()

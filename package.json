@@ -17,6 +17,8 @@
     "@nuxtjs/moment": "^1.6.1",
     "artplayer": "^4.5.4",
     "hls.js": "^1.2.1",
-    "nuxt-seo": "^1.6.1"
+    "nuxt-seo": "^1.6.1",
+    "vue-virtual-scroll-list": "^2.3.3",
+    "vue-virtual-scroller": "^1.0.10"
   }
 }

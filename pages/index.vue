@@ -19,20 +19,21 @@
                                 id="search-field" v-model="animeName" v-on:input="searchAnime">
                         </form>
                     </div>
-                        <div class="searchSuggestions">
-                            <div ref="search_result" class="search-result" v-on:click="goToInfo(anime.id)" v-for="anime in searchJson" v-bind:key="anime.id">
-                                <img class="anime-image-nav" :src="anime.image" alt="">
-                                <div class="result-text-nav">
-                                    <h1 class="result-title-nav">
-                                        {{ anime.title.userPreferred }}
-                                    </h1>
-                                    <h2 class="result-date-nav">
+                    <div class="searchSuggestions">
+                        <div ref="search_result" class="search-result" v-on:click="goToInfo(anime.id)"
+                            v-for="anime in searchJson" v-bind:key="anime.id">
+                            <img class="anime-image-nav" :src="anime.image" alt="">
+                            <div class="result-text-nav">
+                                <h1 class="result-title-nav">
+                                    {{ anime.title.userPreferred }}
+                                </h1>
+                                <h2 class="result-date-nav">
 
-                                        {{ anime.releaseDate }}
-                                    </h2>
-                                </div>
+                                    {{ anime.releaseDate }}
+                                </h2>
                             </div>
                         </div>
+                    </div>
                 </div>
                 <div class="avatar"></div>
             </div>
@@ -52,7 +53,8 @@
                     <h2 class="episode-count">Episodes: <span class="red-text">7</span> - Status: <span
                             class="red-text">CURRENTLY AIRING</span></h2>
                     <h1 class="title">Yofukashi no Uta</h1>
-                    <h4 class="description-home">Wracked by insomnia and wanderlust, Kou Yamori is driven onto the moonlit
+                    <h4 class="description-home">Wracked by insomnia and wanderlust, Kou Yamori is driven onto the
+                        moonlit
                         streets every night in an aimless search for something he can’t seem to name. His nightly ritual
                         is
                         marked by purposeless introspection — until he meets Nazuna, who might just be a vampire! Kou’s
@@ -116,13 +118,20 @@ export default {
             });
 
             console.log(this.searchJson)
+            const suggestionClipper = document.querySelector('.suggestionClipper');
+            const searchSuggestions = document.querySelector('.searchSuggestions');
 
-            if(this.searchJson != null && this.searchJson.length != 0) {
-                this.$el.querySelector('.searchSuggestions').classList.add('display')
-                this.$el.querySelector('.suggestionClipper').classList.add('display')
+            if (this.searchJson != null && this.searchJson.length != 0) {
+                if (suggestionClipper != null && searchSuggestions != null) {
+
+                    suggestionClipper.classList.add('display')
+                    searchSuggestions.classList.add('display')
+                }
             } else {
-                this.$el.querySelector('.searchSuggestions').classList.remove('display')
-                this.$el.querySelector('.suggestionClipper').classList.remove('display')
+                if (suggestionClipper != null && searchSuggestions != null) {
+                    suggestionClipper.classList.remove('display')
+                    searchSuggestions.classList.remove('display')
+                }
             }
         },
         async goToSearch() {
@@ -138,19 +147,27 @@ export default {
         const searchSuggestions = document.querySelector('.searchSuggestions');
 
         password.addEventListener('focus', (event) => {
-            searchSuggestions.style.overflow.y = 'scroll';
+            if (searchSuggestions) {
+                searchSuggestions.style.overflowY = 'scroll';
+            }
             //this.searchAnime()
         });
 
         password.addEventListener('blur', (event) => {
-            suggestionClipper.classList.remove('display');
-            searchSuggestions.classList.remove('display');
-            searchSuggestions.style.overflow = 'hidden';
+            if (suggestionClipper) {
+
+                suggestionClipper.classList.remove('display');
+            }
+            if (searchSuggestions) {
+
+                searchSuggestions.classList.remove('display');
+                searchSuggestions.style.overflow = 'hidden';
+            }
         });
     },
     beforeMount() {
         window.addEventListener('scroll', this.handleScroll)
-        
+
     },
     beforeDestroy() {
         window.removeEventListener('scroll', this.handleScroll)
