@@ -169,6 +169,15 @@ export default {
             videoPlayerDesign: false,
         }
     },
+    head() {
+        return {
+        title: "Inu's Stream",
+        meta: [
+            { name: 'description', content: 'Stream anime without any ads' }
+        ],
+        }
+        
+    },
     methods: {
         handleScroll() {
             // Your scroll handling here
