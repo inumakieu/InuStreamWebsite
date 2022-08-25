@@ -171,12 +171,12 @@ export default {
     },
     head() {
         return {
-        title: "Inu's Stream",
-        meta: [
-            { name: 'description', content: 'Stream anime without any ads' }
-        ],
+            title: "Inu's Stream",
+            meta: [
+                { name: 'description', content: 'Stream anime without any ads' }
+            ],
         }
-        
+
     },
     methods: {
         handleScroll() {
@@ -282,6 +282,16 @@ export default {
                 searchSuggestions.style.overflow = 'hidden';
             }
         });
+
+        const avatarWrapper = document.querySelector('.avatar-wrapper');
+
+        document.addEventListener('click', (event) => {
+            const isClickInside = avatarWrapper.contains(event.target);
+
+            if (!isClickInside) {
+                this.changeShowDropdown()
+            }
+        })
     },
     beforeMount() {
         window.addEventListener('scroll', this.handleScroll)
@@ -510,6 +520,7 @@ input:checked+.slider:before {
     position: absolute;
     display: flex;
     width: 320px;
+    height: 0px;
     min-width: 320px;
     transform: translate(-60%, 20px);
     transition: 0.4s all ease;
@@ -571,7 +582,6 @@ input:checked+.slider:before {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: rgb(66, 66, 66);
     margin: 0px 20px;
     display: flex;
     align-items: center;
