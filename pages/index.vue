@@ -37,7 +37,7 @@
                 </div>
                 <div class="avatar-wrapper">
                     <div class="avatar" v-on:click="changeShowDropdown()"></div>
-                    <div class="dropdown-menu opened">
+                    <div class="dropdown-menu">
                         <div class="main-dropdown selected">
                             <ul>
                                 <div class="dropdown-item">
