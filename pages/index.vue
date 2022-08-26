@@ -43,7 +43,7 @@
                                 <div class="dropdown-item">
                                     <div class="dropdown-left-wrapper">
                                         <div class="left-icon" style="background-color: red"></div>
-                                        <li>USER</li>
+                                        <li>LOGIN</li>
                                     </div>
                                 </div>
                                 <div class="dropdown-item" v-on:click="changeSubmenu('settings')">
@@ -209,16 +209,12 @@ export default {
                 return results; // { "userId": 1, "id": 1, "title": "...", "body": "..." }
             });
 
-            console.log(this.searchJson)
-            const suggestionClipper = document.querySelector('.suggestionClipper');
-            const searchSuggestions = document.querySelector('.searchSuggestions');
+            console.log(this.searchJson.length)
 
             if (this.searchJson != null && this.searchJson.length != 0) {
-                suggestionClipper.classList.add('display')
-                searchSuggestions.classList.add('display')
+                document.querySelector('.searchSuggestions').classList.add('display')
             } else {
-                suggestionClipper.classList.remove('display')
-                searchSuggestions.classList.remove('display')
+                document.querySelector('.searchSuggestions').classList.remove('display')
             }
         },
         async goToSearch() {
@@ -261,8 +257,9 @@ export default {
     },
     mounted() {
         const password = document.querySelector('input[type="search"]');
-        const suggestionClipper = document.querySelector('.suggestionClipper');
         const searchSuggestions = document.querySelector('.searchSuggestions');
+        const searchResult = document.querySelector('.search-result');
+        const search = document.querySelector('.search');
 
         password.addEventListener('focus', (event) => {
             if (searchSuggestions) {
@@ -271,25 +268,21 @@ export default {
             //this.searchAnime()
         });
 
-        password.addEventListener('blur', (event) => {
-            if (suggestionClipper) {
-
-                suggestionClipper.classList.remove('display');
-            }
-            if (searchSuggestions) {
-
-                searchSuggestions.classList.remove('display');
-                searchSuggestions.style.overflow = 'hidden';
-            }
-        });
-
         const avatarWrapper = document.querySelector('.avatar-wrapper');
 
         document.addEventListener('click', (event) => {
             const isClickInside = avatarWrapper.contains(event.target);
+            const isSearchSuggestionInside = searchSuggestions.contains(event.target);
 
             if (!isClickInside) {
-                this.changeShowDropdown()
+                document.querySelector('.dropdown-menu').style.height = '0px'
+                document.querySelector('.dropdown-menu').classList.remove('opened')
+                this.showDropdown = false
+            }
+
+            if (!isSearchSuggestionInside) {
+                console.log('NOT INSIDE')
+                searchSuggestions.classList.remove('display')
             }
         })
     },
