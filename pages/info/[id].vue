@@ -1,21 +1,64 @@
 <template>
-    <div class="info-wrapper">
+    <div class="info-page-wrapper">
         <img v-if="anime != null" ref="bg" class="bg" :src="anime.cover">
         <div class="gradient-info"></div>
         <div class="overall-wrapper">
             <div class="details-wrapper">
-                <div class="poster-wrapper">
-                    <img v-if="anime != null" ref="poster_image" class="poster-image" :src="anime.image">
-                    <h1 v-if="anime != null" class="rating">Rating: {{ anime.rating / 10 }} / 10</h1>
-                    <h1 v-if="anime != null" class="released">Released : {{ anime.releaseDate }}</h1>
-                </div>
-                <div v-if="anime != null" class="info-wrapper">
-                    <h1 class="duration">{{ anime.duration }} min / Episode</h1>
-                    <h1 class="status">Episodes: <span class="red-text">{{ anime.totalEpisodes }}</span> -
-                        Status: <span class="red-text">{{ anime.status }}</span></h1>
-                    <h1 class="title">{{ anime.title.english }}</h1>
-                    <h1 class="title-native">{{ anime.title.native }}</h1>
-                    <p class="description"><span v-html="anime.description"></span></p>
+                <div class="row-wrapper">
+                    <div class="left-side-row">
+
+                        <div class="poster-wrapper">
+                            <img v-if="anime != null" ref="poster_image" class="poster-image" :src="anime.image">
+                            <h1 v-if="anime != null" class="rating">Rating: {{ anime.rating / 10 }} / 10</h1>
+                            <h1 v-if="anime != null" class="released">Released : {{ anime.releaseDate }}</h1>
+                        </div>
+                        <div v-if="anime != null" class="info-wrapper">
+                            <h1 class="duration">{{ anime.duration }} min / Episode</h1>
+                            <h1 class="status">Episodes: <span class="red-text">{{ anime.totalEpisodes }}</span> -
+                                Status: <span class="red-text">{{ anime.status }}</span></h1>
+                            <h1 class="title">{{ anime.title.english }}</h1>
+                            <h1 class="title-native">{{ anime.title.native }}</h1>
+                            <p class="description"><span v-html="anime.description"></span></p>
+                        </div>
+                        <div class="studio-wrapper">
+                            <h2 class="studios-top-title">Studios:</h2>
+                            <div v-for="studio in anime.studios" class="studio-name-wrapper">
+                                <h2 class="studio-name-text">{{ studio }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right-side-row">
+                        <div class="right-side-wrapper">
+                            <h1 class="characters-title">Characters</h1>
+                            <div class="character-list-wrapper">
+                                <div v-for="character in anime.characters" class="characters-list">
+                                    <div class="character-wrapper">
+                                        <div class="character-image-wrapper">
+                                            <img class="character-image" :src="character.image">
+                                        </div>
+                                        <div class="character-details-wrapper">
+                                            <div class="character-role">{{ character.role }}</div>
+                                            <div class="character-name">{{ character.name.userPreferred }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h1 class="related-title">Related Anime</h1>
+                            <div class="related-list-wrapper">
+                                <div v-for="related in anime.relations" class="characters-list">
+                                    <div class="related-wrapper" v-on:click="goToInfo(related.id)">
+                                        <div class="related-image-wrapper">
+                                            <img class="related-image" :src="related.cover">
+                                        </div>
+                                        <div class="related-details-wrapper">
+                                            <div class="character-role">{{ related.relationType }}</div>
+                                            <div class="related-name">{{ related.title.userPreferred }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="lower-part">
@@ -24,6 +67,7 @@
                     </div>
                 </div>
             </div>
+            <h1 class="episodes-title">Episodes</h1>
             <div v-my-directive class="info-episode-list" :ref="episodeListRef">
                 <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
@@ -57,6 +101,7 @@ console.log('testing')
 
 var id = route.path.replace("/info/", "");
 var episodeNumber = 1;
+var charactersIndex = ref(0);
 var loadingHtml = ref('<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');
 var episodeList = ref([]);
 var loadedEpisodes = false;
@@ -78,6 +123,11 @@ loadAnime()
 watch(episodes, () => {
     loadAnime()
 })
+
+
+async function goToInfo(id) {
+    await navigateTo('/info/' + id, { replace: false })
+};
 
 function animateList() {
     var cards = document.querySelectorAll('.episode-card-info');
@@ -178,7 +228,52 @@ useHead({
 });
 </script>
 
-<style>
+<style scoped>
+.row-wrapper {
+    width: 100vw;
+    height: 63vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-side-row {
+    display: flex;
+}
+
+.studio-wrapper {
+    padding-left: 80px;
+    height: 36vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.studio-name-text {
+    margin: 0;
+    padding: 0;
+    font-size: 32px;
+    color: white;
+    font-weight: bold;
+}
+
+.studios-top-title {
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    color: black;
+    font-weight: bold;
+}
+
+.episodes-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+    margin-left: 120px;
+    margin-top: 20px;
+}
+
+
 .loading-wrapper {
     width: 100%;
     display: flex;
@@ -258,6 +353,7 @@ useHead({
 ::-webkit-scrollbar {
     height: 8px;
     width: 8px;
+    display: none;
 }
 
 /* Track */
@@ -305,7 +401,7 @@ useHead({
 
 .details-wrapper {
     width: 100vw;
-    height: 70vh;
+    height: 63vh;
     display: flex;
     align-items: center;
 }
@@ -328,6 +424,223 @@ useHead({
     margin-bottom: 12px;
     -webkit-box-shadow: 0px 0px 12px 5px #000000;
     box-shadow: 0px 0px 12px 5px #000000;
+}
+
+.right-side-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-self: flex-end;
+    margin-right: 60px;
+    width: 16vw;
+}
+
+.character-wrapper:hover {
+    position: relative;
+    width: 140px;
+    height: 210px;
+    border-radius: 20px;
+    margin-right: 20px;
+    overflow: hidden;
+    color: black;
+    transition: 0.4s all ease;
+}
+
+.character-wrapper {
+    position: relative;
+    width: 110px;
+    height: 170px;
+    border-radius: 12px;
+    margin-right: 20px;
+    overflow: hidden;
+    color: black;
+    transition: 0.4s all ease;
+}
+
+.related-title {
+    margin-top: 10px;
+    padding: 0;
+}
+
+.characters-title {
+    margin-top: 80px;
+    padding: 0;
+}
+
+.related-list-wrapper {
+    width: 20vw;
+    height: 170px;
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    align-items: center;
+}
+
+.character-list-wrapper {
+    width: 20vw;
+    height: 230px;
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    align-items: center;
+}
+
+.character-wrapper:hover>.character-image-wrapper>.character-image {
+    width: 140px;
+    height: 210px;
+    border-radius: 20px;
+    object-fit: cover;
+    object-position: center;
+    transition: 0.4s all ease;
+}
+
+.character-wrapper>.character-image-wrapper>.character-image {
+    width: 110px;
+    height: 170px;
+    border-radius: 12px;
+    object-fit: cover;
+    object-position: center;
+    transition: 0.4s all ease;
+}
+
+.character-image-wrapper {
+    position: absolute;
+    overflow: hidden;
+}
+
+
+
+.character-name {
+    width: 110px;
+    height: 40px;
+    background-color: black;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    transition: 0.4s all ease;
+    text-overflow: ellipsis;
+}
+
+.character-wrapper:hover>.character-details-wrapper>.character-name {
+    width: 140px;
+    font-size: 12px;
+    transition: 0.4s all ease;
+}
+
+.character-details-wrapper {
+    position: absolute;
+    width: 110px;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    transition: 0.4s all ease;
+}
+
+.character-details-wrapper:hover {
+    width: 140px;
+    height: 210px;
+    transition: 0.4s all ease;
+}
+
+.character-role {
+    border-radius: 0 0 0 8px;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 12px;
+    background-color: black;
+    color: white;
+}
+
+.related-wrapper {
+    position: relative;
+    width: 150px;
+    height: 90px;
+    margin-right: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.4s all ease;
+}
+
+.related-wrapper:hover {
+    width: 190px;
+    height: 120px;
+    transition: 0.4s all ease;
+}
+
+.related-details-wrapper {
+    position: absolute;
+    width: 150px;
+    height: 90px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    transition: 0.4s all ease;
+}
+
+.related-wrapper:hover>.related-details-wrapper {
+    width: 190px;
+    height: 120px;
+    transition: 0.4s all ease;
+}
+
+.related-image-wrapper {
+    position: absolute;
+    overflow: hidden;
+}
+
+.related-image {
+    width: 150px;
+    height: 90px;
+    border-radius: 12px;
+    object-fit: cover;
+    object-position: center;
+    transition: 0.4s all ease;
+}
+
+.related-wrapper:hover>.related-image-wrapper>.related-image {
+    width: 190px;
+    height: 120px;
+    border-radius: 20px;
+    transition: 0.4s all ease;
+}
+
+.related-name {
+    width: 150px;
+    height: 30px;
+    padding: 4px 12px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-size: 8px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    transition: 0.4s all ease;
+    text-overflow: ellipsis;
+}
+
+.related-wrapper:hover>.related-details-wrapper>.related-name {
+    width: 190px;
+    height: 40px;
+    transition: 0.4s all ease;
+}
+
+.info-wrapper {
+    width: 36vw;
 }
 
 .rating {
@@ -361,7 +674,6 @@ useHead({
 .description {
     font-size: 14px;
     font-weight: 400;
-    width: 800px;
 }
 
 .red-text {
