@@ -1,5 +1,5 @@
 <template>
-    <div class="body" style="display: flex; justify-content: space-between;">
+    <div v-if="!netflixUI && doneLoading" class="body" style="display: flex; justify-content: space-between;">
         <div class="left-side">
             <div class="video-wrapper">
                 <Artplayer class="artplayer" @get-instance="getInstance" :option="option" :style="stylesObject" />
@@ -78,6 +78,71 @@
                         </div>
                         <div class="episode-title-text"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-else class="body">
+        <div class="video-wrapper-netflix">
+            <Artplayer class="artplayer" @get-instance="getInstance" :option="option" :style="stylesObject" />
+            <div class="subtitles">
+                <h2 class="subtitle-shadow"></h2>
+                <h2 class="subtitle-text"></h2>
+            </div>
+            <div class="gradient-controls"></div>
+            <div class="custom-controls">
+                <div class="bottom-controls">
+                    <svg class="skip-back-button" width="40px" height="22px" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 384 512">
+                        <path fill="white"
+                            d="M480 256c0 123.4-100.5 223.9-223.9 223.9c-48.84 0-95.17-15.58-134.2-44.86c-14.12-10.59-16.97-30.66-6.375-44.81c10.59-14.12 30.62-16.94 44.81-6.375c27.84 20.91 61 31.94 95.88 31.94C344.3 415.8 416 344.1 416 256s-71.69-159.8-159.8-159.8c-37.46 0-73.09 13.49-101.3 36.64l45.12 45.14c17.01 17.02 4.955 46.1-19.1 46.1H35.17C24.58 224.1 16 215.5 16 204.9V59.04c0-24.04 29.07-36.08 46.07-19.07l47.6 47.63C149.9 52.71 201.5 32.11 256.1 32.11C379.5 32.11 480 132.6 480 256z" />
+                    </svg>
+                    <svg class="play-button" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 384 512">
+                        <path fill="white"
+                            d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z" />
+                    </svg>
+                    <svg class="skip-forward-button" width="40px" height="22px" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 384 512">
+                        <path fill="white"
+                            d="M468.9 32.11c13.87 0 27.18 10.77 27.18 27.04v145.9c0 10.59-8.584 19.17-19.17 19.17h-145.7c-16.28 0-27.06-13.32-27.06-27.2c0-6.634 2.461-13.4 7.96-18.9l45.12-45.14c-28.22-23.14-63.85-36.64-101.3-36.64c-88.09 0-159.8 71.69-159.8 159.8S167.8 415.9 255.9 415.9c73.14 0 89.44-38.31 115.1-38.31c18.48 0 31.97 15.04 31.97 31.96c0 35.04-81.59 70.41-147 70.41c-123.4 0-223.9-100.5-223.9-223.9S132.6 32.44 256 32.44c54.6 0 106.2 20.39 146.4 55.26l47.6-47.63C455.5 34.57 462.3 32.11 468.9 32.11z" />
+                    </svg>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="time-text">
+                        00:00 / 00:00
+                    </div>
+                    <svg class="volume-button" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 640 512">
+                        <path fill="white"
+                            d="M412.6 182c-10.28-8.334-25.41-6.867-33.75 3.402c-8.406 10.24-6.906 25.35 3.375 33.74C393.5 228.4 400 241.8 400 255.1c0 14.17-6.5 27.59-17.81 36.83c-10.28 8.396-11.78 23.5-3.375 33.74c4.719 5.806 11.62 8.802 18.56 8.802c5.344 0 10.75-1.779 15.19-5.399C435.1 311.5 448 284.6 448 255.1S435.1 200.4 412.6 182zM473.1 108.2c-10.22-8.334-25.34-6.898-33.78 3.34c-8.406 10.24-6.906 25.35 3.344 33.74C476.6 172.1 496 213.3 496 255.1s-19.44 82.1-53.31 110.7c-10.25 8.396-11.75 23.5-3.344 33.74c4.75 5.775 11.62 8.771 18.56 8.771c5.375 0 10.75-1.779 15.22-5.431C518.2 366.9 544 313 544 255.1S518.2 145 473.1 108.2zM534.4 33.4c-10.22-8.334-25.34-6.867-33.78 3.34c-8.406 10.24-6.906 25.35 3.344 33.74C559.9 116.3 592 183.9 592 255.1s-32.09 139.7-88.06 185.5c-10.25 8.396-11.75 23.5-3.344 33.74C505.3 481 512.2 484 519.2 484c5.375 0 10.75-1.779 15.22-5.431C601.5 423.6 640 342.5 640 255.1S601.5 88.34 534.4 33.4zM301.2 34.98c-11.5-5.181-25.01-3.076-34.43 5.29L131.8 160.1H48c-26.51 0-48 21.48-48 47.96v95.92c0 26.48 21.49 47.96 48 47.96h83.84l134.9 119.8C272.7 477 280.3 479.8 288 479.8c4.438 0 8.959-.9314 13.16-2.835C312.7 471.8 320 460.4 320 447.9V64.12C320 51.55 312.7 40.13 301.2 34.98z" />
+                    </svg>
+
+                    <svg class="episodes-button" width="45" height="30" viewBox="0 0 54 39" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M3 14C1.34326 14 0 15.3431 0 17V36C0 37.6569 1.34326 39 3 39H37C38.6567 39 40 37.6569 40 36V17C40 15.3431 38.6567 14 37 14H3ZM26.5 26.866C27.1665 26.4811 27.1665 25.5189 26.5 25.134L17.5 19.9378C16.8335 19.5529 16 20.0341 16 20.8038V31.1962C16 31.9659 16.8335 32.4471 17.5 32.0622L26.5 26.866Z"
+                            fill="white" />
+                        <path
+                            d="M10 7C10 7 7 7 7 9.5C7 12 10 12 10 12H39C40.6567 12 42 13.3431 42 15V29C42 29 42 32 44.5 32C47 32 47 29 47 29V10C47 8.34314 45.6567 7 44 7H10Z"
+                            fill="white" />
+                        <path
+                            d="M17 0C17 0 14 0 14 2.5C14 5 17 5 17 5H46C47.6567 5 49 6.34314 49 8V22C49 22 49 25 51.5 25C54 25 54 22 54 22V3C54 1.34314 52.6567 0 51 0H17Z"
+                            fill="white" />
+                    </svg>
+
+                    <svg class="next-episode-button" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 640 512">
+                        <path fill="white"
+                            d="M287.1 447.1c17.67 0 31.1-14.33 31.1-32V96.03c0-17.67-14.33-32-32-32c-17.67 0-31.1 14.33-31.1 31.1v319.9C255.1 433.6 270.3 447.1 287.1 447.1zM52.51 440.6l192-159.1c7.625-6.436 11.43-15.53 11.43-24.62c0-9.094-3.809-18.18-11.43-24.62l-192-159.1C31.88 54.28 0 68.66 0 96.03v319.9C0 443.3 31.88 457.7 52.51 440.6z" />
+                    </svg>
+
+                    <svg class="expand-button" width="32px" height="32px" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512">
+                        <path fill="white"
+                            d="M128 32H32C14.31 32 0 46.31 0 64v96c0 17.69 14.31 32 32 32s32-14.31 32-32V96h64c17.69 0 32-14.31 32-32S145.7 32 128 32zM416 32h-96c-17.69 0-32 14.31-32 32s14.31 32 32 32h64v64c0 17.69 14.31 32 32 32s32-14.31 32-32V64C448 46.31 433.7 32 416 32zM128 416H64v-64c0-17.69-14.31-32-32-32s-32 14.31-32 32v96c0 17.69 14.31 32 32 32h96c17.69 0 32-14.31 32-32S145.7 416 128 416zM416 320c-17.69 0-32 14.31-32 32v64h-64c-17.69 0-32 14.31-32 32s14.31 32 32 32h96c17.69 0 32-14.31 32-32v-96C448 334.3 433.7 320 416 320z" />
+                    </svg>
                 </div>
             </div>
         </div>
@@ -185,7 +250,9 @@ export default {
             episodeNumber: 0,
             streamingData: null,
             artPlayer: null,
-            fullscreenBool: false
+            fullscreenBool: false,
+            netflixUI: false,
+            doneLoading: false
         };
     },
     components: {
@@ -253,24 +320,31 @@ export default {
                 this.$el.querySelector('.play-button').addEventListener("click", function () {
                     art.toggle();
                 });
+
+
+
                 var expand_button = this.$el.querySelector('.expand-button')
                 var video_wrapper = this.$el.querySelector('.video-wrapper')
+                var video_wrapper_netflix = this.$el.querySelector('.video-wrapper-netflix')
+                console.log(video_wrapper_netflix)
                 expand_button.addEventListener("click", function () {
+                    console.log('FULLSCREEN')
                     if (!this.fullscreenBool) {
                         this.fullscreenBool = true
-                        video_wrapper.requestFullscreen()
-                        subs.style.bottom = 'calc(50px)'
+                        if (this.netflixUI) {
+                            video_wrapper.requestFullscreen()
+                        } else {
+                            video_wrapper_netflix.requestFullscreen()
+                        }
                     } else {
                         this.fullscreenBool = false
                         window.document.exitFullscreen()
-                        subs.style.bottom = 'calc(30vh + 20px)'
                     }
                 });
 
                 window.document.addEventListener('fullscreenchange', function () {
                     if (!window.document.fullscreenElement) {
                         this.fullscreenBool = false
-                        subs.style.bottom = 'calc(30vh + 20px)'
                     }
                 });
 
@@ -344,9 +418,31 @@ export default {
                 var new_sub = this.$el.querySelector('.subtitle-text')
                 var new_sub_shadow = this.$el.querySelector('.subtitle-shadow')
                 if (subtitle.firstChild != undefined) {
-                    subtitle.firstChild.innerHTML = subtitle.firstChild.innerHTML.replace('&lt;i&gt;', '<i>').replace('&lt;/i&gt;', '</i>').replace('&lt;b&gt;', '<b>').replace('&lt;/b&gt;', '</b>')
-                    new_sub.innerHTML = subtitle.firstChild.innerHTML
-                    new_sub_shadow.innerHTML = subtitle.firstChild.innerHTML
+                    if (new_sub.innerHTML == '') {
+                        var opening_tag_string = ''
+                        var closing_tag_string = ''
+                        var final_sub = ''
+
+                        for (var subtitle_text in subtitle.children) {
+                            console.log(subtitle_text)
+                            console.log(subtitle.children[subtitle_text].innerHTML)
+                            if (subtitle.children[subtitle_text].innerHTML != undefined) {
+
+                                if (subtitle.children[subtitle_text].innerHTML.indexOf('&lt;i&gt;') != -1) {
+                                    opening_tag_string += '<i>'
+                                    closing_tag_string += '</i>'
+                                }
+                                if (subtitle.children[subtitle_text].innerHTML.indexOf('&lt;b&gt;') != -1) {
+                                    opening_tag_string += '<b>'
+                                    closing_tag_string += '</b>'
+                                }
+                                final_sub += subtitle.children[subtitle_text].innerHTML.replace('&lt;i&gt;', '').replace('&lt;/i&gt;', '').replace('&lt;b&gt;', '').replace('&lt;/b&gt;', '') + '</br>'
+                            }
+                        }
+                        console.log(final_sub)
+                        new_sub.innerHTML += opening_tag_string + final_sub + closing_tag_string
+                        new_sub_shadow.innerHTML += opening_tag_string + final_sub + closing_tag_string
+                    }
                 } else {
                     new_sub.innerHTML = ''
                     new_sub_shadow.innerHTML = ''
@@ -378,6 +474,9 @@ export default {
         this.$el.querySelector('.expand-button').addEventListener("click", function () {
             this.$el.querySelector('.expand-button').requestFullscreen()
         });
+
+        this.netflixUI = localStorage.getItem('netflixSetting')
+        this.doneLoading = true
     },
 };
 </script>
@@ -407,6 +506,14 @@ export default {
     display: flex;
 }
 
+.video-wrapper-netflix {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
 .artplayer {
 
     position: absolute;
@@ -431,9 +538,11 @@ export default {
 
 .subtitle-shadow {
     pointer-events: none;
-    padding-left: 2px;
+    text-align: center;
+    margin-left: 2px;
     margin-top: 2px;
     font-size: 30px;
+    bottom: -2px;
     position: absolute;
     color: black;
     text-shadow: rgb(0, 0, 0) 4px 0px 0px, rgb(0, 0, 0) 3.87565px 0.989616px 0px, rgb(0, 0, 0) 3.51033px 1.9177px 0px, rgb(0, 0, 0) 2.92676px 2.72656px 0px, rgb(0, 0, 0) 2.16121px 3.36588px 0px, rgb(0, 0, 0) 1.26129px 3.79594px 0px, rgb(0, 0, 0) 0.282949px 3.98998px 0px, rgb(0, 0, 0) -0.712984px 3.93594px 0px, rgb(0, 0, 0) -1.66459px 3.63719px 0px, rgb(0, 0, 0) -2.51269px 3.11229px 0px, rgb(0, 0, 0) -3.20457px 2.39389px 0px, rgb(0, 0, 0) -3.69721px 1.52664px 0px, rgb(0, 0, 0) -3.95997px 0.56448px 0px, rgb(0, 0, 0) -3.97652px -0.432781px 0px, rgb(0, 0, 0) -3.74583px -1.40313px 0px, rgb(0, 0, 0) -3.28224px -2.28625px 0px, rgb(0, 0, 0) -2.61457px -3.02721px 0px, rgb(0, 0, 0) -1.78435px -3.57996px 0px, rgb(0, 0, 0) -0.843183px -3.91012px 0px, rgb(0, 0, 0) 0.150409px -3.99717px 0px, rgb(0, 0, 0) 1.13465px -3.8357px 0px, rgb(0, 0, 0) 2.04834px -3.43574px 0px, rgb(0, 0, 0) 2.83468px -2.82216px 0px, rgb(0, 0, 0) 3.44477px -2.03312px 0px, rgb(0, 0, 0) 3.84068px -1.11766px 0px, rgb(0, 0, 0) 3.9978px -0.132717px 0px;
@@ -441,6 +550,7 @@ export default {
 
 .subtitle-text {
     pointer-events: none;
+    text-align: center;
     position: absolute;
     font-size: 30px;
     color: white;
@@ -450,7 +560,6 @@ export default {
 .gradient-controls {
     position: absolute;
     z-index: 21;
-    border-radius: 12px;
     width: 100%;
     height: 100%;
     transition: 0.3s all ease;
@@ -478,14 +587,36 @@ export default {
 }
 
 .play-button {
-    margin-right: 50px;
+    margin-right: 40px;
+    transition: 0.3s all ease;
+}
+
+.next-episode-button {
+    transition: 0.3s all ease;
+}
+
+.play-button:hover,
+.skip-back-button:hover,
+.skip-forward-button:hover,
+.expand-button:hover,
+.volume-button:hover,
+.episodes-button:hover,
+.next-episode-button:hover {
+    transform: scale(1.2);
+}
+
+.skip-back-button,
+.skip-forward-button {
+    margin-right: 40px;
+    padding: 8px;
+    transition: 0.3s all ease;
 }
 
 .progress-bar {
     height: 6px;
     border-radius: 3px;
     width: 100%;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 .progress {
@@ -506,6 +637,17 @@ export default {
 .volume-button,
 .expand-button {
     margin-left: 40px;
+    transition: 0.3s all ease;
+}
+
+.expand-button {
+    padding-right: 8px;
+}
+
+.volume-button,
+.episodes-button {
+    margin-right: 40px;
+    transition: 0.3s all ease;
 }
 
 .top-info {

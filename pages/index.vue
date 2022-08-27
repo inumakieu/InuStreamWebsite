@@ -241,6 +241,7 @@ export default {
             document.querySelector('.dropdown-menu').style.height = newHeight;
         },
         changeVideoPlayer(checkbox) {
+            localStorage.setItem('netflixSetting', this.videoPlayerDesign)
             console.log('Checkbox value: ' + this.videoPlayerDesign)
         },
         changeShowDropdown() {
