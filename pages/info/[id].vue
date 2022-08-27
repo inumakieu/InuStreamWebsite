@@ -71,8 +71,20 @@
             <div v-my-directive class="info-episode-list" :ref="episodeListRef">
                 <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
-                <virtual-list class="list" style="height: 360px; width: 70vw; overflow-x: auto;" :data-key="'id'"
-                    :data-sources="episodeList" :data-component="item" :estimate-size="100" />
+                <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
+                    class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
+                    <div class="image-wrapper-info">
+                        <img class="episode-bg-info" :src="episode.image">
+                        <div class="episode-gradient-info"></div>
+                        <h3 class="episode-number-text-info">{{ episode.number }}</h3>
+                    </div>
+                    <div class="episode-info-wrapper-info">
+                        <div class="episode-title-text-info">
+                            {{ episode.title ?? 'Episode ' + episode.number }}
+                        </div>
+                        <div class="episode-title-text-info"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -82,8 +94,6 @@
 
 <script setup>
 import { useFetch, useHead, useRoute } from '#app';
-import item from 'components/episodeComponent.vue';
-import VirtualList from 'vue-virtual-scroll-list';
 
 const route = useRoute();
 
@@ -180,15 +190,15 @@ watch(episodeList, () => {
 })
 
 async function loadEpisode(episode, anime) {
-    await navigateTo('/stream/' + anime.id + '/' + anime.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number)
+    await navigateTo('/stream/' + anime.id + '/' + anime.title.english ? anime.title.english.toLowerCase().replaceAll(' ', '-') : anime.title.native.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number)
 }
 
 useHead({
-    title: `Info of ${anime.title.english}`,
+    title: `Info of ${anime.title.english ?? anime.title.native}`,
     meta: [
         {
             name: "og:title",
-            content: `${anime.title.english}`
+            content: `${anime.title.english ?? anime.title.native}`
         },
         {
             name: "og:type",
@@ -631,6 +641,7 @@ useHead({
 
 .info-wrapper {
     width: 36vw;
+    align-self: center;
 }
 
 .rating {
