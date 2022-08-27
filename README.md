@@ -82,7 +82,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Info Page Screenshot][product-screenshot]](https://i.ibb.co/g3ZxZMh/info-page.png)
+<a href="https://github.com/5H4D0WILA/InuStreamWebsite">
+    <img src="images/info_page.png" alt="Logo">
+  </a>
 
 This website was created out of frustration that most anime streaming sites cause, by either having bad UIs or ads anytime you click on anything.
 So with that in mind, i tried to create something thats easy to use for anyone, without having used the website before, while also being functional.
@@ -192,7 +194,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Discord - Inumaki#8590
 
-Project Link: [https://github.com/5H4D0WILA/InuStreamWebsite](https://github.com/5H4D0WILA/InuStreamWebsite)
+Project Link: [https://github.com/5H4D0WILA/InuStreamWebsite](images/info_page.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
