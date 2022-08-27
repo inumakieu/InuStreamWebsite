@@ -72,7 +72,7 @@
                 <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
-                    class="episode-card-info" v-on:click="loadEpisode(episode, anime)">
+                    class="episode-card-info" v-on:click="streamEpisode(episode, anime)">
                     <div class="image-wrapper-info">
                         <img class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
@@ -189,8 +189,9 @@ watch(episodeList, () => {
     console.log(episodeList)
 })
 
-async function loadEpisode(episode, anime) {
-    await navigateTo('/stream/' + anime.id + '/' + anime.title.english ? anime.title.english.toLowerCase().replaceAll(' ', '-') : anime.title.native.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number)
+async function streamEpisode(episode, anime) {
+    console.log('GOING TO EPISODE')
+    await navigateTo('/stream/' + anime.id + '/' + (anime.title.english ? anime.title.english.toLowerCase().replaceAll(' ', '-') : anime.title.native.toLowerCase().replaceAll(' ', '-')) + '-ep-' + episode.number)
 }
 
 useHead({
