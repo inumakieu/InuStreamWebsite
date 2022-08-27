@@ -1,15 +1,14 @@
 <template>
-    <div>{{ index }} - {{ source.title }}</div>
+    <div class="item">
+        <div class="id">{{ source.id }} - {{ source.title }}</div>
+    </div>
 </template>
 
 <script>
 export default {
-    name: 'episodeComponent',
+    name: 'item',
     props: {
-        index: { // index of current item
-            type: Number
-        },
-        source: { // here is: {uid: 'unique_1', text: 'abc'}
+        source: {
             type: Object,
             default() {
                 return {}
@@ -18,3 +17,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.item {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid lightgrey;
+    padding: 1em;
+}
+</style>
