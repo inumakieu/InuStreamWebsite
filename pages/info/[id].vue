@@ -107,7 +107,7 @@ const route = useRoute();
 
 console.log('testing')
 
-var id = route.path.replace("/info/", "");
+var id = route.path.replace("/info/", "").replace('/', '');
 var episodeNumber = 1;
 var charactersIndex = ref(0);
 var loadingHtml = ref('<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>');

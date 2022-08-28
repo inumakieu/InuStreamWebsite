@@ -169,7 +169,7 @@ if (error.value || !episodes.value) {
 var anime = episodes.value;
 
 useHead({
-    title: `${anime.title.english}`,
+    title: `${anime.title.english} EP ${episodeNumber}`,
     meta: [
         {
             name: "og:title",
@@ -296,16 +296,16 @@ export default {
                 var subs = this.$el.querySelector('.subtitles')
                 var artplayerElement = this.$el.querySelector('.artplayer')
 
-                var progress_indicattion = this.$el.querySelector('.progress-bar').onclick = function clickEvent(e) {
+                var progress_indicattion = this.$el.querySelector('.progress-bar').addEventListener('click', (e) => {
                     // e = Mouse click event.
                     var rect = e.target.getBoundingClientRect();
                     var x = e.clientX - rect.left; //x position within the element.
                     console.log(art.duration * (x / rect.width))
-                    art.seek = (art.duration * (x / rect.width))
+                    //art.seek = (art.duration * (x / rect.width))
 
                     //var y = e.clientY - rect.top;  //y position within the element.
                     //console.log("Left? : " + x + " ; Top? : " + y + ".");
-                }
+                })
 
 
                 controls.addEventListener('mouseover', (event) => {
@@ -383,12 +383,16 @@ export default {
                     if (e.code == 'KeyF') {
                         if (!this.fullscreenBool) {
                             this.fullscreenBool = true
-                            video_wrapper.requestFullscreen()
+                            if (this.netflixUI) {
+                                video_wrapper.requestFullscreen()
+                            } else {
+                                video_wrapper_netflix.requestFullscreen()
+                            }
                             subs.style.bottom = 'calc(50px)'
                         } else {
                             this.fullscreenBool = false
                             window.document.exitFullscreen()
-                            subs.style.bottom = 'calc(30vh + 20px)'
+                            subs.style.bottom = 'calc(50px)'
                         }
                     }
                 })
@@ -418,31 +422,10 @@ export default {
                 var new_sub = this.$el.querySelector('.subtitle-text')
                 var new_sub_shadow = this.$el.querySelector('.subtitle-shadow')
                 if (subtitle.firstChild != undefined) {
-                    if (new_sub.innerHTML == '') {
-                        var opening_tag_string = ''
-                        var closing_tag_string = ''
-                        var final_sub = ''
+                    console.log(subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ''))
+                    new_sub.innerHTML = subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
+                    new_sub_shadow.innerHTML = subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
 
-                        for (var subtitle_text in subtitle.children) {
-                            console.log(subtitle_text)
-                            console.log(subtitle.children[subtitle_text].innerHTML)
-                            if (subtitle.children[subtitle_text].innerHTML != undefined) {
-
-                                if (subtitle.children[subtitle_text].innerHTML.indexOf('&lt;i&gt;') != -1) {
-                                    opening_tag_string += '<i>'
-                                    closing_tag_string += '</i>'
-                                }
-                                if (subtitle.children[subtitle_text].innerHTML.indexOf('&lt;b&gt;') != -1) {
-                                    opening_tag_string += '<b>'
-                                    closing_tag_string += '</b>'
-                                }
-                                final_sub += subtitle.children[subtitle_text].innerHTML.replace('&lt;i&gt;', '').replace('&lt;/i&gt;', '').replace('&lt;b&gt;', '').replace('&lt;/b&gt;', '') + '</br>'
-                            }
-                        }
-                        console.log(final_sub)
-                        new_sub.innerHTML += opening_tag_string + final_sub + closing_tag_string
-                        new_sub_shadow.innerHTML += opening_tag_string + final_sub + closing_tag_string
-                    }
                 } else {
                     new_sub.innerHTML = ''
                     new_sub_shadow.innerHTML = ''
@@ -616,6 +599,7 @@ export default {
     height: 6px;
     border-radius: 3px;
     width: 100%;
+    pointer-events: none;
     background-color: rgba(255, 255, 255, 0.6);
 }
 
