@@ -68,15 +68,22 @@
                 </div>
             </div>
             <h1 class="episodes-title">Episodes</h1>
-            <div v-my-directive class="info-episode-list" :ref="episodeListRef">
+            <div v-my-directive class="info-episode-list" :ref="episodeListRef" v-scroll-drag>
                 <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
-                    class="episode-card-info" v-on:click="streamEpisode(episode, anime)">
+                    class="episode-card-info">
                     <div class="image-wrapper-info">
                         <img class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
                         <h3 class="episode-number-text-info">{{ episode.number }}</h3>
+                        <div class="play-episode-button" v-on:click="streamEpisode(episode, anime)">
+                            <svg class="play-button-icon" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 384 512">
+                                <path fill="white"
+                                    d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z" />
+                            </svg>
+                        </div>
                     </div>
                     <div class="episode-info-wrapper-info">
                         <div class="episode-title-text-info">
@@ -84,6 +91,7 @@
                         </div>
                         <div class="episode-title-text-info"></div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -143,6 +151,41 @@ function animateList() {
 
         }
         loadedEpisodes = true
+    }
+}
+
+const vScrollDrag = {
+    mounted: async (el) => {
+        const slider = document.querySelector('.info-episode-list');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active')
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        })
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active')
+        })
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            e.preventDefault();
+            slider.classList.remove('active')
+        })
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = x - startX;
+            slider.scrollLeft = scrollLeft - walk;
+        })
     }
 }
 
@@ -230,6 +273,31 @@ useHead({
 </script>
 
 <style scoped>
+.play-episode-button {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    margin-right: 125px;
+    margin-top: calc(25% - 12.5px);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    opacity: 0.0;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    transition: 0.3s all ease;
+    z-index: 5;
+}
+
+.image-wrapper-info:hover>.play-episode-button {
+    opacity: 1.0;
+    transition: 0.3s all ease;
+}
+
+.play-button-icon {
+    pointer-events: none;
+}
+
 .row-wrapper {
     width: 100vw;
     height: 63vh;
@@ -715,11 +783,11 @@ useHead({
     width: 300px;
     aspect-ratio: 16/9;
     display: flex;
-    justify-content: flex-end;
 }
 
 .episode-number-text-info {
     position: relative;
+    justify-self: flex-end;
     padding: 8px 12px;
     font-size: 20px;
     font-weight: bold;
