@@ -68,12 +68,12 @@
                 </div>
             </div>
             <h1 class="episodes-title">Episodes</h1>
-            <div v-my-directive class="info-episode-list" :ref="episodeListRef" v-scroll-drag>
+            <div v-my-directive class="info-episode-list" :ref="episodeListRef">
                 <div class="loading-wrapper" v-html="loadingHtml">
                 </div>
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
                     class="episode-card-info">
-                    <div class="image-wrapper-info">
+                    <div class="image-wrapper-info" v-scroll-drag>
                         <img class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
                         <h3 class="episode-number-text-info">{{ episode.number }}</h3>
@@ -156,6 +156,7 @@ function animateList() {
 
 const vScrollDrag = {
     mounted: async (el) => {
+        console.log('SCROLL LOADED')
         const slider = document.querySelector('.info-episode-list');
         let isDown = false;
         let startX;
@@ -186,7 +187,7 @@ const vScrollDrag = {
             const walk = x - startX;
             slider.scrollLeft = scrollLeft - walk;
         })
-    }
+    },
 }
 
 const vMyDirective = {
