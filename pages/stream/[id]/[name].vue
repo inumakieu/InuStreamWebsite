@@ -380,6 +380,12 @@ export default {
                     if (e.code == 'KeyM') {
                         // toggle mute
                     }
+                    if (e.code == 'ArrowRight') {
+                        art.seek = art.currentTime + 15
+                    }
+                    if (e.code == 'ArrowLeft') {
+                        art.seek = art.currentTime - 15
+                    }
                     if (e.code == 'KeyF') {
                         if (!this.fullscreenBool) {
                             this.fullscreenBool = true
@@ -422,9 +428,9 @@ export default {
                 var new_sub = this.$el.querySelector('.subtitle-text')
                 var new_sub_shadow = this.$el.querySelector('.subtitle-shadow')
                 if (subtitle.firstChild != undefined) {
-                    console.log(subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ''))
-                    new_sub.innerHTML = subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
-                    new_sub_shadow.innerHTML = subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
+                    console.log(subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ' '))
+                    new_sub.innerHTML = subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ' ').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
+                    new_sub_shadow.innerHTML = subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ' ').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
 
                 } else {
                     new_sub.innerHTML = ''
@@ -522,7 +528,7 @@ export default {
 .subtitle-shadow {
     pointer-events: none;
     text-align: center;
-    margin-left: 2px;
+    margin-left: 4px;
     margin-top: 2px;
     font-size: 30px;
     bottom: -2px;
