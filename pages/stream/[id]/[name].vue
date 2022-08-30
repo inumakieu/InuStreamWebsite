@@ -535,6 +535,9 @@ export default {
                 return data;
             });
         },
+        yourCallBackFunction() {
+            alert('BACK')
+        }
     },
     mounted: function () {
         this.$el.querySelector('.expand-button').addEventListener("click", function () {
@@ -543,8 +546,6 @@ export default {
 
         this.netflixUI = localStorage.getItem('netflixSetting')
         this.doneLoading = true
-
-
     },
 };
 </script>

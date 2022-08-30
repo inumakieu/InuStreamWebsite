@@ -9,4 +9,7 @@ export default defineNuxtConfig({
     },
   },
   ssr: true,
+  router: {
+    mode: "abstract",
+  },
 });

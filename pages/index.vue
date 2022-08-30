@@ -218,10 +218,10 @@ export default {
             }
         },
         async goToSearch() {
-            await navigateTo('/search/' + this.$refs.search.value.toLowerCase().replaceAll(' ', '-'), { replace: false })
+            await navigateTo('/search/' + this.$refs.search.value.toLowerCase().replaceAll(' ', '-'), { replace: true })
         },
         async goToInfo(id) {
-            await navigateTo('/info/' + id, { replace: false })
+            await navigateTo('/info/' + id, { replace: true })
         },
         changeSubmenu(nextSubmenu) {
             this.currentDropdown = nextSubmenu;
@@ -257,6 +257,9 @@ export default {
         }
     },
     mounted() {
+        window.onpopstate = function () {
+            location.reload()
+        };
         const password = document.querySelector('input[type="search"]');
         const searchSuggestions = document.querySelector('.searchSuggestions');
         const searchResult = document.querySelector('.search-result');
