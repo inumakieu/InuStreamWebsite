@@ -10,7 +10,6 @@
                 <div class="gradient-controls"></div>
                 <div class="custom-controls">
                     <div class="bottom-controls">
-
                         <svg class="play-button" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 384 512">
                             <path fill="white"
@@ -91,17 +90,25 @@
             </div>
             <div class="gradient-controls"></div>
             <div class="custom-controls">
+
                 <div class="bottom-controls">
                     <svg class="skip-back-button" width="40px" height="22px" xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 384 512">
                         <path fill="white"
                             d="M480 256c0 123.4-100.5 223.9-223.9 223.9c-48.84 0-95.17-15.58-134.2-44.86c-14.12-10.59-16.97-30.66-6.375-44.81c10.59-14.12 30.62-16.94 44.81-6.375c27.84 20.91 61 31.94 95.88 31.94C344.3 415.8 416 344.1 416 256s-71.69-159.8-159.8-159.8c-37.46 0-73.09 13.49-101.3 36.64l45.12 45.14c17.01 17.02 4.955 46.1-19.1 46.1H35.17C24.58 224.1 16 215.5 16 204.9V59.04c0-24.04 29.07-36.08 46.07-19.07l47.6 47.63C149.9 52.71 201.5 32.11 256.1 32.11C379.5 32.11 480 132.6 480 256z" />
                     </svg>
-                    <svg class="play-button" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 384 512">
-                        <path fill="white"
-                            d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z" />
-                    </svg>
+                    <div class="play-pause-wrapper">
+                        <svg class="pause-button" width="24px" height="24px" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 320 512">
+                            <path fill="white"
+                                d="M272 63.1l-32 0c-26.51 0-48 21.49-48 47.1v288c0 26.51 21.49 48 48 48L272 448c26.51 0 48-21.49 48-48v-288C320 85.49 298.5 63.1 272 63.1zM80 63.1l-32 0c-26.51 0-48 21.49-48 48v288C0 426.5 21.49 448 48 448l32 0c26.51 0 48-21.49 48-48v-288C128 85.49 106.5 63.1 80 63.1z" />
+                        </svg>
+                        <svg class="play-button" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 384 512">
+                            <path fill="white"
+                                d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z" />
+                        </svg>
+                    </div>
                     <svg class="skip-forward-button" width="40px" height="22px" xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 384 512">
                         <path fill="white"
@@ -120,7 +127,7 @@
                     </svg>
 
                     <svg class="episodes-button" width="45" height="30" viewBox="0 0 54 39" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
+                        xmlns="http://www.w3.org/2000/svg" v-on:click="episodeSelectorLogic()">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M3 14C1.34326 14 0 15.3431 0 17V36C0 37.6569 1.34326 39 3 39H37C38.6567 39 40 37.6569 40 36V17C40 15.3431 38.6567 14 37 14H3ZM26.5 26.866C27.1665 26.4811 27.1665 25.5189 26.5 25.134L17.5 19.9378C16.8335 19.5529 16 20.0341 16 20.8038V31.1962C16 31.9659 16.8335 32.4471 17.5 32.0622L26.5 26.866Z"
                             fill="white" />
@@ -133,7 +140,7 @@
                     </svg>
 
                     <svg class="next-episode-button" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 640 512">
+                        v-on:click="loadEpisode(this.anilistJson.episodes[this.episodeNumber])" viewBox="0 0 640 512">
                         <path fill="white"
                             d="M287.1 447.1c17.67 0 31.1-14.33 31.1-32V96.03c0-17.67-14.33-32-32-32c-17.67 0-31.1 14.33-31.1 31.1v319.9C255.1 433.6 270.3 447.1 287.1 447.1zM52.51 440.6l192-159.1c7.625-6.436 11.43-15.53 11.43-24.62c0-9.094-3.809-18.18-11.43-24.62l-192-159.1C31.88 54.28 0 68.66 0 96.03v319.9C0 443.3 31.88 457.7 52.51 440.6z" />
                     </svg>
@@ -143,6 +150,26 @@
                         <path fill="white"
                             d="M128 32H32C14.31 32 0 46.31 0 64v96c0 17.69 14.31 32 32 32s32-14.31 32-32V96h64c17.69 0 32-14.31 32-32S145.7 32 128 32zM416 32h-96c-17.69 0-32 14.31-32 32s14.31 32 32 32h64v64c0 17.69 14.31 32 32 32s32-14.31 32-32V64C448 46.31 433.7 32 416 32zM128 416H64v-64c0-17.69-14.31-32-32-32s-32 14.31-32 32v96c0 17.69 14.31 32 32 32h96c17.69 0 32-14.31 32-32S145.7 416 128 416zM416 320c-17.69 0-32 14.31-32 32v64h-64c-17.69 0-32 14.31-32 32s14.31 32 32 32h96c17.69 0 32-14.31 32-32v-96C448 334.3 433.7 320 416 320z" />
                     </svg>
+                </div>
+            </div>
+            <div class="intro-skip-mask">
+
+                <div class="intro-skip-wrapper" v-on:click="skipIntro()">
+                    Skip Opening
+                </div>
+            </div>
+            <div class="episode-selector">
+                <h1 class="episode-selector-title">Episodes</h1>
+                <div class="episode-selector-list" v-if="this.anilistJson != null">
+                    <div class="episode-selector-card" v-for="episode in this.anilistJson.episodes"
+                        v-on:click="loadEpisode(episode)">
+                        <div class="episode-selector-wrapper">
+                            <img class="episode-selector-image" :src="episode.image" alt="">
+                            <div class="episode-selector-gradient"></div>
+                            <div class="episode-selector-number">{{ episode.number }}</div>
+                            <div class="episode-selector-name">{{ episode.title }}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -252,7 +279,9 @@ export default {
             artPlayer: null,
             fullscreenBool: false,
             netflixUI: false,
-            doneLoading: false
+            doneLoading: false,
+            showIntroSkip: false,
+            showEpisodeSelector: false,
         };
     },
     components: {
@@ -260,14 +289,23 @@ export default {
     },
     methods: {
         async loadEpisode(episode) {
-            await navigateTo('/stream/' + this.anilistJson.id + '/' + this.anilistJson.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number)
+            await navigateTo('/stream/' + this.anilistJson.id + '/' + this.anilistJson.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number, { replace: true })
+        },
+        skipIntro() {
+            this.artPlayer.seek = this.streamingData.intro.end;
+        },
+        episodeSelectorLogic() {
+            this.showEpisodeSelector = !this.showEpisodeSelector;
+            document.querySelector('.episode-selector').classList.toggle('display')
         },
         getInstance(art) {
 
             art.on('ready', async (...args) => {
+                this.artPlayer = art;
                 this.$el.querySelector('.art-bottom').style.display = 'none'
                 this.$el.querySelector('.art-state').style.display = 'none'
                 this.$el.querySelector('.art-notice').style.display = 'none'
+                this.$el.querySelector('.art-layers').style.display = 'none'
 
                 await this.fetch()
                 art.switchUrl(this.streamingData.sources[0].url, '')
@@ -296,16 +334,20 @@ export default {
                 var subs = this.$el.querySelector('.subtitles')
                 var artplayerElement = this.$el.querySelector('.artplayer')
 
-                var progress_indicattion = this.$el.querySelector('.progress-bar').addEventListener('click', (e) => {
+                var progress_indication = this.$el.querySelector('.progress-bar').addEventListener('click', (e) => {
                     // e = Mouse click event.
                     var rect = e.target.getBoundingClientRect();
                     var x = e.clientX - rect.left; //x position within the element.
-                    console.log(art.duration * (x / rect.width))
-                    //art.seek = (art.duration * (x / rect.width))
+                    art.seek = (art.duration * (x / rect.width))
 
                     //var y = e.clientY - rect.top;  //y position within the element.
                     //console.log("Left? : " + x + " ; Top? : " + y + ".");
                 })
+
+
+                //this.$el.querySelector('.episode-selector-card').children.item(this.episodeNumber - 1).classList.add('selected')
+
+
 
 
                 controls.addEventListener('mouseover', (event) => {
@@ -317,8 +359,26 @@ export default {
                     gradient.style.opacity = '0'
                 });
 
-                this.$el.querySelector('.play-button').addEventListener("click", function () {
-                    art.toggle();
+                this.$el.querySelector('.skip-back-button').addEventListener('click', function () {
+                    art.seek = art.currentTime - 10
+                })
+
+                this.$el.querySelector('.skip-forward-button').addEventListener('click', function () {
+                    art.seek = art.currentTime + 10
+                })
+
+                var play_button = this.$el.querySelector('.play-button');
+                var pause_button = this.$el.querySelector('.pause-button');
+
+                play_button.addEventListener("click", function () {
+                    pause_button.style.display = 'flex';
+                    play_button.style.display = 'none';
+                    art.play();
+                });
+                pause_button.addEventListener("click", function () {
+                    art.pause();
+                    pause_button.style.display = 'none';
+                    play_button.style.display = 'flex';
                 });
 
 
@@ -373,18 +433,26 @@ export default {
                     }
                 };
 
+                document.querySelector(".intro-skip-wrapper").addEventListener('click', function () {
+                    ;
+                });
+
                 document.addEventListener('keydown', (e) => {
                     if (e.code == 'Space') {
                         art.toggle()
+                    }
+                    if (e.code == 'KeyI') {
+                        this.showIntroSkip = !this.showIntroSkip;
+                        document.querySelector(".intro-skip-wrapper").classList.toggle('display');
                     }
                     if (e.code == 'KeyM') {
                         // toggle mute
                     }
                     if (e.code == 'ArrowRight') {
-                        art.seek = art.currentTime + 15
+                        art.seek = art.currentTime + 10
                     }
                     if (e.code == 'ArrowLeft') {
-                        art.seek = art.currentTime - 15
+                        art.seek = art.currentTime - 10
                     }
                     if (e.code == 'KeyF') {
                         if (!this.fullscreenBool) {
@@ -428,13 +496,22 @@ export default {
                 var new_sub = this.$el.querySelector('.subtitle-text')
                 var new_sub_shadow = this.$el.querySelector('.subtitle-shadow')
                 if (subtitle.firstChild != undefined) {
-                    console.log(subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ' '))
                     new_sub.innerHTML = subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ' ').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
                     new_sub_shadow.innerHTML = subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ' ').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
-
                 } else {
                     new_sub.innerHTML = ''
                     new_sub_shadow.innerHTML = ''
+                }
+
+                if (this.streamingData.intro != null) {
+                    if (art.currentTime > this.streamingData.intro.start && Math.floor(art.currentTime) <= this.streamingData.intro.end) {
+                        this.showIntroSkip = true;
+                        document.querySelector(".intro-skip-wrapper").classList.add('display');
+
+                    } else {
+                        this.showIntroSkip = false;
+                        document.querySelector(".intro-skip-wrapper").classList.remove('display');
+                    }
                 }
             });
         },
@@ -466,11 +543,198 @@ export default {
 
         this.netflixUI = localStorage.getItem('netflixSetting')
         this.doneLoading = true
+
+
     },
 };
 </script>
 
-<style>
+<style scoped>
+/* width */
+::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+    display: none;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #1a1a19;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #707179;
+    border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #707179;
+    border-radius: 4px;
+}
+
+.episode-selector-list {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 80%;
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+
+.episode-selector-title {
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.episode-selector-card {
+    position: relative;
+    margin-right: 20px;
+    width: 170px;
+    aspect-ratio: 16/9;
+    border-radius: 12px;
+    transition: 0.3s all ease;
+}
+
+.episode-selector-wrapper {
+    position: static;
+    width: 170px;
+    aspect-ratio: 16/9;
+    display: flex;
+    transition: 0.3s all ease;
+}
+
+.episode-selector-number {
+    position: absolute;
+    font-size: 16px;
+    font-weight: bold;
+    top: 4px;
+    padding-left: 154px;
+}
+
+.episode-selector-gradient {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.episode-selector-image {
+    position: absolute;
+    border-radius: 12px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.episode-selector {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.episode-selector-gradient {
+    position: absolute;
+    border-radius: 11px;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%);
+}
+
+.episode-selector-name {
+    position: absolute;
+    font-size: 8px;
+    border-radius: 0px 0px 10px 10px;
+    font-weight: bold;
+    background-color: black;
+    width: 100%;
+    max-width: 100%;
+    min-height: 28px;
+    padding: 6px 0px;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+
+.episode-selector.display {
+    z-index: 200;
+    position: absolute;
+    bottom: 110px;
+    right: 60px;
+    width: 450px;
+    height: 160px;
+    background-color: #16151A;
+    border-radius: 12px;
+    transition: 0.3s all ease;
+}
+
+.episode-selector {
+    height: 0;
+    position: absolute;
+    bottom: 110px;
+    right: 60px;
+}
+
+.intro-skip-mask {
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 20px;
+    right: 60px;
+    bottom: 120px;
+    width: 300px;
+    height: 100px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.intro-skip-wrapper {
+    pointer-events: all;
+    position: relative;
+    transform: translateX(120%);
+    z-index: 30;
+    font-size: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 50px;
+    font-weight: bold;
+    color: white;
+    opacity: 0.8;
+    cursor: pointer;
+    background-color: #16151A;
+    transition: 0.3s all ease;
+}
+
+.intro-skip-wrapper.display {
+    transform: translateX(0%);
+}
+
+.intro-skip-wrapper.display:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+.play-pause-wrapper {
+    display: flex;
+    position: relative;
+    margin-right: 50px;
+    margin-left: 0;
+    margin-top: 0;
+    padding: 0;
+    margin-bottom: 22px;
+}
+
 .left-side {
     margin: 0;
     padding: 0;
@@ -576,7 +840,16 @@ export default {
 }
 
 .play-button {
-    margin-right: 40px;
+    position: absolute;
+    display: flex;
+    transition: 0.3s all ease;
+}
+
+.pause-button {
+    position: absolute;
+    display: none;
+    margin-right: -4px;
+    margin-top: -1px;
     transition: 0.3s all ease;
 }
 
@@ -585,6 +858,7 @@ export default {
 }
 
 .play-button:hover,
+.pause-button:hover,
 .skip-back-button:hover,
 .skip-forward-button:hover,
 .expand-button:hover,
@@ -605,14 +879,15 @@ export default {
     height: 6px;
     border-radius: 3px;
     width: 100%;
-    pointer-events: none;
     background-color: rgba(255, 255, 255, 0.6);
 }
+
 
 .progress {
     height: 6px;
     border-radius: 3px;
     width: 0%;
+    pointer-events: none;
     background-color: #FF4242;
 }
 

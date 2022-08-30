@@ -12,6 +12,11 @@
   },
   "dependencies": {
     "@consumet/extensions": "^1.0.10",
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
+    "@fortawesome/free-regular-svg-icons": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/vue-fontawesome": "^3.0.1",
     "@nuxt/http": "^0.6.4",
     "@nuxtjs/google-fonts": "^3.0.0-0",
     "@nuxtjs/moment": "^1.6.1",
