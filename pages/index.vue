@@ -25,11 +25,11 @@
                             <img class="anime-image-nav" :src="anime.image" alt="">
                             <div class="result-text-nav">
                                 <h1 class="result-title-nav">
-                                    {{ anime.title.userPreferred }}
+                                    {{  anime.title.userPreferred  }}
                                 </h1>
                                 <h2 class="result-date-nav">
 
-                                    {{ anime.releaseDate }}
+                                    {{  anime.releaseDate  }}
                                 </h2>
                             </div>
                         </div>
@@ -118,47 +118,53 @@
             </div>
         </header>
         <div>
-            <div class="featured-content">
+            <div v-if="featuredJson != null" class="featured-content">
                 <div class="clipper">
-                    <div class="iframe-wrapper">
+                    <div class="iframe-wrapper" v-if="featuredJson[selectedAnime].trailer.id != null">
                         <iframe class="iframe-class"
-                            src="https://www.youtube.com/embed/CFuuCA0duQU?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=CFuuCA0duQU"
+                            :src="`https://www.youtube.com/embed/${featuredJson[selectedAnime].trailer.id}?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=${featuredJson[selectedAnime].trailer.id}`"
                             frameborder="0"></iframe>
+                    </div>
+                    <div class="background-cover-wrapper" v-else>
+                        <img class="background-cover" :src="featuredJson[selectedAnime].cover" alt="">
                     </div>
                 </div>
                 <div class="gradient"></div>
                 <div class="featured-details">
-                    <h3 class="duration">23 min / Episode</h3>
-                    <h2 class="episode-count">Episodes: <span class="red-text">7</span> - Status: <span
-                            class="red-text">CURRENTLY AIRING</span></h2>
-                    <h1 class="title">Yofukashi no Uta</h1>
-                    <h4 class="description-home">Wracked by insomnia and wanderlust, Kou Yamori is driven onto the
-                        moonlit
-                        streets every night in an aimless search for something he can’t seem to name. His nightly ritual
-                        is
-                        marked by purposeless introspection — until he meets Nazuna, who might just be a vampire! Kou’s
-                        new
-                        companion could offer him dark gifts and a vampire’s immortality. But there are conditions that
-                        must
-                        be met before Kou can sink his teeth into vampirism, and he’ll have to discover just how far
-                        he’s
-                        willing to go to satisfy his desires before he can heed the Call of the Night!<br><br>(Source:
-                        Sentai Filmworks)</h4>
+                    <h3 class="duration">{{  featuredJson[selectedAnime].duration  }} min / Episode</h3>
+                    <h2 class="episode-count">Episodes: <span class="red-text">{{
+                             featuredJson[selectedAnime].totalEpisodes 
+                            }}</span> - Status: <span class="red-text">{{  featuredJson[selectedAnime].status  }}</span>
+                    </h2>
+                    <h1 class="title">{{  featuredJson[selectedAnime].title.userPreferred  }}</h1>
+                    <p class="description-home" v-html="featuredJson[selectedAnime].description"></p>
+                </div>
+                <div class="featured-selector">
+                    <div class="featured-card" v-for="(featuredAnime, index) in featuredJson" :key="featuredAnime.id">
+                        <div class="featured-card-wrapper" v-on:click="changeFeaturedAnime(index)">
+                            <img class="featured-image" :src="featuredAnime.cover" alt="">
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div style="height: 800px;width: 800px;color: red;">{{ slug }}</div>
+            <div style="height: 800px;width: 800px;color: red;">{{  slug  }}</div>
         </div>
     </div>
 </template>
 
 <script>
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+// optional style for arrows & dots
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
     transition: {
         name: 'home',
         mode: 'out-in'
     },
+    components: { VueSlickCarousel },
     data() {
         return {
             animeName: null,
@@ -166,7 +172,9 @@ export default {
             magic_flag: false,
             showDropdown: false,
             currentDropdown: 'main',
-            videoPlayerDesign: false,
+            videoPlayerDesign: true,
+            featuredJson: null,
+            selectedAnime: 0,
         }
     },
     head() {
@@ -179,6 +187,11 @@ export default {
 
     },
     methods: {
+        changeFeaturedAnime(i) {
+            document.querySelector('.featured-selector').children.item(i).classList.add('selected')
+            document.querySelector('.featured-selector').children.item(this.selectedAnime).classList.remove('selected')
+            this.selectedAnime = i;
+        },
         handleScroll() {
             // Your scroll handling here
             console.log(window.scrollY)
@@ -256,7 +269,7 @@ export default {
             }
         }
     },
-    mounted() {
+    async mounted() {
         const password = document.querySelector('input[type="search"]');
         const searchSuggestions = document.querySelector('.searchSuggestions');
         const searchResult = document.querySelector('.search-result');
@@ -286,6 +299,15 @@ export default {
                 searchSuggestions.classList.remove('display')
             }
         })
+
+        this.featuredJson = await fetch('https://consumet-api.herokuapp.com/meta/anilist/trending').then(function (response) {
+            // The response is a Response instance.
+            // You parse the data into a useable format using `.json()`
+            return response.json();
+        }).then(function (data) {
+            return data.results; // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+        });
+
     },
     beforeMount() {
         window.addEventListener('scroll', this.handleScroll)
@@ -293,11 +315,60 @@ export default {
     },
     beforeDestroy() {
         window.removeEventListener('scroll', this.handleScroll)
-    }
+    },
 }
 </script>
 
 <style>
+.featured-selector {
+    z-index: 100;
+    display: flex;
+    width: 600px;
+    height: 320px;
+    align-items: center;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    position: absolute;
+    bottom: 120px;
+    right: 50px;
+}
+
+.featured-card.selected {
+    width: 200px;
+    height: 280px;
+    margin-right: 30px;
+    border-radius: 20px;
+    transition: 0.4s all ease;
+}
+
+.featured-card {
+    position: relative;
+    width: 160px;
+    height: 220px;
+    margin-right: 30px;
+    border-radius: 20px;
+    transition: 0.4s all ease;
+}
+
+.featured-card-wrapper {
+    position: static;
+    width: 160px;
+    height: 220px;
+    margin-right: 30px;
+    border-radius: 20px;
+}
+
+.featured-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+    object-position: center;
+    overflow: hidden;
+}
+
+
 /* clears the 'X' from Internet Explorer */
 input[type=search]::-ms-clear {
     display: none;
@@ -693,6 +764,24 @@ ul {
     margin-left: -100%;
 }
 
+.background-cover-wrapper {
+    width: calc(100vw - 8px);
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+
+.background-cover {
+    width: calc(100vw - 8px);
+    aspect-ratio: 16/9;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    object-fit: cover;
+    object-position: center;
+}
+
 .gradient {
     width: calc(100vw - 8px);
     height: 700px;
@@ -725,11 +814,12 @@ h2 {
 .title {
     font-size: 52px;
     padding-bottom: 20px;
+    width: 800px;
 }
 
 .description-home {
-    font-size: 14px;
-    font-weight: normal;
+    font-size: 16px;
+    font-weight: 600;
     width: 40vw;
 }
 
