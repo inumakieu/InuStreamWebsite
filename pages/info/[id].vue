@@ -73,7 +73,7 @@
                 </div>
                 <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
                     class="episode-card-info">
-                    <div class="image-wrapper-info" v-scroll-drag>
+                    <div class="image-wrapper-info">
                         <img class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
                         <h3 class="episode-number-text-info">{{ episode.number }}</h3>
@@ -154,41 +154,6 @@ function animateList() {
     }
 }
 
-const vScrollDrag = {
-    mounted: async (el) => {
-        console.log('SCROLL LOADED')
-        const slider = document.querySelector('.info-episode-list');
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-
-        slider.addEventListener('mousedown', (e) => {
-            isDown = true;
-            slider.classList.add('active')
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-        })
-
-        slider.addEventListener('mouseleave', () => {
-            isDown = false;
-            slider.classList.remove('active')
-        })
-
-        slider.addEventListener('mouseup', () => {
-            isDown = false;
-            e.preventDefault();
-            slider.classList.remove('active')
-        })
-
-        slider.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = x - startX;
-            slider.scrollLeft = scrollLeft - walk;
-        })
-    },
-}
 
 const vMyDirective = {
     mounted: async (el) => {
@@ -215,8 +180,10 @@ const vMyDirective = {
                             }
 
                         }
+
                         loadedEpisodes = true
                     }
+
                 }, "100")
 
             }
@@ -226,6 +193,39 @@ const vMyDirective = {
         watch(episodeResponse, () => {
             loadEpisodes()
         })
+        console.log('SCROLL LOADED')
+        var slider = document.querySelector('.info-episode-list');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            console.log('DOWNNNN')
+            isDown = true;
+            slider.classList.add('active')
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        })
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active')
+        })
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            e.preventDefault();
+            slider.classList.remove('active')
+        })
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = x - startX;
+            slider.scrollLeft = scrollLeft - walk;
+        })
+
     },
 }
 
