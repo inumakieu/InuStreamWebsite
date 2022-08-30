@@ -218,10 +218,10 @@ export default {
             }
         },
         async goToSearch() {
-            await navigateTo('/search/' + this.$refs.search.value.toLowerCase().replaceAll(' ', '-'), { replace: true })
+            await navigateTo('/search/' + this.$refs.search.value.toLowerCase().replaceAll(' ', '-'), { replace: false })
         },
         async goToInfo(id) {
-            await navigateTo('/info/' + id, { replace: true })
+            await navigateTo('/info/' + id, { replace: false })
         },
         changeSubmenu(nextSubmenu) {
             this.currentDropdown = nextSubmenu;

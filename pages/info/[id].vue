@@ -134,7 +134,7 @@ watch(episodes, () => {
 
 
 async function goToInfo(id) {
-    await navigateTo('/info/' + id, { replace: true })
+    await navigateTo('/info/' + id, { replace: false })
 };
 
 function animateList() {
