@@ -257,9 +257,6 @@ export default {
         }
     },
     mounted() {
-        window.onpopstate = function () {
-            location.reload()
-        };
         const password = document.querySelector('input[type="search"]');
         const searchSuggestions = document.querySelector('.searchSuggestions');
         const searchResult = document.querySelector('.search-result');

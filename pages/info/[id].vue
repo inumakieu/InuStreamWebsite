@@ -228,9 +228,6 @@ const vMyDirective = {
         })
     },
 }
-window.onpopstate = function () {
-    location.reload()
-};
 
 watch(episodeList, () => {
     console.log(episodeList)
