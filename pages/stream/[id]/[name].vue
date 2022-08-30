@@ -160,8 +160,8 @@
             </div>
             <div class="episode-selector">
                 <h1 class="episode-selector-title">Episodes</h1>
-                <div class="episode-selector-list" v-if="this.anilistJson != null">
-                    <div class="episode-selector-card" v-for="episode in this.anilistJson.episodes"
+                <div class="episode-selector-list" v-if="anime != null">
+                    <div class="episode-selector-card" v-for="episode in anime.episodes"
                         v-on:click="loadEpisode(episode)">
                         <div class="episode-selector-wrapper">
                             <img class="episode-selector-image" :src="episode.image" alt="">
