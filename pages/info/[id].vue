@@ -9,21 +9,21 @@
 
                         <div class="poster-wrapper">
                             <img v-if="anime != null" ref="poster_image" class="poster-image" :src="anime.image">
-                            <h1 v-if="anime != null" class="rating">Rating: {{ anime.rating / 10 }} / 10</h1>
-                            <h1 v-if="anime != null" class="released">Released : {{ anime.releaseDate }}</h1>
+                            <h1 v-if="anime != null" class="rating">Rating: {{  anime.rating / 10  }} / 10</h1>
+                            <h1 v-if="anime != null" class="released">Released : {{  anime.releaseDate  }}</h1>
                         </div>
                         <div v-if="anime != null" class="info-wrapper">
-                            <h1 class="duration">{{ anime.duration }} min / Episode</h1>
-                            <h1 class="status">Episodes: <span class="red-text">{{ anime.totalEpisodes }}</span> -
-                                Status: <span class="red-text">{{ anime.status }}</span></h1>
-                            <h1 class="title">{{ anime.title.english }}</h1>
-                            <h1 class="title-native">{{ anime.title.native }}</h1>
+                            <h1 class="duration">{{  anime.duration  }} min / Episode</h1>
+                            <h1 class="status">Episodes: <span class="red-text">{{  anime.totalEpisodes  }}</span> -
+                                Status: <span class="red-text">{{  anime.status  }}</span></h1>
+                            <h1 class="title">{{  anime.title.english  }}</h1>
+                            <h1 class="title-native">{{  anime.title.native  }}</h1>
                             <p class="description"><span v-html="anime.description"></span></p>
                         </div>
                         <div class="studio-wrapper">
                             <h2 class="studios-top-title">Studios:</h2>
                             <div v-for="studio in anime.studios" class="studio-name-wrapper">
-                                <h2 class="studio-name-text">{{ studio }}</h2>
+                                <h2 class="studio-name-text">{{  studio  }}</h2>
                             </div>
                         </div>
                     </div>
@@ -37,8 +37,8 @@
                                             <img class="character-image" :src="character.image">
                                         </div>
                                         <div class="character-details-wrapper">
-                                            <div class="character-role">{{ character.role }}</div>
-                                            <div class="character-name">{{ character.name.userPreferred }}</div>
+                                            <div class="character-role">{{  character.role  }}</div>
+                                            <div class="character-name">{{  character.name.userPreferred  }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -51,8 +51,9 @@
                                             <img class="related-image" :src="related.cover">
                                         </div>
                                         <div class="related-details-wrapper">
-                                            <div class="character-role">{{ related.relationType }}</div>
-                                            <div class="related-name">{{ related.title.userPreferred }}</div>
+                                            <div class="character-role">{{  related.relationType.replaceAll('_', ' ')  }}
+                                            </div>
+                                            <div class="related-name">{{  related.title.userPreferred  }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +77,7 @@
                     <div class="image-wrapper-info">
                         <img class="episode-bg-info" :src="episode.image">
                         <div class="episode-gradient-info"></div>
-                        <h3 class="episode-number-text-info">{{ episode.number }}</h3>
+                        <h3 class="episode-number-text-info">{{  episode.number  }}</h3>
                         <div class="play-episode-button" v-on:click="streamEpisode(episode, anime)">
                             <svg class="play-button-icon" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 384 512">
@@ -87,7 +88,7 @@
                     </div>
                     <div class="episode-info-wrapper-info">
                         <div class="episode-title-text-info">
-                            {{ episode.title ?? 'Episode ' + episode.number }}
+                            {{  episode.title ?? 'Episode ' + episode.number  }}
                         </div>
                         <div class="episode-title-text-info"></div>
                     </div>

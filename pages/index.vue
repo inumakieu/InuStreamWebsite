@@ -328,12 +328,14 @@ export default {
     align-items: center;
     overflow-x: scroll;
     overflow-y: hidden;
+    scroll-snap-type: x mandatory;
     position: absolute;
     bottom: 120px;
     right: 50px;
 }
 
 .featured-card.selected {
+    scroll-snap-align: start;
     width: 200px;
     height: 280px;
     margin-right: 30px;
@@ -342,6 +344,7 @@ export default {
 }
 
 .featured-card {
+    scroll-snap-align: start;
     position: relative;
     width: 160px;
     height: 220px;
