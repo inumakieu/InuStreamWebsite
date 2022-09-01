@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!netflixUI && doneLoading" class="body" style="display: flex; justify-content: space-between;">
+    <div v-if="false && doneLoading" class="body" style="display: flex; justify-content: space-between;">
         <div class="left-side">
             <div class="video-wrapper">
                 <Artplayer class="artplayer" @get-instance="getInstance" :option="option" :style="stylesObject" />

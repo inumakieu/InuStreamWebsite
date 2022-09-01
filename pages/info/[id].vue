@@ -1,48 +1,55 @@
 <template>
-    <div class="info-page-wrapper">
-        <img v-if="anime != null" ref="bg" class="bg" :src="anime.cover">
-        <div class="gradient-info"></div>
-        <div class="overall-wrapper">
-            <div class="details-wrapper">
-                <div class="row-wrapper">
-                    <div class="left-side-row">
-
-                        <div class="poster-wrapper">
-                            <img v-if="anime != null" ref="poster_image" class="poster-image" :src="anime.image">
-                            <h1 v-if="anime != null" class="rating">Rating: {{  anime.rating / 10  }} / 10</h1>
-                            <h1 v-if="anime != null" class="released">Released : {{  anime.releaseDate  }}</h1>
-                        </div>
-                        <div v-if="anime != null" class="info-wrapper">
-                            <h1 class="duration">{{  anime.duration  }} min / Episode</h1>
-                            <h1 class="status">Episodes: <span class="red-text">{{  anime.totalEpisodes  }}</span> -
-                                Status: <span class="red-text">{{  anime.status  }}</span></h1>
-                            <h1 class="title">{{  anime.title.english  }}</h1>
-                            <h1 class="title-native">{{  anime.title.native  }}</h1>
-                            <p class="description"><span v-html="anime.description"></span></p>
-                        </div>
-                        <div class="studio-wrapper">
-                            <h2 class="studios-top-title">Studios:</h2>
-                            <div v-for="studio in anime.studios" class="studio-name-wrapper">
-                                <h2 class="studio-name-text">{{  studio  }}</h2>
-                            </div>
+    <div class="info-wrapper-new">
+        <img v-if="anime != null" class="bg-new" :src="anime.cover">
+        <div class="info-gradient"></div>
+        <div class="info-detail-wrapper">
+            <div class="top-main-info-wrapper">
+                <div class="left-top-info-wrapper">
+                    <div class="poster-image-wrapper">
+                        <img v-if="anime != null" class="poster-image-new" :src="anime.image">
+                        <div class="poster-gradient"></div>
+                        <div class="poster-text-details">
+                            <h2 class="rating-text">Rating: {{ (anime.rating / 10) }} / 10</h2>
+                            <h2 class="release-text">Released: {{ anime.releaseDate }}</h2>
                         </div>
                     </div>
-                    <div class="right-side-row">
-                        <div class="right-side-wrapper">
-                            <h1 class="characters-title">Characters</h1>
-                            <div class="character-list-wrapper">
-                                <div v-for="character in anime.characters" class="characters-list">
-                                    <div class="character-wrapper">
-                                        <div class="character-image-wrapper">
-                                            <img class="character-image" :src="character.image">
-                                        </div>
-                                        <div class="character-details-wrapper">
-                                            <div class="character-role">{{  character.role  }}</div>
-                                            <div class="character-name">{{  character.name.userPreferred  }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+                <div class="title-top-wrapper">
+                    <h1 class="anime-title">{{ anime.title.english }}</h1>
+                    <h1 class="anime-title-romaji">{{ anime.title.native }}</h1>
+                </div>
+            </div>
+            <div class="bottom-main-info-wrapper">
+                <div v-if="showLeftBar" class="left-side-info-wrapper">
+                    <div class="detail-left-wrapper">
+                        Studios:
+                        <div class="studio-column" v-for="studio in anime.studios">
+                            <div class="studio-name">{{ studio }}</div>
+                        </div>
+                    </div>
+                    <div class="detail-left-wrapper">
+                        Duration: <span>{{ anime.duration }} min</span>
+                    </div>
+                    <div class="detail-left-wrapper">
+                        Episodes: <span>{{ anime.totalEpisodes }}</span>
+                    </div>
+                    <div class="detail-left-wrapper">
+                        Season: <span>{{ anime.season }}</span>
+                    </div>
+                    <div class="detail-left-wrapper">
+                        Released: <span>{{ anime.releaseDate }}</span>
+                    </div>
+                    <div class="detail-left-wrapper">
+                        Genre:
+                        <div class="studio-column" v-for="genre in anime.genres">
+                            <div class="studio-name">{{ genre }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-main-info-wrapper">
+                    <div class="description-related-wrapper">
+                        <p class="anime-description" v-html="anime.description"></p>
+                        <div class="related-column-wrapper">
                             <h1 class="related-title">Related Anime</h1>
                             <div class="related-list-wrapper">
                                 <div v-for="related in anime.relations" class="characters-list">
@@ -51,53 +58,49 @@
                                             <img class="related-image" :src="related.cover">
                                         </div>
                                         <div class="related-details-wrapper">
-                                            <div class="character-role">{{  related.relationType.replaceAll('_', ' ')  }}
+                                            <div class="character-role">{{ related.relationType.replaceAll('_', ' ') }}
                                             </div>
-                                            <div class="related-name">{{  related.title.userPreferred  }}</div>
+                                            <div class="related-name-wrapper">
+                                                <div class="related-name">{{ related.title.userPreferred }}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="lower-part">
-                <div class="genre-list">
-                    <div v-if="anime != null" class="genre" v-for="genre in anime.genres" v-html="genre">
-                    </div>
-                </div>
-            </div>
-            <h1 class="episodes-title">Episodes</h1>
-            <div v-my-directive class="info-episode-list" :ref="episodeListRef">
-                <div class="loading-wrapper" v-html="loadingHtml">
-                </div>
-                <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
-                    class="episode-card-info">
-                    <div class="image-wrapper-info">
-                        <img class="episode-bg-info" :src="episode.image">
-                        <div class="episode-gradient-info"></div>
-                        <h3 class="episode-number-text-info">{{  episode.number  }}</h3>
-                        <div class="play-episode-button" v-on:click="streamEpisode(episode, anime)">
-                            <svg class="play-button-icon" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 384 512">
-                                <path fill="white"
-                                    d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z" />
-                            </svg>
+                    <h1 class="episodes-title">Episodes</h1>
+                    <div v-my-directive class="info-episode-list" :ref="episodeListRef">
+                        <div class="loading-wrapper" v-html="loadingHtml">
                         </div>
-                    </div>
-                    <div class="episode-info-wrapper-info">
-                        <div class="episode-title-text-info">
-                            {{  episode.title ?? 'Episode ' + episode.number  }}
-                        </div>
-                        <div class="episode-title-text-info"></div>
-                    </div>
+                        <div v-if="episodeList != null && episodeList.length > 0" v-for="episode in episodeList"
+                            class="episode-card-info">
+                            <div class="image-wrapper-info">
+                                <img class="episode-bg-info" :src="episode.image">
+                                <div class="episode-gradient-info"></div>
+                                <div class="episode-detail-wrapper">
+                                    <div class="watched">WATCHED</div>
+                                    <div class="episode-bottom-wrapper">
 
+                                        <div class="episode-title-wrapper">{{ episode.title }}</div>
+                                    </div>
+                                </div>
+                                <h3 class="episode-number-text-info">{{ episode.number }}</h3>
+                                <div class="play-episode-button" v-on:click="streamEpisode(episode, anime)">
+                                    <svg class="play-button-icon" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 384 512">
+                                        <path fill="white"
+                                            d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </template>
 
 
@@ -105,6 +108,22 @@
 import { useFetch, useHead, useRoute } from '#app';
 
 const route = useRoute();
+
+var innerW = ref(0)
+var showLeftBar = ref(true);
+if (process.client) {
+    innerW.value = window.innerWidth
+    window.addEventListener('resize', () => {
+        console.log(window.innerWidth)
+        innerW.value = window.innerWidth
+        if (innerW.value > 900) {
+            showLeftBar.value = true
+        } else {
+            showLeftBar.value = false
+        }
+    });
+}
+
 
 console.log('testing')
 
@@ -275,14 +294,196 @@ useHead({
 </script>
 
 <style scoped>
+.info-wrapper-new {
+    display: flex;
+    position: relative;
+}
+
+.bg-new {
+    width: 100vw;
+    height: 60vh;
+    position: absolute;
+    object-fit: cover;
+    object-position: center;
+}
+
+.info-gradient {
+    width: 100vw;
+    height: 60vh;
+    position: absolute;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(22, 21, 26, 0.9) 70%, rgba(22, 21, 26, 1) 100%);
+}
+
+.top-main-info-wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    width: 100vw;
+    height: 62vh;
+    padding: 0 5vw;
+}
+
+.left-top-info-wrapper {
+    position: relative;
+    bottom: 30vh;
+    margin-right: 2vw;
+}
+
+.poster-image-wrapper {
+    position: relative;
+}
+
+.poster-image-new {
+    position: absolute;
+    width: 20vh;
+    aspect-ratio: 1/ 1.5;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 2vh;
+    -webkit-box-shadow: 0px 0px 12px 5px #16151A;
+    box-shadow: 0px 0px 12px 5px #16151A;
+}
+
+.poster-gradient {
+    position: absolute;
+    width: 20vh;
+    aspect-ratio: 1/ 1.5;
+    border-radius: 1.8vh;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+}
+
+.poster-text-details {
+    position: absolute;
+    width: 20vh;
+    height: 30vh;
+    text-align: center;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+.rating-text {
+    color: white;
+    font-weight: bold;
+    font-size: 2.2vh;
+    padding-bottom: 4px;
+}
+
+.release-text {
+    color: #999999;
+    font-weight: bold;
+    font-size: 1.5vh;
+    padding-top: 0;
+    padding-bottom: 12px;
+}
+
+.title-top-wrapper {
+    margin-left: 25vh;
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.anime-title {
+    font-weight: bold;
+    font-size: 4.8vh;
+    color: white;
+}
+
+.anime-title-romaji {
+    font-weight: 500;
+    font-size: 3.2vh;
+    color: white;
+}
+
+.bottom-main-info-wrapper {
+    margin-top: 40px;
+    display: flex;
+    width: 100vw;
+    height: 900px;
+}
+
+.left-side-info-wrapper {
+    width: 16vw;
+    min-width: 12vw;
+    height: fit-content;
+    font-size: 1vw;
+    background-color: black;
+    border-radius: 20px;
+    margin: 0 38px 0 40px;
+    color: #B8B8B8;
+    font-weight: bold;
+    padding: 1.6vw;
+}
+
+.detail-left-wrapper {
+    margin-bottom: 0.8vh;
+}
+
+.studio-column {
+    font-size: 0.8vw;
+    color: white;
+    font-weight: 500;
+    padding-left: 1.4vw;
+    margin-top: 0.8vh;
+}
+
+.studio-name {
+    padding: 6px 10px;
+    border-radius: 1vh;
+    margin-bottom: 1vh;
+}
+
+.studio-name:hover {
+    background-color: #16151abb;
+}
+
+span {
+    color: #C73030;
+    font-weight: 600;
+}
+
+.right-main-info-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.related-column-wrapper {
+    width: 30vw;
+}
+
+.anime-description {
+    width: 50vw;
+    height: fit-content;
+    background-color: black;
+    border-radius: 20px;
+    padding: 4vh;
+    font-size: 1.7vh;
+    margin-right: 4vw;
+}
+
+.description-related-wrapper {
+    display: flex;
+}
+
+
+/* 
+
+OLD CSS
+
+*/
+
+
 .play-episode-button {
     position: absolute;
     justify-content: center;
     align-items: center;
-    margin-right: 125px;
-    margin-top: calc(25% - 12.5px);
-    width: 50px;
-    height: 50px;
+    margin-right: 6.5vw;
+    margin-top: 6vh;
+    width: 3vw;
+    aspect-ratio: 1 / 1;
     display: flex;
     opacity: 0.0;
     border-radius: 50%;
@@ -298,6 +499,8 @@ useHead({
 
 .play-button-icon {
     pointer-events: none;
+    width: 1.2vw;
+    aspect-ratio: 1 / 1;
 }
 
 .row-wrapper {
@@ -337,11 +540,10 @@ useHead({
 }
 
 .episodes-title {
-    font-size: 32px;
+    font-size: 4vh;
     font-weight: bold;
     color: white;
-    margin-left: 120px;
-    margin-top: 20px;
+    margin-top: 5vh;
 }
 
 
@@ -529,8 +731,9 @@ useHead({
 }
 
 .related-title {
-    margin-top: 10px;
+    font-size: 3vh;
     padding: 0;
+
 }
 
 .characters-title {
@@ -540,8 +743,10 @@ useHead({
 
 .related-list-wrapper {
     width: 20vw;
-    height: 170px;
+    min-width: 20vw;
+    height: 18vh;
     display: flex;
+    gap: 2vw;
     overflow-x: scroll;
     overflow-y: hidden;
     align-items: center;
@@ -633,36 +838,29 @@ useHead({
 
 .related-wrapper {
     position: relative;
-    width: 150px;
-    height: 90px;
-    margin-right: 20px;
-    border-radius: 12px;
+    width: 10vw;
+    aspect-ratio: 16/9;
+    border-radius: 2vh;
     overflow: hidden;
     transition: 0.4s all ease;
 }
 
 .related-wrapper:hover {
-    width: 190px;
-    height: 120px;
+    width: 13vw;
+    aspect-ratio: 16/9;
     transition: 0.4s all ease;
 }
 
 .related-details-wrapper {
     position: absolute;
-    width: 150px;
-    height: 90px;
-    border-radius: 12px;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 2vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
-    transition: 0.4s all ease;
-}
-
-.related-wrapper:hover>.related-details-wrapper {
-    width: 190px;
-    height: 120px;
     transition: 0.4s all ease;
 }
 
@@ -672,43 +870,57 @@ useHead({
 }
 
 .related-image {
-    width: 150px;
-    height: 90px;
-    border-radius: 12px;
+    width: 10vw;
+    aspect-ratio: 16/9;
+    border-radius: 2vh;
     object-fit: cover;
     object-position: center;
     transition: 0.4s all ease;
 }
 
 .related-wrapper:hover>.related-image-wrapper>.related-image {
-    width: 190px;
-    height: 120px;
-    border-radius: 20px;
+    width: 13vw;
+    aspect-ratio: 16/9;
+    border-radius: 3vh;
     transition: 0.4s all ease;
 }
 
-.related-name {
-    width: 150px;
-    height: 30px;
-    padding: 4px 12px;
-    text-align: center;
+.related-name-wrapper {
+    width: 100%;
+    height: 40px;
     background-color: black;
-    color: white;
-    font-size: 8px;
-    font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 4;
     transition: 0.4s all ease;
+}
+
+.related-name {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 90%;
+    height: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 8px;
+    font-weight: bold;
+    transition: 0.4s all ease;
     text-overflow: ellipsis;
 }
 
-.related-wrapper:hover>.related-details-wrapper>.related-name {
-    width: 190px;
-    height: 40px;
+.related-wrapper:hover>.related-details-wrapper>.related-name-wrapper {
+    height: 50px;
     transition: 0.4s all ease;
 }
+
+.related-wrapper:hover>.related-details-wrapper>.related-name-wrapper>.related-name {
+    font-size: 10px;
+}
+
 
 .info-wrapper {
     width: 36vw;
@@ -773,8 +985,7 @@ useHead({
 .info-episode-list {
     display: flex;
     flex-direction: row;
-    margin-left: 120px;
-    width: 90vw;
+    width: 74vw;
     height: 230px;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -787,15 +998,6 @@ useHead({
     display: flex;
 }
 
-.episode-number-text-info {
-    position: relative;
-    justify-self: flex-end;
-    padding: 8px 12px;
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    z-index: 5;
-}
 
 .episode-card-info {
     position: relative;
@@ -812,7 +1014,7 @@ useHead({
 
 .image-wrapper-info {
     position: relative;
-    width: 300px;
+    width: 16vw;
     aspect-ratio: 16/9;
     display: flex;
     justify-content: flex-end;
@@ -820,22 +1022,63 @@ useHead({
 
 .episode-bg-info {
     position: absolute;
-    margin-left: 360px;
-    width: 300px;
+    width: 16vw;
     aspect-ratio: 16/9;
     background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%);
     background-position: 0;
     background-repeat: no-repeat;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 2vh;
     display: flex;
     justify-content: flex-end;
+}
+
+.episode-detail-wrapper {
+    position: absolute;
+    width: 16vw;
+    aspect-ratio: 16/9;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.watched {
+    width: fit-content;
+    padding: 0.5vh 1.2vw;
+    font-weight: bold;
+    border-radius: 2vh 0 1.5vh 0;
+    background-color: black;
+}
+
+.episode-title-wrapper {
+    display: -webkit-box;
+    background-color: black;
+    font-weight: 700;
+    font-size: 1.4vh;
+    max-height: 3.6vh;
+    line-height: 1.8vh;
+    padding: 10px 1.2vh;
+    text-align: center;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-lines: 2;
+    overflow-y: hidden;
+    word-wrap: break-word;
+}
+
+.episode-bottom-wrapper {
+    max-height: 10vh;
+    overflow: hidden;
+    border-radius: 0 0 2vh 2vh;
 }
 
 .episode-number-text-info {
     position: relative;
     padding: 8px 12px;
-    font-size: 20px;
+    font-size: 2.7vh;
     font-weight: bold;
     color: white;
     z-index: 5;
@@ -860,9 +1103,9 @@ useHead({
 .episode-gradient-info {
     position: absolute;
     margin-left: 30px;
-    border-radius: 12px;
+    border-radius: 1.8vh;
     z-index: 3;
-    width: 300px;
+    width: 16vw;
     aspect-ratio: 16/9;
     background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%);
 }
