@@ -49,7 +49,7 @@
                 <div class="right-main-info-wrapper">
                     <div class="description-related-wrapper">
                         <p class="anime-description" v-html="anime.description"></p>
-                        <div class="related-column-wrapper">
+                        <div v-if="!isMobile" class="related-column-wrapper">
                             <h1 class="related-title">Related Anime</h1>
                             <div class="related-list-wrapper">
                                 <div v-for="related in anime.relations" class="characters-list">
@@ -111,6 +111,7 @@ const route = useRoute();
 
 var innerW = ref(0)
 var showLeftBar = ref(true);
+var isMobile = ref(false)
 if (process.client) {
     innerW.value = window.innerWidth
     window.addEventListener('resize', () => {
@@ -118,11 +119,17 @@ if (process.client) {
         innerW.value = window.innerWidth
         if (innerW.value > 900) {
             showLeftBar.value = true
-        } else {
+            isMobile.value = false
+        } else if (innerW.value <= 500) {
+            isMobile.value = true
+        } else if (innerW.value <= 900) {
             showLeftBar.value = false
+        } else if (innerW.value > 500) {
+            isMobile.value = false
         }
     });
 }
+
 
 
 console.log('testing')
@@ -297,6 +304,7 @@ useHead({
 .info-wrapper-new {
     display: flex;
     position: relative;
+    overflow-x: hidden;
 }
 
 .bg-new {
@@ -315,17 +323,19 @@ useHead({
 }
 
 .top-main-info-wrapper {
-    position: relative;
+    position: static;
     display: flex;
+    justify-content: flex-start;
     align-items: flex-end;
     width: 100vw;
     height: 62vh;
-    padding: 0 5vw;
+    padding: 0 0 0 5vw;
 }
 
 .left-top-info-wrapper {
     position: relative;
-    bottom: 30vh;
+    width: 20vh;
+    aspect-ratio: 1/ 1.5;
     margin-right: 2vw;
 }
 
@@ -335,19 +345,17 @@ useHead({
 
 .poster-image-new {
     position: absolute;
-    width: 20vh;
+    width: 100%;
     aspect-ratio: 1/ 1.5;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     border-radius: 2vh;
-    -webkit-box-shadow: 0px 0px 12px 5px #16151A;
-    box-shadow: 0px 0px 12px 5px #16151A;
 }
 
 .poster-gradient {
     position: absolute;
-    width: 20vh;
+    width: 100%;
     aspect-ratio: 1/ 1.5;
     border-radius: 1.8vh;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
@@ -355,8 +363,8 @@ useHead({
 
 .poster-text-details {
     position: absolute;
-    width: 20vh;
-    height: 30vh;
+    width: 100%;
+    aspect-ratio: 1/ 1.5;
     text-align: center;
     display: flex;
     justify-content: flex-end;
@@ -364,6 +372,7 @@ useHead({
 }
 
 .rating-text {
+    position: relative;
     color: white;
     font-weight: bold;
     font-size: 2.2vh;
@@ -371,6 +380,7 @@ useHead({
 }
 
 .release-text {
+    position: relative;
     color: #999999;
     font-weight: bold;
     font-size: 1.5vh;
@@ -379,7 +389,10 @@ useHead({
 }
 
 .title-top-wrapper {
-    margin-left: 25vh;
+    position: relative;
+    width: 80%;
+    margin-right: 0;
+    padding-right: 0;
     height: 30vh;
     display: flex;
     flex-direction: column;
@@ -387,14 +400,16 @@ useHead({
 }
 
 .anime-title {
+    width: 80%;
     font-weight: bold;
-    font-size: 4.8vh;
+    font-size: 4vh;
     color: white;
 }
 
 .anime-title-romaji {
+    width: 80%;
     font-weight: 500;
-    font-size: 3.2vh;
+    font-size: 2.8vh;
     color: white;
 }
 
@@ -455,7 +470,7 @@ span {
 }
 
 .anime-description {
-    width: 50vw;
+    width: 100%;
     height: fit-content;
     background-color: black;
     border-radius: 20px;
