@@ -11,7 +11,7 @@
     "nuxt": "3.0.0-rc.8"
   },
   "dependencies": {
-    "@consumet/extensions": "^1.0.10",
+    "@consumet/extensions": "^1.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-brands-svg-icons": "^6.1.2",
     "@fortawesome/free-regular-svg-icons": "^6.1.2",
@@ -25,7 +25,10 @@
     "@vime/vue-next": "^5.3.1",
     "artplayer": "^4.5.4",
     "hls.js": "^1.2.1",
+    "just-detect-adblock": "^1.1.0",
     "nuxt-seo": "^1.6.1",
+    "vue-adblock-detect": "0.0.2",
+    "vue-adblock-detector": "^1.2.4",
     "vue-dragscroll": "^4.0.4",
     "vue-slick-carousel": "^1.0.6",
     "vue-virtual-scroll-list": "^2.3.3",
