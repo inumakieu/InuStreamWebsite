@@ -180,6 +180,16 @@ let vCustomDirective = {
         alert('AdBlocker Detected');
       }
     }
+  },
+  beforeRouteEnter: () => {
+    let notifier : Element = document.querySelector(".notify");
+    if (notifier) {
+      if (notifier.style.width == "1px") {
+        alert('No AdBlocker');
+      } else {
+        alert('AdBlocker Detected');
+      }
+    }
   }
 };
 
