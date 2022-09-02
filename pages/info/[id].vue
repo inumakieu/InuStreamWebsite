@@ -115,6 +115,34 @@
       <div class="-ad-banner-">
       </div>
     </div>
+    <div class="pointer-interceptor">
+      <div class="detectPopup">
+        <div class="exclamation-wrapper">
+          <svg width="57" height="57" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30.5 15.9828C30.5 14.886 29.6063 14 28.5 14C27.3938 14 26.5 14.886 26.5 15.9828V27.0862C26.5 28.1829 27.3938 29.069 28.5 29.069C29.6063 29.069 30.5 28.1829 30.5 27.0862V15.9828ZM28.5 37C29.8813 37 31 35.8909 31 34.5216C31 33.1522 29.8813 32.0431 28.5 32.0431C27.1188 32.0431 26 33.1522 26 34.5216C26 35.8909 27.1188 37 28.5 37Z" fill="#DE2627"/>
+            <path d="M26.7679 3C27.5377 1.66667 29.4623 1.66667 30.2321 3L51.4497 39.75C52.2195 41.0833 51.2572 42.75 49.7176 42.75H7.28238C5.74278 42.75 4.78053 41.0833 5.55033 39.75L26.7679 3Z" stroke="#DE2627" stroke-width="3"/>
+          </svg>
+        </div>
+        <h1 class="popupTitle">Adblock Detected</h1>
+        <h2 class="popupDescription">We have detected that you are using an Adblocker. We dont have any ads on this website, but Adblockers block many images used by the website, which results in a worse User Experience.
+          <br/>If you want to see all images, please disable your Adblocker.
+          <br/>♥ THX ♥</h2>
+        <div class="bottom-popup-row">
+          <div class="dont-show-again">
+            <div class="show-again-checkbox" v-on:click="popupCheckbox()">
+              <div class="svg-wrapper">
+                <svg width="8px" height="8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path fill="white" d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
+              </div>
+            </div>
+            Don’t show this popup again.
+          </div>
+          <div class="understood-button" v-on:click="hidePopup()">
+            Understood
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -361,6 +389,130 @@ useHead({
 </script>
 
 <style scoped>
+
+.pointer-interceptor.active {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 300;
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+  pointer-events: all;
+  transition: 0.3s all ease;
+}
+
+.pointer-interceptor {
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s all ease;
+}
+
+.detectPopup {
+  z-index: 340;
+  position: fixed;
+  left: calc(50vw - 280px);
+  top: 80px;
+  background-color: white;
+  border-radius: 20px;
+  width: 540px;
+  height: 300px;
+  -webkit-box-shadow: 0px 0px 20px 4px #000000;
+  box-shadow: 0px 0px 20px 4px #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.exclamation-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: fit-content;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background-color: #FFE0E4;
+}
+
+.popupTitle {
+  font-weight: bold;
+  font-size: 20px;
+  color: black;
+  margin-top: 8px;
+}
+
+.popupDescription {
+  padding-left: 12px;
+  padding-right: 12px;
+  font-weight: 400;
+  font-size: 15px;
+  color: #686868;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.bottom-popup-row {
+  display: flex;
+  height: 40px;
+  width: 490px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dont-show-again {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: 600;
+  font-size: 10px;
+  color: black;
+}
+
+.show-again-checkbox {
+  background-color: #D9D9D9;
+  border: none;
+  width: 16px;
+  aspect-ratio: 1/1;
+  border-radius: 4px;
+  margin-right: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s all ease;
+}
+
+.show-again-checkbox >.svg-wrapper {
+  opacity: 0;
+  transition: 0.3s all ease;
+}
+
+.show-again-checkbox.active > .svg-wrapper {
+  opacity: 1;
+  transition: 0.3s all ease;
+}
+
+.show-again-checkbox.active {
+  background-color: #1f212b;
+  border: none;
+  width: 16px;
+  aspect-ratio: 1/1;
+  border-radius: 4px;
+  margin-right: 8px;
+  transition: 0.3s all ease;
+}
+
+.understood-button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: #DE2627;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .-ad-banner- {
   width: 1px;
 }
