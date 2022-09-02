@@ -345,13 +345,14 @@ export default {
     });
 
     let notifier = document.querySelector(".notify");
+    if(localStorage.getItem('hideBlockerPopup') == null || localStorage.getItem('hideBlockerPopup') == undefined) {
+      localStorage.setItem('hideBlockerPopup', false)
+    }
     if (notifier) {
       if (notifier.style.width == "1px" || localStorage.getItem('hideBlockerPopup') == "true") {
         document.querySelector('.pointer-interceptor').classList.remove('active')
-      } else {
-        if(localStorage.getItem('hideBlockerPopup') != null && localStorage.getItem('hideBlockerPopup') != undefined && localStorage.getItem('hideBlockerPopup') == "false"){
+      } else if(localStorage.getItem('hideBlockerPopup') == "false"){
           document.querySelector('.pointer-interceptor').classList.add('active')
-        }
       }
     }
 
