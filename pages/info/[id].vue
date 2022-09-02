@@ -122,10 +122,9 @@
 <script setup lang="ts">
 import {useFetch, useHead, useRoute} from '#app';
 import {META} from '@consumet/extensions';
-import Zoro from "@consumet/extensions/dist/providers/anime/zoro.js";
 import {IAnimeInfo} from "@consumet/extensions/dist/models";
 
-const ANILIST = new META.Anilist(new Zoro());
+const ANILIST = new META.Anilist();
 
 
 const route = useRoute();
@@ -220,7 +219,7 @@ function animateList() {
     console.log(cards)
     for (let index in cards) {
       if (cards[index] != null) {
-        cards[index].style.transitionDelay = index / 10 + 's'
+        cards[index].style.transitionDelay =  + `${(index / 10)}s`
         cards[index].classList.add('loaded')
       }
 
