@@ -33,7 +33,6 @@
     "vue-adblock-detector": "^1.2.4",
     "vue-dragscroll": "^4.0.4",
     "vue-slick-carousel": "^1.0.6",
-    "vue-virtual-scroll-list": "^2.3.3",
-    "vue-virtual-scroller": "^1.0.10"
+    "vue-virtual-scroll-list": "^2.3.3"
   }
 }
