@@ -46,7 +46,7 @@
     <div class="recently-released">
       Recently Released
       <div class="recent-list">
-        <div class="recent-anime-wrapper" v-for="recentAnime in recentlyReleasedAnime">
+        <div class="recent-anime-wrapper" v-for="recentAnime in recentlyReleasedAnime" v-on:click="goToEpisode(recentAnime)">
           <img class="recent-image" :src="recentAnime.image" alt="">
           <div class="recent-title">{{ (recentAnime.title as ITitle).english }}</div>
           <div class="recent-number">Episode {{ recentAnime.episodeNumber }}</div>
@@ -59,7 +59,7 @@
         InumakiEU
       </div>
       <div class="disclaimer-text">
-        Anistream does not store any files on our server, we only linked to the media which is hosted on 3rd party
+        Inu's Stream does not store any files on our server, we only linked to the media which is hosted on 3rd party
         services.
       </div>
     </div>
@@ -67,21 +67,38 @@
 </template>
 
 <script setup lang="ts">
-import { useFetch, useHead } from '#app';
+// IMPORTS
+import { useHead } from '#app';
 import { META, ANIME } from '@consumet/extensions';
-import { ITitle } from '@consumet/extensions/dist/models/types';
+import { IAnimeResult, ITitle } from '@consumet/extensions/dist/models/types';
+import Anilist from '@consumet/extensions/dist/providers/meta/anilist';
+import { url } from 'inspector';
+import { Ref } from 'vue';
 
-const ANILIST = new META.Anilist(new ANIME.Zoro());
+// VARIABLES
 
-const featuredAnime = (await ANILIST.fetchTrendingAnime()).results;
-let currentFeaturedIndex = 0;
+const ANILIST               : Anilist         = new META.Anilist(new ANIME.Zoro());
+const featuredAnime         : IAnimeResult[]  = (await ANILIST.fetchTrendingAnime()).results;
+const recentlyReleasedAnime : IAnimeResult[]  = (await ANILIST.fetchRecentEpisodes()).results;
 
-const recentlyReleasedAnime = (await ANILIST.fetchRecentEpisodes()).results;
+let currentFeaturedIndex    : number          = 0;
+let animeName               : Ref<String>     = ref('');
 
-let animeName = ref('');
+// DIRECTIVES
+
+let vScrollDirective = {
+  beforeMount() {
+    window.addEventListener('scroll', handleScroll)
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', handleScroll)
+  },
+}
+
+// FUNCTIONS
 
 function handleScroll() {
-  var nav_bar = document.documentElement.querySelector('.navbar');
+  var nav_bar = document.documentElement.querySelector('.navbar') as HTMLElement | null;
   if (window.scrollY >= 150) {
     nav_bar.style.backgroundColor = 'black';
 
@@ -94,7 +111,7 @@ function handleScroll() {
 function openSearchBar() {
   console.log('SEARCHING');
   if (process.client && innerWidth <= 500) {
-    let searchbar = document.querySelector('.search-form');
+    let searchbar = document.querySelector('.search-form') as HTMLElement | null;
     console.log(searchbar);
     searchbar.style.display = 'flex';
     searchbar.style.width = '100%';
@@ -106,15 +123,46 @@ async function goToSearch() {
     await navigateTo('/search/' + animeName.value.toLowerCase().replaceAll(' ', '-'), {replace: false})
 };
 
-let vScrollDirective = {
-  beforeMount() {
-    window.addEventListener('scroll', handleScroll)
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', handleScroll)
-  },
-}
+async function goToEpisode(episodeJson : IAnimeResult) {
+  if(process.client)
+    await navigateTo('/stream/' + episodeJson.id.toString() + '/' + ((episodeJson.title as ITitle).english ?? (episodeJson.title as ITitle).romaji).toLowerCase().replaceAll(' ', '-') + '-ep-' + episodeJson.episodeNumber.toString(), {replace: false})
+};
 
+// META TAGS
+
+useHead({
+	title: `Inu's Stream`,
+	meta: [
+		{
+			name: "og:title",
+			content: `Inu's Stream`
+		},
+		{
+			name: "og:type",
+			content: "website"
+		},
+		{
+			name: "og:url",
+			content: `https://inu.watch/`
+		},
+		{
+			name: "og:image",
+			content: "<%= require('./images/homepage_temp.jpeg') %>"
+		},
+		{
+			name: "og:description",
+			content: `Stream anime without annoying ads.`
+		},
+		{
+			name: "twitter:card",
+			content: "summary_large_image"
+		},
+		{
+			name: "theme-color",
+			content: '#16151A'
+		}
+	]
+});
 </script>
 
 <style scoped lang="scss">
@@ -416,6 +464,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
     & .recent-anime-wrapper {
       color: #999999;
+      cursor: pointer;
 
       & .recent-image {
         width: 180px;
