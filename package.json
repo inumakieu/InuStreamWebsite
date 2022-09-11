@@ -13,7 +13,7 @@
     "sass-loader": "^10.3.1"
   },
   "dependencies": {
-    "@consumet/extensions": "^1.1.0",
+    "@consumet/extensions": "https://github.com/consumet/consumet.ts.git",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-brands-svg-icons": "^6.1.2",
     "@fortawesome/free-regular-svg-icons": "^6.1.2",
