@@ -234,7 +234,9 @@ useHead({
 <script>
 import Artplayer from "../../../components/Artplayer.vue";
 import Hls from 'hls.js';
-import consolaGlobalInstance from 'consola';
+import {META, ANIME} from '@consumet/extensions';
+
+const ANILIST = new META.Anilist(new ANIME.Zoro());
 
 export default {
     data() {
@@ -528,12 +530,14 @@ export default {
                 return data;
             });
 
+            this.streamingData = await ANILIST.fetchEpisodeSources(this.anilistJson.episodes[this.episodeNumber - 1].id)
 
-            this.streamingData = await fetch('https://consumet-api.herokuapp.com/anime/zoro/watch?episodeId=' + this.anilistJson.episodes[this.episodeNumber - 1].id).then(function (response) {
+            console.log(this.streamingData)
+            /* this.streamingData = await fetch('https://consumet-api.herokuapp.com/anime/zoro/watch?episodeId=' + this.anilistJson.episodes[this.episodeNumber - 1].id).then(function (response) {
                 return response.json();
             }).then(function (data) {
                 return data;
-            });
+            }); */
         },
         yourCallBackFunction() {
             alert('BACK')

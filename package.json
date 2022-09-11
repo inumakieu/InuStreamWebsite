@@ -8,7 +8,9 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.5",
-    "nuxt": "3.0.0-rc.8"
+    "nuxt": "3.0.0-rc.8",
+    "sass": "^1.54.9",
+    "sass-loader": "^10.3.1"
   },
   "dependencies": {
     "@consumet/extensions": "^1.1.0",
