@@ -530,7 +530,11 @@ export default {
                 return data;
             });
 
-            this.streamingData = await ANILIST.fetchEpisodeSources(this.anilistJson.episodes[this.episodeNumber - 1].id)
+            this.streamingData = await fetch('https://consumet-api.herokuapp.com/meta/anilist/watch/' + this.anilistJson.episodes[this.episodeNumber - 1].id + '?provider=zoro').then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                return data;
+            });
 
             console.log(this.streamingData)
             /* this.streamingData = await fetch('https://consumet-api.herokuapp.com/anime/zoro/watch?episodeId=' + this.anilistJson.episodes[this.episodeNumber - 1].id).then(function (response) {
