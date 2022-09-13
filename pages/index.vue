@@ -46,7 +46,8 @@
     <div class="recently-released">
       Recently Released
       <div class="recent-list">
-        <div class="recent-anime-wrapper" v-for="recentAnime in recentlyReleasedAnime" v-on:click="goToEpisode(recentAnime)">
+        <div class="recent-anime-wrapper" v-for="recentAnime in recentlyReleasedAnime"
+          v-on:click="goToEpisode(recentAnime)">
           <img class="recent-image" :src="recentAnime.image" alt="">
           <div class="recent-title">{{ (recentAnime.title as ITitle).english }}</div>
           <div class="recent-number">Episode {{ recentAnime.episodeNumber }}</div>
@@ -77,12 +78,12 @@ import { Ref } from 'vue';
 
 // VARIABLES
 
-const ANILIST               : Anilist         = new META.Anilist(new ANIME.Zoro());
-const featuredAnime         : IAnimeResult[]  = (await ANILIST.fetchTrendingAnime()).results;
-const recentlyReleasedAnime : IAnimeResult[]  = (await ANILIST.fetchRecentEpisodes()).results;
+const ANILIST: Anilist = new META.Anilist(new ANIME.Zoro());
+const featuredAnime: IAnimeResult[] = (await ANILIST.fetchTrendingAnime()).results;
+const recentlyReleasedAnime: IAnimeResult[] = (await ANILIST.fetchRecentEpisodes()).results;
 
-let currentFeaturedIndex    : number          = 0;
-let animeName               : Ref<String>     = ref('');
+let currentFeaturedIndex: number = 0;
+let animeName: Ref<String> = ref('');
 
 // DIRECTIVES
 
@@ -119,49 +120,49 @@ function openSearchBar() {
 };
 
 async function goToSearch() {
-  if(process.client)
-    await navigateTo('/search/' + animeName.value.toLowerCase().replaceAll(' ', '-'), {replace: false})
+  if (process.client)
+    await navigateTo('/search/' + animeName.value.toLowerCase().replaceAll(' ', '-'), { replace: false })
 };
 
-async function goToEpisode(episodeJson : IAnimeResult) {
-  if(process.client)
-    await navigateTo('/stream/' + episodeJson.id.toString() + '/' + ((episodeJson.title as ITitle).english ?? (episodeJson.title as ITitle).romaji).toLowerCase().replaceAll(' ', '-') + '-ep-' + episodeJson.episodeNumber.toString(), {replace: false})
+async function goToEpisode(episodeJson: IAnimeResult) {
+  if (process.client)
+    await navigateTo('/stream/' + episodeJson.id.toString() + '/' + ((episodeJson.title as ITitle).english ?? (episodeJson.title as ITitle).romaji).toLowerCase().replaceAll(' ', '-') + '-ep-' + episodeJson.episodeNumber.toString(), { replace: false })
 };
 
 // META TAGS
 
 useHead({
-	title: `Inu's Stream`,
-	meta: [
-		{
-			name: "og:title",
-			content: `Inu's Stream`
-		},
-		{
-			name: "og:type",
-			content: "website"
-		},
-		{
-			name: "og:url",
-			content: `https://inu.watch/`
-		},
-		{
-			name: "og:image",
-			content: "<%= require('./images/homepage_temp.jpeg') %>"
-		},
-		{
-			name: "og:description",
-			content: `Stream anime without annoying ads.`
-		},
-		{
-			name: "twitter:card",
-			content: "summary_large_image"
-		},
-		{
-			name: "theme-color",
-			content: '#16151A'
-		}
-	]
+  title: `Inu's Stream`,
+  meta: [
+    {
+      name: "og:title",
+      content: `Inu's Stream`
+    },
+    {
+      name: "og:type",
+      content: "website"
+    },
+    {
+      name: "og:url",
+      content: `https://inu.watch/`
+    },
+    {
+      name: "og:image",
+      content: "<%= require('./images/homepage_temp.jpeg') %>"
+    },
+    {
+      name: "og:description",
+      content: `Stream anime without annoying ads.`
+    },
+    {
+      name: "twitter:card",
+      content: "summary_large_image"
+    },
+    {
+      name: "theme-color",
+      content: '#16151A'
+    }
+  ]
 });
 </script>
 
@@ -170,7 +171,7 @@ $mobile: 500px;
 
 .body {
   background-color: #16151A;
-  width: 100vw;
+  width: calc(100vw - 8px);
   height: 100vh;
   margin: 0;
   padding: 0;
@@ -204,7 +205,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .navbar {
   position: fixed;
-  width: 100vw;
+  width: calc(100vw - 8px);
   height: 80px;
   z-index: 100;
   display: flex;
@@ -295,7 +296,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .featured-content {
-  width: 100vw;
+  width: calc(100vw - 8px);
   height: 70vh;
   overflow: hidden;
   position: relative;
@@ -323,7 +324,7 @@ input[type="search"]::-webkit-search-results-decoration {
     flex-direction: column;
     margin-left: 80px;
     color: white;
-    height: 100%;
+    height: 90%;
     transition: 0.4s all ease;
 
     & .featured-duration {

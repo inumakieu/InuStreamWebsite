@@ -1,10 +1,38 @@
-*, body, html {
-    margin: 0;
-    padding: 0;
+*,
+body,
+html {
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: 'Inter';
-    background-color: #16151A;
-    color: white;
+  font-family: "Inter";
+  background-color: #16151a;
+  color: white;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  z-index: 99;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1a1a19;
+  z-index: 99;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #707179;
+  border-radius: 4px;
+  z-index: 99;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #707179;
+  border-radius: 4px;
 }
