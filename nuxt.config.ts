@@ -6,14 +6,12 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       Inter: [0, 100, 200, 300, 400, 500, 600, 700, 800],
-      ZenMaruGothic: [0, 100, 200, 300, 400, 500, 600, 700, 800],
+      "Zen Maru Gothic": [300, 400, 500, 700, 900],
     },
   },
   ssr: true,
   router: {
     mode: "history",
   },
-  css: [
-    '~/assets/css/main.css'
-  ]
+  css: ["~/assets/css/main.css"],
 });

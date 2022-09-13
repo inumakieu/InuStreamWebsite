@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 // IMPORTS
-import { useHead } from '#app';
+import { useHead, useRoute } from '#app';
 import { META, ANIME } from '@consumet/extensions';
 import { IAnimeResult, ITitle } from '@consumet/extensions/dist/models/types';
 import Anilist from '@consumet/extensions/dist/providers/meta/anilist';

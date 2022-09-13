@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Zen Maru Gothic";
+  src: local("Zen Maru Gothic"),
+    url(assets\fonts\ZenMaruGothic-Regular.ttf) format("truetype");
+}
+
 *,
 body,
 html {
