@@ -647,6 +647,7 @@ useHead({
 		font-weight: 500;
 		font-size: 2.8vh;
 		color: white;
+		font-family: 'Zen Maru Gothic';
 	}
 }
 
