@@ -43,7 +43,7 @@
                         </div>
                         <div v-if="anime.episodes[episodeNumber - 1].title != null" class="episode-title">
                             {{ anime.episodes[episodeNumber -
-                                    1].title
+                            1].title
                             }}
                         </div>
                     </div>
@@ -54,8 +54,8 @@
                 <div class="spacer"></div>
                 <div v-if="anime != null" class="description-watch">
                     {{ anime.episodes[episodeNumber - 1].description != null ? anime.episodes[episodeNumber
-                            -
-                            1].description : 'This is Episode ' + episodeNumber + ' of ' + anime.title.english
+                    -
+                    1].description : 'This is Episode ' + episodeNumber + ' of ' + anime.title.english
                     }}
                 </div>
             </div>
@@ -81,7 +81,7 @@
             </div>
         </div>
     </div>
-    <div v-else class="body">
+    <div v-else class="body" id="container">
         <div class="video-wrapper-netflix">
             <Artplayer class="artplayer" @get-instance="getInstance" :option="option" :style="stylesObject" />
             <div class="subtitles">
@@ -234,7 +234,7 @@ useHead({
 <script>
 import Artplayer from "../../../components/Artplayer.vue";
 import Hls from 'hls.js';
-import {META, ANIME} from '@consumet/extensions';
+import { META, ANIME } from '@consumet/extensions';
 
 const ANILIST = new META.Anilist(new ANIME.Zoro());
 
@@ -559,6 +559,47 @@ export default {
 </script>
 
 <style scoped>
+#container {
+    display: block;
+}
+
+@media only screen and (orientation:portrait) {
+
+    #container {
+
+        height: 100vw;
+
+        -webkit-transform: rotate(90deg);
+
+        -moz-transform: rotate(90deg);
+
+        -o-transform: rotate(90deg);
+
+        -ms-transform: rotate(90deg);
+
+        transform: rotate(90deg);
+
+    }
+
+}
+
+@media only screen and (orientation:landscape) {
+
+    #container {
+
+        -webkit-transform: rotate(0deg);
+
+        -moz-transform: rotate(0deg);
+
+        -o-transform: rotate(0deg);
+
+        -ms-transform: rotate(0deg);
+
+        transform: rotate(0deg);
+
+    }
+}
+
 /* width */
 ::-webkit-scrollbar {
     height: 8px;
