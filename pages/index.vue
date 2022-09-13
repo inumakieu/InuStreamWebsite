@@ -73,7 +73,6 @@ import { useHead } from '#app';
 import { META, ANIME } from '@consumet/extensions';
 import { IAnimeResult, ITitle } from '@consumet/extensions/dist/models/types';
 import Anilist from '@consumet/extensions/dist/providers/meta/anilist';
-import { url } from 'inspector';
 import { Ref } from 'vue';
 
 // VARIABLES
@@ -148,7 +147,7 @@ useHead({
     },
     {
       name: "og:image",
-      content: "<%= require('./images/homepage_temp.jpeg') %>"
+      content: "https://i.imgur.com/7Hz4LEi.jpeg"
     },
     {
       name: "og:description",

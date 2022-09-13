@@ -206,6 +206,7 @@ Project Link: [https://github.com/5H4D0WILA/InuStreamWebsite](images/info_page.p
 * <b>[Riimuru](https://github.com/riimuru)</b> for the Consumet API
 * <b>[NADESHIKON](https://github.com/NADESHIKON)</b> for helping me if i had issues (the meta tags for example)
 * <b>[Othneil Drew](https://github.com/othneildrew)</b> for the template of this Readme
+* <b>[Unknown Person](https://i.imgur.com/7Hz4LEi.jpeg)</b> for the homepage meta image. If you are the creator of the image, please contact me for removal/credit
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
