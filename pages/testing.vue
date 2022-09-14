@@ -29,6 +29,10 @@ if(process.client)
     });
 }
 
+useHead({
+    title: 'TESTING',
+})
+
 
 </script>
 

@@ -24,6 +24,15 @@
                 </div>
             </div>
         </div>
+		<div class="bottom-nav-bar">
+			<div class="selected-tab"></div>
+			<ul class="navbar-list">
+				<li class="navbar-item" v-on:click="changeTab(0)">More Info</li>
+				<li class="navbar-item" v-on:click="changeTab(1)">Episodes</li>
+				<li class="navbar-item" v-on:click="changeTab(2)">Characters</li>
+				<li class="navbar-item" v-on:click="changeTab(3)">Related</li>
+			</ul>
+		</div>
     </div>
 </template>
 
@@ -60,6 +69,18 @@ watch(episodeResponse, () => {
 
 async function goToEpisode(episode: IAnimeEpisode) {
     await navigateTo('/stream/' + animeInfo.id + '/' + ((animeInfo.title as ITitle).english ? (animeInfo.title as ITitle).english.toLowerCase().replaceAll(' ', '-') : (animeInfo.title as ITitle).native.toLowerCase().replaceAll(' ', '-')) + '-ep-' + episode.number);
+}
+
+function changeTab(index) {
+	let currentTab = document.querySelector('.navbar-list').children[index] as HTMLElement;
+	let width = currentTab.offsetWidth - 8;
+	let x = currentTab.offsetLeft;
+	console.log({x});
+	let tabIndicator = document.querySelector('.selected-tab') as HTMLElement;
+	tabIndicator.style.width = width + 'px';
+	tabIndicator.style.paddingLeft = '0';
+	tabIndicator.style.paddingRight = '0';
+	tabIndicator.style.left = x + 'px';
 }
 
 useHead({
@@ -289,5 +310,46 @@ $mobile: 500px;
             }
         }
     }
+}
+
+.bottom-nav-bar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: calc(100vw - 40px);
+	height: 70px;
+	margin: 20px;
+	background-color: black;
+	border-radius: 12px;
+
+	& .selected-tab {
+		position: absolute;
+		background-color: #1E222C;
+		width: 80px;
+		height: 36px;
+		left: 0;
+		margin-top: 17px;
+		margin-left: 14px;
+		border-radius: 18px;
+		transition: 0.3s all ease;
+	}
+
+	& .navbar-list {
+		position: absolute;
+		text-decoration: none;
+		list-style: none;
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		height: 100%;
+		margin: 0 10px;
+
+		& .navbar-item {
+			background-color: transparent;
+			padding: 10px 16px;
+			border-radius: 50px;
+			font-size: 3vw;
+		}
+	}
 }
 </style>
