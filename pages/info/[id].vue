@@ -82,8 +82,26 @@
 						</div>
 					</div>
 				</div>
+				<div class="character-tab-wrapper">
+					<div class="character-info-wrapper" v-for="character in animeInfo.characters">
+						<div class="voice-actor-image-wrapper">
+							<img class="character-image" :src="character.image" alt="">
+							<div class="voice-actor-text">{{ character.role }}</div>
+						</div>
+						<div class="character-text-wrapper">
+							<div class="background-role">{{ character.role }}</div>
+							<div class="character-detail-wrapper">
+								<div class="character-name">{{ character.name.userPreferred }}</div>
+								<div class="character-name-native">{{ character.name.native }}</div>
+							</div>
+							<div class="voice-actor-detail-wrapper">
+								<div class="voice-actor-name">{{ character.voiceActors[0].name.userPreferred }}</div>
+							</div>
+						</div>
+						<img class="voice-actor-image" :src="character.voiceActors[0].image" alt="">
+					</div>
+				</div>
 			</div>
-
 			<div class="mobile-spacer"></div>
 		</div>
 		<div class="bottom-nav-bar">
@@ -149,6 +167,8 @@ function changeTab(index) {
 		tabWrapper.style.transform = 'translateX(0%)';
 	} else if (index == 1) {
 		tabWrapper.style.transform = 'translateX(-100%)';
+	} else if (index == 2) {
+		tabWrapper.style.transform = 'translateX(-200%)';
 	}
 }
 
@@ -211,6 +231,7 @@ $mobile: 500px;
 	height: 100vh;
 	margin: 0;
 	padding: 0;
+	overflow-x: hidden;
 }
 
 .cover-image {
@@ -346,8 +367,9 @@ $mobile: 500px;
 		}
 
 		& .episode-tab-wrapper {
-			width: 70vw;
+			width: 60vw;
 			margin: 30px;
+			margin-left: 0px;
 
 			& .description {
 				background-color: #1E222C;
@@ -410,6 +432,10 @@ $mobile: 500px;
 				flex-direction: row;
 				overflow-x: scroll;
 
+				&::-webkit-scrollbar-track {
+					background: transparent;
+				}
+
 				& .episode-wrapper {
 					display: flex;
 					margin-bottom: 20px;
@@ -446,6 +472,139 @@ $mobile: 500px;
 				}
 			}
 		}
+
+		& .character-tab-wrapper {
+			width: 360px;
+			margin: 30px;
+			margin-left: 0px;
+			margin-right: 0px;
+			display: flex;
+			align-items: flex-end;
+			flex-direction: column;
+			position: relative;
+			height: 540px;
+			overflow-y: scroll;
+
+			&::-webkit-scrollbar-track {
+				background: transparent;
+			}
+
+			& .character-info-wrapper {
+				background-color: #1E222C;
+				margin-bottom: 12px;
+				height: 90px;
+				padding: 0;
+				width: 18vw;
+				border-radius: 10px;
+				display: flex;
+				justify-content: space-between;
+
+				& .character-image {
+					position: absolute;
+					width: 60px;
+					height: 90px;
+					object-fit: cover;
+					object-position: center;
+					border-radius: 10px;
+				}
+
+				& .voice-actor-image {
+					width: 60px;
+					height: 90px;
+					object-fit: cover;
+					object-position: center;
+					border-radius: 10px;
+				}
+
+				& .voice-actor-image-wrapper {
+					position: relative;
+					width: 60px;
+					height: 90px;
+
+
+
+					& .voice-actor-text {
+						position: absolute;
+						width: 60px;
+						height: 86px;
+						border-radius: 8px;
+						display: flex;
+						justify-content: center;
+						align-items: flex-end;
+						font-size: 0.4vw;
+						font-weight: bold;
+						padding-bottom: 4px;
+						background: linear-gradient(0deg, #000000 0%, rgba(0, 0, 0, 0) 100%);
+					}
+				}
+
+				& .character-text-wrapper {
+					width: calc(18vw - 120px);
+					text-align: center;
+
+					& .background-role {
+						position: absolute;
+						width: calc(18vw - 120px);
+						height: 90px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						font-size: 74px;
+						font-weight: bold;
+						text-align: center;
+						overflow: hidden;
+						background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
+						-webkit-background-clip: text;
+						-webkit-text-fill-color: transparent;
+						background-clip: text;
+						text-fill-color: transparent;
+					}
+
+					& .character-detail-wrapper {
+						position: absolute;
+						width: calc(18vw - 120px);
+						height: 90px;
+						display: flex;
+						flex-direction: column;
+						align-items: flex-start;
+						justify-content: center;
+						margin-left: 12px;
+
+						& .character-name {
+							position: relative;
+							font-size: 16px;
+							font-weight: bold;
+						}
+
+						& .character-name-native {
+							position: relative;
+							font-size: 10px;
+							font-weight: regular;
+							font-family: 'Zen Maru Gothic';
+						}
+					}
+
+					& .voice-actor-detail-wrapper {
+						width: calc(18vw - 120px);
+						height: 90px;
+						position: absolute;
+						display: flex;
+						justify-content: flex-end;
+						align-items: flex-end;
+
+						& .voice-actor-name {
+							font-size: 12px;
+							color: #999999;
+							padding-right: 12px;
+							padding-bottom: 12px;
+							font-weight: bold;
+						}
+					}
+
+
+				}
+			}
+		}
 	}
 
 
@@ -460,6 +619,7 @@ $mobile: 500px;
 
 			& .episode-tab-wrapper {
 				width: 100vw;
+				margin-left: 30px;
 
 				& .description {
 					width: 78vw;
@@ -482,6 +642,38 @@ $mobile: 500px;
 
 						& .episode-image {
 							width: 126px;
+						}
+					}
+				}
+			}
+
+			& .character-tab-wrapper {
+				width: 100vw;
+				flex-direction: column;
+				margin-left: 30px;
+
+				& .character-info-wrapper {
+					width: calc(100vw - 66px);
+
+					& .voice-actor-image-wrapper {
+						& .voice-actor-text {
+							font-size: 2vw;
+						}
+					}
+
+					& .character-text-wrapper {
+						width: calc((100vw - 66px) - 120px);
+
+						& .background-role {
+							width: calc((100vw - 66px) - 120px);
+						}
+
+						& .character-detail-wrapper {
+							width: calc((100vw - 66px) - 120px);
+						}
+
+						& .voice-actor-detail-wrapper {
+							width: calc((100vw - 66px) - 120px);
 						}
 					}
 				}
