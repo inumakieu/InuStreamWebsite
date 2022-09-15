@@ -59,6 +59,18 @@
 				</div>
 				<div class="episode-tab-wrapper">
 					<p class="description" v-html="animeInfo.description"></p>
+					<div class="genre-and-next-episode-wrapper">
+						<div class="genre-wrapper">
+							<div class="genre" v-for="genre in animeInfo.genres">{{ genre }}</div>
+						</div>
+						<div class="next-episode-indicator">
+							Episode {{ (animeInfo.nextAiringEpisode as {'airingTime':
+							number, 'timeUntilAiring': number, 'episode': number}).episode }}:
+							<br>
+							{{ secondsToDhms((animeInfo.nextAiringEpisode as {'airingTime':
+							number, 'timeUntilAiring': number, 'episode': number}).timeUntilAiring) }}
+						</div>
+					</div>
 					<h1 class="episode-text">Episodes</h1>
 					<div class="episode-list">
 						<div class="episode-wrapper" v-for="episode in episodeList" v-on:click="goToEpisode(episode)">
@@ -105,6 +117,7 @@ const {
 	data: episodeResponse
 } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
 
+// FUNCTIONS
 function loadEpisodes() {
 	if (episodeResponse.value) {
 		episodeList.value = episodeResponse.value;
@@ -132,10 +145,24 @@ function changeTab(index) {
 	tabIndicator.style.paddingLeft = '0';
 	tabIndicator.style.paddingRight = '0';
 	tabIndicator.style.left = x + 'px';
-	if(index == 0) {
+	if (index == 0) {
 		tabWrapper.style.transform = 'translateX(0%)';
-	} else if(index == 1) {
+	} else if (index == 1) {
 		tabWrapper.style.transform = 'translateX(-100%)';
+	}
+}
+
+function secondsToDhms(seconds: number) {
+	seconds = Number(seconds);
+	var d = Math.floor(seconds / (3600 * 24));
+	var h = Math.floor(seconds % (3600 * 24) / 3600);
+	var m = Math.floor(seconds % 3600 / 60);
+	var s = Math.floor(seconds % 60);
+
+	if (d > 0) {
+		return d > 0 ? d + (d == 1 ? " day, " : " days ") : "";
+	} else {
+		return h > 0 ? h + (h == 1 ? " hour, " : " hours ") : "";
 	}
 }
 
@@ -317,9 +344,11 @@ $mobile: 500px;
 				}
 			}
 		}
+
 		& .episode-tab-wrapper {
 			width: 70vw;
 			margin: 30px;
+
 			& .description {
 				background-color: #1E222C;
 				padding: 16px;
@@ -327,6 +356,45 @@ $mobile: 500px;
 				font-size: 16px;
 				margin-bottom: 30px;
 				border-radius: 20px;
+			}
+
+			& .genre-and-next-episode-wrapper {
+				margin-bottom: 20px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+
+				& .genre-wrapper {
+					display: flex;
+					gap: 10px;
+					width: 54vw;
+					margin-right: 20px;
+					overflow-x: scroll;
+
+					&::-webkit-scrollbar {
+						width: 8px;
+						height: 8px;
+						z-index: 99;
+						display: none;
+					}
+
+					& .genre {
+						background-color: black;
+						padding: 10px 18px;
+						border-radius: 40px;
+						font-weight: bold;
+						font-size: 14px;
+					}
+				}
+
+				& .next-episode-indicator {
+					background-color: #EE4546;
+					border-radius: 16px;
+					padding: 10px 18px;
+					text-align: center;
+					font-weight: bold;
+					font-size: 12px;
+				}
 			}
 
 			& .episode-text {
@@ -385,15 +453,16 @@ $mobile: 500px;
 	@media screen and (max-width: $mobile) {
 		& .tabs-wrapper {
 			transform: translateX(-100%);
-				
+
 			& .extra-info-tab-wrapper {
 				width: 100vw;
 			}
 
 			& .episode-tab-wrapper {
 				width: 100vw;
+
 				& .description {
-				width: 78vw;
+					width: 78vw;
 					text-align: center;
 					font-size: 14px;
 					border-radius: 12px;
