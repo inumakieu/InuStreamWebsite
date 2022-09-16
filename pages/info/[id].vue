@@ -98,7 +98,9 @@
 								<div class="voice-actor-name">{{ character.voiceActors[0].name.userPreferred }}</div>
 							</div>
 						</div>
-						<img class="voice-actor-image" :src="character.voiceActors[0].image" alt="">
+						<div class="voice-actor-image-wrapper">
+							<img class="voice-actor-image" :src="character.voiceActors[0].image" alt="">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -481,9 +483,9 @@ $mobile: 500px;
 			display: flex;
 			align-items: flex-end;
 			flex-direction: column;
-			position: relative;
 			height: 540px;
 			overflow-y: scroll;
+			position: relative;
 
 			&::-webkit-scrollbar-track {
 				background: transparent;
@@ -509,6 +511,7 @@ $mobile: 500px;
 				}
 
 				& .voice-actor-image {
+					position: absolute;
 					width: 60px;
 					height: 90px;
 					object-fit: cover;
@@ -539,8 +542,11 @@ $mobile: 500px;
 				}
 
 				& .character-text-wrapper {
+					background-color: #1E222C;
 					width: calc(18vw - 120px);
 					text-align: center;
+					height: fit-content;
+					overflow-y: unset;
 
 					& .background-role {
 						position: absolute;
@@ -557,7 +563,6 @@ $mobile: 500px;
 						-webkit-background-clip: text;
 						-webkit-text-fill-color: transparent;
 						background-clip: text;
-						text-fill-color: transparent;
 					}
 
 					& .character-detail-wrapper {
@@ -649,19 +654,37 @@ $mobile: 500px;
 
 			& .character-tab-wrapper {
 				width: 100vw;
+				height: fit-content;
 				flex-direction: column;
 				margin-left: 30px;
+				position: static;
+				align-items: flex-start;
 
 				& .character-info-wrapper {
 					width: calc(100vw - 66px);
+					position: static;
+					min-height: 90px;
+					background-color: red;
 
 					& .voice-actor-image-wrapper {
+						position: static;
+
 						& .voice-actor-text {
 							font-size: 2vw;
 						}
 					}
 
+					& .voice-actor-image {
+						position: absolute;
+						width: 60px;
+						height: 90px;
+						object-fit: cover;
+						object-position: center;
+						background-color: red;
+					}
+
 					& .character-text-wrapper {
+						position: static;
 						width: calc((100vw - 66px) - 120px);
 
 						& .background-role {
