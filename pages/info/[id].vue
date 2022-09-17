@@ -132,15 +132,17 @@ let id: string = route.path.replace("/info/", "").replace('/', '');
 const ANILIST: Anilist = new META.Anilist(new ANIME.Zoro());
 const animeInfo: IAnimeInfo = await ANILIST.fetchAnilistInfoById(id);
 let episodeList = ref([]);
-const {
-	episodeError,
-	data: episodeResponse
-} = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
 
 // FUNCTIONS
 
 let vEpisodeDirective = {
-	mounted: () => {
+	mounted: async () => {
+		const {
+			episodeError,
+			data: episodeResponse
+		} = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
+
+
 		function loadEpisodes() {
 			if (episodeResponse.value) {
 				episodeList.value = episodeResponse.value;
