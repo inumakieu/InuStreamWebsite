@@ -63,7 +63,7 @@
 						<div class="genre-wrapper">
 							<div class="genre" v-for="genre in animeInfo.genres">{{ genre }}</div>
 						</div>
-						<div class="next-episode-indicator">
+						<div v-if="animeInfo.nextAiringEpisode != null" class="next-episode-indicator">
 							Episode {{ (animeInfo.nextAiringEpisode as {'airingTime':
 							number, 'timeUntilAiring': number, 'episode': number}).episode }}:
 							<br>
