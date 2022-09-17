@@ -92,6 +92,27 @@
                     </div>
                 </div>
             </div>
+            <div class="error-popup">
+                <div class="error-title-bar">
+                    <div class="left-wrapper-error">
+                        <div class="left-error-x">
+                            <svg width="10px" height="10px" class="left-error-icon" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 320 512">
+                                <path fill="#1E222C"
+                                    d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z" />
+                            </svg>
+                        </div>
+                        <div class="error-title">Error loading the Episode</div>
+                    </div>
+                    <svg v-on:click="closeError()" width="20px" height="20px" class="right-error-icon"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                        <path fill="white"
+                            d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z" />
+                    </svg>
+                </div>
+                <div class="error-description">Zoro updates its secret key every ~40 mins, and the current key that we
+                    use is outdated, please retry loading an episode in a few minutes.</div>
+            </div>
         </div>
     </div>
 </template>
@@ -120,6 +141,11 @@ async function loadEpisode(episode) {
     console.log(anime);
     await navigateTo('/stream/' + anime.id + '/' + anime.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number, { replace: true })
 };
+
+function closeError() {
+    let errorPopup = document.querySelector('.error-popup');
+    errorPopup.classList.remove('show');
+}
 
 useHead({
     title: `${anime.title.english} EP ${episodeNumber}`,
@@ -465,6 +491,11 @@ export default {
                 return data;
             });
 
+            if (this.streamingData['sources'] == null || this.streamingData['sources'] == undefined) {
+                let errorPopup = document.querySelector('.error-popup');
+                errorPopup.classList.add('show');
+            }
+
             console.log(this.streamingData)
             /* this.streamingData = await fetch('https://consumet-api.herokuapp.com/anime/zoro/watch?episodeId=' + this.anilistJson.episodes[this.episodeNumber - 1].id).then(function (response) {
                 return response.json();
@@ -490,7 +521,64 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.error-popup {
+    position: absolute;
+    bottom: -100px;
+    right: 30px;
+    z-index: 10000;
+    background-color: #1E222C;
+    border-radius: 12px;
+    padding: 14px;
+    transition: 0.4s all ease;
+
+    & .error-title-bar {
+        display: flex;
+        justify-content: space-between;
+
+        & .left-wrapper-error {
+            display: flex;
+            align-items: center;
+
+            & .left-error-x {
+                width: 22px;
+                height: 22px;
+                border-radius: 11px;
+                background-color: #C31B10;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            & .error-title {
+                color: #C31B10;
+                font-size: 14px;
+                font-weight: bold;
+                margin-left: 12px;
+            }
+        }
+
+
+    }
+
+    & .error-description {
+        width: 400px;
+        margin-top: 10px;
+        padding-left: 34px;
+        margin-right: 30px;
+        font-size: 12px;
+        color: #999999;
+        font-weight: 500;
+    }
+
+    &.show {
+        bottom: 30px;
+    }
+}
+
+
+
+
 /* width */
 ::-webkit-scrollbar {
     height: 8px;
