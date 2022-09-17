@@ -211,7 +211,7 @@ export default {
     methods: {
         async loadEpisode(episode) {
             console.log("NEXT EPISODE");
-            await navigateTo('/stream/' + this.anilistJson.id + '/' + this.anilistJson.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number, { replace: true })
+            await navigateTo('/stream/' + this.anime.id + '/' + this.anime.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number, { replace: true })
         },
         skipIntro() {
             this.artPlayer.seek = this.streamingData.intro.end;
