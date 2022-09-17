@@ -79,7 +79,8 @@
             <div class="episode-selector">
                 <h1 class="episode-selector-title">Episodes</h1>
                 <div class="episode-selector-list" v-if="anime != null">
-                    <div class="episode-selector-card" v-for="episode in anime.episodes"
+                    <div class="episode-selector-card"
+                        v-for="episode in anime.episodes.slice(episodeNumber, anime.episodes.length)"
                         v-on:click="loadEpisode(episode)">
                         <div class="episode-selector-wrapper">
                             <img class="episode-selector-image" :src="'https://images.weserv.nl/?url=' + episode.image"
