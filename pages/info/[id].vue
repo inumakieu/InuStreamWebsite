@@ -90,7 +90,6 @@
 							<div class="voice-actor-text">{{ character.role }}</div>
 						</div>
 						<div class="character-text-wrapper">
-							<div class="background-role">{{ character.role }}</div>
 							<div class="character-detail-wrapper">
 								<div class="character-name">{{ character.name.userPreferred }}</div>
 								<div class="character-name-native">{{ character.name.native }}</div>
@@ -366,10 +365,6 @@ $mobile: 500px;
 					border-radius: 10px;
 					background-color: transparent;
 					transition: 0.3s all ease;
-
-					&:hover {
-						background-color: #16151ab8;
-					}
 				}
 			}
 		}
@@ -458,12 +453,14 @@ $mobile: 500px;
 
 					& .episode-info {
 						font-size: 10px;
-						width: 100%;
+						width: 90%;
+						padding: 0 10px;
 						display: flex;
 						flex-direction: column;
 						justify-content: center;
 
 						& .episode-title {
+							padding-top: 10px;
 							display: -webkit-box;
 							-webkit-line-clamp: 2;
 							line-clamp: 2;
