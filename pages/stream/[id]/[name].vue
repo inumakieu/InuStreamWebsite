@@ -221,6 +221,12 @@ export default {
         },
         getInstance(art) {
 
+            art.on('destroy', (...args) => {
+                console.log("destroyed");
+                this.artPlayer = null;
+                art = null;
+            });
+
             art.on('ready', async (...args) => {
                 this.artPlayer = art;
                 this.$el.querySelector('.art-bottom').style.display = 'none'
@@ -475,9 +481,7 @@ export default {
         this.doneLoading = true
     },
     unmounted: function () {
-        this.art.destroy();
-        this.artPlayer.destroy();
-        alert('unmounted');
+        console.log(this.artPlayer);
     }
 };
 </script>
