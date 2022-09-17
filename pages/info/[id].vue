@@ -72,9 +72,10 @@
 						</div>
 					</div>
 					<h1 class="episode-text">Episodes</h1>
-					<div class="episode-list" v-episode-directive>
+					<div class="episode-list">
 						<div class="episode-wrapper" v-for="episode in episodeList" v-on:click="goToEpisode(episode)">
-							<img class="episode-image" :src="(episode.image as string)" alt="">
+							<img class="episode-image"
+								:src="'https://images.weserv.nl/?url=' + (episode.image as string)" alt="">
 							<div class="episode-info">
 								<h2 class="episode-title">{{ episode.title }}</h2>
 								<h2 class="episode-number">Episode {{ episode.number }}</h2>
@@ -135,29 +136,25 @@ let episodeList = ref([]);
 
 // FUNCTIONS
 
-let vEpisodeDirective = {
-	mounted: async () => {
-		const {
-			episodeError,
-			data: episodeResponse
-		} = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
+onMounted(async () => {
+	const {
+		episodeError,
+		data: episodeResponse
+	} = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
 
 
-		function loadEpisodes() {
-			if (episodeResponse.value && episodeList.value.length == 0) {
-				episodeList.value = episodeResponse.value;
-			}
+	function loadEpisodes() {
+		if (episodeResponse.value && episodeList.value.length == 0) {
+			episodeList.value = episodeResponse.value;
 		}
-
-		loadEpisodes()
-
-		watch(episodeResponse, () => {
-			loadEpisodes()
-		});
 	}
-}
 
+	loadEpisodes()
 
+	watch(episodeResponse, () => {
+		loadEpisodes()
+	});
+});
 
 async function goToEpisode(episode: IAnimeEpisode) {
 	await navigateTo('/stream/' + animeInfo.id + '/' + ((animeInfo.title as ITitle).english ? (animeInfo.title as ITitle).english.toLowerCase().replaceAll(' ', '-') : (animeInfo.title as ITitle).native.toLowerCase().replaceAll(' ', '-')) + '-ep-' + episode.number);

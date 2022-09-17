@@ -82,7 +82,8 @@
                     <div class="episode-selector-card" v-for="episode in anime.episodes"
                         v-on:click="loadEpisode(episode)">
                         <div class="episode-selector-wrapper">
-                            <img class="episode-selector-image" :src="episode.image" alt="">
+                            <img class="episode-selector-image" :src="'https://images.weserv.nl/?url=' + episode.image"
+                                alt="">
                             <div class="episode-selector-gradient"></div>
                             <div class="episode-selector-number">{{ episode.number }}</div>
                             <div class="episode-selector-name">{{ episode.title }}</div>
@@ -473,51 +474,15 @@ export default {
         this.netflixUI = localStorage.getItem('netflixSetting')
         this.doneLoading = true
     },
+    unmounted: function () {
+        this.art.destroy();
+        this.artPlayer.destroy();
+        alert('unmounted');
+    }
 };
 </script>
 
 <style scoped>
-#container {
-    display: block;
-}
-
-@media only screen and (orientation:portrait) {
-
-    #container {
-
-        height: 100vw;
-
-        -webkit-transform: rotate(90deg);
-
-        -moz-transform: rotate(90deg);
-
-        -o-transform: rotate(90deg);
-
-        -ms-transform: rotate(90deg);
-
-        transform: rotate(90deg);
-
-    }
-
-}
-
-@media only screen and (orientation:landscape) {
-
-    #container {
-
-        -webkit-transform: rotate(0deg);
-
-        -moz-transform: rotate(0deg);
-
-        -o-transform: rotate(0deg);
-
-        -ms-transform: rotate(0deg);
-
-        transform: rotate(0deg);
-
-    }
-}
-
 /* width */
 ::-webkit-scrollbar {
     height: 8px;
