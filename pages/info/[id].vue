@@ -72,7 +72,7 @@
 						</div>
 					</div>
 					<h1 class="episode-text">Episodes</h1>
-					<div class="episode-list">
+					<div class="episode-list" v-episode-directive>
 						<div class="episode-wrapper" v-for="episode in episodeList" v-on:click="goToEpisode(episode)">
 							<img class="episode-image" :src="(episode.image as string)" alt="">
 							<div class="episode-info">
@@ -138,17 +138,24 @@ const {
 } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
 
 // FUNCTIONS
-function loadEpisodes() {
-	if (episodeResponse.value) {
-		episodeList.value = episodeResponse.value;
+
+let vEpisodeDirective = {
+	mounted: () => {
+		function loadEpisodes() {
+			if (episodeResponse.value) {
+				episodeList.value = episodeResponse.value;
+			}
+		}
+
+		loadEpisodes()
+
+		watch(episodeResponse, () => {
+			loadEpisodes()
+		});
 	}
 }
 
-loadEpisodes()
 
-watch(episodeResponse, () => {
-	loadEpisodes()
-});
 
 async function goToEpisode(episode: IAnimeEpisode) {
 	await navigateTo('/stream/' + animeInfo.id + '/' + ((animeInfo.title as ITitle).english ? (animeInfo.title as ITitle).english.toLowerCase().replaceAll(' ', '-') : (animeInfo.title as ITitle).native.toLowerCase().replaceAll(' ', '-')) + '-ep-' + episode.number);
