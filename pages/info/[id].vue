@@ -144,7 +144,7 @@ let vEpisodeDirective = {
 
 
 		function loadEpisodes() {
-			if (episodeResponse.value) {
+			if (episodeResponse.value && episodeList.value.length == 0) {
 				episodeList.value = episodeResponse.value;
 			}
 		}
