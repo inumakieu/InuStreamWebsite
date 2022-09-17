@@ -114,6 +114,12 @@ if (error.value || !episodes.value) {
 
 var anime = episodes.value;
 
+async function loadEpisode(episode) {
+    console.log("NEXT EPISODE");
+    console.log(anime);
+    await navigateTo('/stream/' + anime.id + '/' + anime.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number, { replace: true })
+};
+
 useHead({
     title: `${anime.title.english} EP ${episodeNumber}`,
     meta: [
@@ -209,11 +215,6 @@ export default {
         Artplayer,
     },
     methods: {
-        async loadEpisode(episode) {
-            console.log("NEXT EPISODE");
-            console.log(this.anime);
-            await navigateTo('/stream/' + this.anime.id + '/' + this.anime.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number, { replace: true })
-        },
         skipIntro() {
             this.artPlayer.seek = this.streamingData.intro.end;
         },
