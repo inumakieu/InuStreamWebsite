@@ -58,7 +58,7 @@
                     </svg>
 
                     <svg class="next-episode-button" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg"
-                        v-on:click="loadEpisode(this.anilistJson.episodes[this.episodeNumber])" viewBox="0 0 640 512">
+                        v-on:click="loadEpisode(anime.episodes[this.episodeNumber])" viewBox="0 0 640 512">
                         <path fill="white"
                             d="M287.1 447.1c17.67 0 31.1-14.33 31.1-32V96.03c0-17.67-14.33-32-32-32c-17.67 0-31.1 14.33-31.1 31.1v319.9C255.1 433.6 270.3 447.1 287.1 447.1zM52.51 440.6l192-159.1c7.625-6.436 11.43-15.53 11.43-24.62c0-9.094-3.809-18.18-11.43-24.62l-192-159.1C31.88 54.28 0 68.66 0 96.03v319.9C0 443.3 31.88 457.7 52.51 440.6z" />
                     </svg>
@@ -211,6 +211,7 @@ export default {
     methods: {
         async loadEpisode(episode) {
             console.log("NEXT EPISODE");
+            console.log(this.anime);
             await navigateTo('/stream/' + this.anime.id + '/' + this.anime.title.english.toLowerCase().replaceAll(' ', '-') + '-ep-' + episode.number, { replace: true })
         },
         skipIntro() {
