@@ -130,7 +130,7 @@ const route = useRoute();
 let id: string = route.path.replace("/info/", "").replace('/', '');
 
 const ANILIST: Anilist = new META.Anilist(new ANIME.Zoro());
-const animeInfo: IAnimeInfo = await ANILIST.fetchAnilistInfoById(id);
+let animeInfo: IAnimeInfo = await ANILIST.fetchAnilistInfoById(id);
 let episodeList = ref([]);
 
 // FUNCTIONS
@@ -419,6 +419,7 @@ $mobile: 500px;
 					text-align: center;
 					font-weight: bold;
 					font-size: 12px;
+					width: 80px;
 				}
 			}
 
@@ -634,6 +635,12 @@ $mobile: 500px;
 					text-align: center;
 					font-size: 14px;
 					border-radius: 12px;
+				}
+
+				& .genre-and-next-episode-wrapper {
+					& .next-episode-indicator {
+						width: auto;
+					}
 				}
 
 				& .episode-text {
