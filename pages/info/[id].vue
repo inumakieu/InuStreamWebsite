@@ -475,7 +475,6 @@ $mobile: 500px;
 			& .genre-and-next-episode-wrapper {
 				margin-bottom: 20px;
 				display: flex;
-				align-items: center;
 				justify-content: space-between;
 
 				& .genre-wrapper {
