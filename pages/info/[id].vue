@@ -524,7 +524,7 @@ $mobile: 500px;
 				flex-direction: row;
 				overflow-x: scroll;
 				justify-content: center;
-				align-items: center;
+				align-items: flex-start;
 				overflow-y: hidden;
 				height: 260px;
 
@@ -800,6 +800,7 @@ $mobile: 500px;
 					margin-bottom: 0;
 					overflow-x: hidden;
 					height: fit-content;
+					align-items: flex-start;
 
 					& .episode-wrapper {
 						flex-direction: row;
