@@ -217,7 +217,7 @@ function changeTab(index) {
 	} else if (index == 3) {
 		tabWrapper.style.transform = 'translateX(-300%)';
 	}
-	//tabWrapper.style.height = '300px';
+	//tabWrapper.style.height = '659px';
 }
 
 function secondsToDhms(seconds: number) {
@@ -432,6 +432,7 @@ $mobile: 500px;
 		display: flex;
 		justify-content: flex-start;
 		transition: 0.4s all ease;
+		position: relative;
 
 		& .extra-info-tab-wrapper {
 			width: 220px;
@@ -767,7 +768,7 @@ $mobile: 500px;
 
 	@media screen and (max-width: $mobile) {
 		& .tabs-wrapper {
-			//transform: translateX(-100%);
+			transform: translateX(-100%);
 
 			& .extra-info-tab-wrapper {
 				width: calc(100vw - 60px);
