@@ -117,6 +117,24 @@
 						</div>
 					</div>
 				</div>
+				<div class="related-tab-wrapper">
+					<div class="related-anime-wrapper" v-for="related in animeInfo.relations">
+						<img class="related-anime-image" :src="related.image" alt="">
+						<div class="related-anime-info-wrapper">
+							<div class="related-anime-type">{{ related.relationType }}</div>
+							<div class="related-title-wrapper">
+								<div class="related-anime-title">{{ (related.title as ITitle).english }}
+								</div>
+								<div class="related-anime-title-native">{{ (related.title as
+								ITitle).native }}</div>
+							</div>
+							<div class="related-bottom-wrapper">
+								<div class="related-anime-type">{{ related.status }}</div>
+								<div class="related-anime-type">{{ related.type }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="mobile-spacer"></div>
 		</div>
@@ -195,7 +213,10 @@ function changeTab(index) {
 		tabWrapper.style.transform = 'translateX(-100%)';
 	} else if (index == 2) {
 		tabWrapper.style.transform = 'translateX(-200%)';
+	} else if (index == 3) {
+		tabWrapper.style.transform = 'translateX(-300%)';
 	}
+	//tabWrapper.style.height = '300px';
 }
 
 function secondsToDhms(seconds: number) {
@@ -686,6 +707,56 @@ $mobile: 500px;
 				}
 			}
 		}
+
+		& .related-tab-wrapper {
+			margin: 30px;
+			width: calc(100vw - 12px);
+			position: relative;
+			border-radius: 12px;
+
+			& .related-anime-wrapper {
+				display: flex;
+				margin-bottom: 20px;
+
+				& .related-anime-image {
+					object-fit: cover;
+					object-position: center;
+					width: 100px;
+					height: auto;
+					border-radius: 12px;
+					margin-right: 12px;
+				}
+
+				& .related-anime-info-wrapper {
+					display: flex;
+					flex-direction: column;
+					width: calc(100vw - 100px - 60px - 12px);
+					justify-content: space-between;
+					margin: 10px 0;
+					font-size: 14px;
+					font-weight: bold;
+
+
+					& .related-title-wrapper {
+						display: flex;
+						flex-direction: column;
+
+						& .related-anime-title-native {
+							font-size: 10px;
+							font-weight: bold;
+							color: #999999;
+							font-family: 'Zen Maru Gothic';
+						}
+					}
+
+					& .related-bottom-wrapper {
+						display: flex;
+						justify-content: space-between;
+						width: 94%;
+					}
+				}
+			}
+		}
 	}
 
 
@@ -699,7 +770,7 @@ $mobile: 500px;
 
 				& .extra-info-item-wrapper {
 					& .extra-info-item {
-						width: 62vw;
+						width: 66vw;
 					}
 				}
 			}
@@ -789,6 +860,11 @@ $mobile: 500px;
 						}
 					}
 				}
+			}
+
+			& .related-tab-wrapper {
+				position: static;
+				margin-left: 100vw;
 			}
 		}
 
