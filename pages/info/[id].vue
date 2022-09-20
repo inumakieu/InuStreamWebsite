@@ -121,7 +121,8 @@
 					<div class="related-anime-wrapper" v-for="related in animeInfo.relations">
 						<img class="related-anime-image" :src="related.image" alt="">
 						<div class="related-anime-info-wrapper">
-							<div class="related-anime-type">{{ related.relationType }}</div>
+							<div class="related-anime-type">{{ (related.relationType as string) }}
+							</div>
 							<div class="related-title-wrapper">
 								<div class="related-anime-title">{{ (related.title as ITitle).english }}
 								</div>
@@ -387,6 +388,10 @@ $mobile: 500px;
 			flex-direction: column;
 			align-items: flex-start;
 			padding-bottom: 9vh;
+
+			& .english-title {
+				text-align: center;
+			}
 
 			& .native-title {
 				font-size: 18px;
@@ -762,14 +767,17 @@ $mobile: 500px;
 
 	@media screen and (max-width: $mobile) {
 		& .tabs-wrapper {
-			transform: translateX(-100%);
+			//transform: translateX(-100%);
 
 			& .extra-info-tab-wrapper {
-				width: 100vw;
+				width: calc(100vw - 60px);
+				margin: 30px;
 
 				& .extra-info-item-wrapper {
+					width: calc(100vw - 100px);
+
 					& .extra-info-item {
-						width: 66vw;
+						width: 100%;
 					}
 				}
 			}
@@ -779,15 +787,25 @@ $mobile: 500px;
 				margin-left: 30px;
 
 				& .description {
-					width: 78vw;
+					width: calc(100vw - 90px);
 					text-align: center;
 					font-size: 14px;
 					border-radius: 12px;
 				}
 
 				& .genre-and-next-episode-wrapper {
+					height: 60px;
+					width: calc(100vw - 60px);
+					display: flex;
+					align-items: center;
+
+					& .genre-wrapper {
+						height: 40px;
+						width: 60%;
+					}
+
 					& .next-episode-indicator {
-						width: auto;
+						width: 70px;
 					}
 				}
 
