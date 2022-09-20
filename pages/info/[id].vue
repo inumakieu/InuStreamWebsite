@@ -86,6 +86,7 @@
 					</div>
 					<h1 class="episode-text">Episodes</h1>
 					<div class="episode-list">
+						<span class="loader"></span>
 						<div class="episode-wrapper" v-for="episode in episodeList" v-on:click="goToEpisode(episode)">
 							<img class="episode-image"
 								:src="'https://images.weserv.nl/?url=' + (episode.image as string)" alt="">
@@ -143,7 +144,7 @@ const route = useRoute();
 let id: string = route.path.replace("/info/", "").replace('/', '');
 
 const ANILIST: Anilist = new META.Anilist(new ANIME.Zoro());
-const animeInfo: IAnimeInfo = await ANILIST.fetchAnilistInfoById(id);
+let animeInfo: IAnimeInfo = await ANILIST.fetchAnilistInfoById(id);
 let episodeList = ref([]);
 
 // FUNCTIONS
@@ -157,6 +158,11 @@ onMounted(async () => {
 
 	function loadEpisodes() {
 		if (episodeResponse.value && episodeList.value.length == 0) {
+			let loader = document.querySelector('.loader') as HTMLElement;
+			let episodeListElement = document.querySelector('.episode-list') as HTMLElement;
+			episodeListElement.style.justifyContent = 'flex-start';
+			loader.style.display = 'none';
+
 			episodeList.value = episodeResponse.value;
 		}
 	}
@@ -244,6 +250,52 @@ useHead({
 
 <style scoped lang="scss">
 $mobile: 500px;
+
+.loader {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	position: relative;
+	animation: rotate 1s linear infinite
+}
+
+.loader::before {
+	content: "";
+	box-sizing: border-box;
+	position: absolute;
+	inset: 0px;
+	border-radius: 50%;
+	border: 5px solid #FFF;
+	animation: prixClipFix 2s linear infinite;
+}
+
+@keyframes rotate {
+	100% {
+		transform: rotate(360deg)
+	}
+}
+
+@keyframes prixClipFix {
+	0% {
+		clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0)
+	}
+
+	25% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0)
+	}
+
+	50% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%)
+	}
+
+	75% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%)
+	}
+
+	100% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0)
+	}
+}
 
 .body {
 	background-color: #16151A;
@@ -435,6 +487,7 @@ $mobile: 500px;
 					text-align: center;
 					font-weight: bold;
 					font-size: 12px;
+					width: 80px;
 				}
 			}
 
@@ -450,6 +503,10 @@ $mobile: 500px;
 				margin-right: 30px;
 				flex-direction: row;
 				overflow-x: scroll;
+				justify-content: center;
+				align-items: center;
+				overflow-y: hidden;
+				height: 260px;
 
 				&::-webkit-scrollbar-track {
 					background: transparent;
@@ -656,6 +713,12 @@ $mobile: 500px;
 					text-align: center;
 					font-size: 14px;
 					border-radius: 12px;
+				}
+
+				& .genre-and-next-episode-wrapper {
+					& .next-episode-indicator {
+						width: auto;
+					}
 				}
 
 				& .episode-text {
