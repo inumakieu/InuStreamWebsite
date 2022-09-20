@@ -14,6 +14,19 @@
 			</div>
 			<div class="tabs-wrapper">
 				<div class="extra-info-tab-wrapper">
+					<h1 class="extra-info-title">Synonyms:</h1>
+					<div class="extra-info-item-wrapper" v-for="synonym in animeInfo.synonyms">
+						<div class="extra-info-item">
+							{{ synonym }}
+						</div>
+					</div>
+					<h1 class="extra-info-title">Country of Origin:</h1>
+					<div class="extra-info-item-wrapper">
+						<div class="extra-info-item">
+							{{ new Intl.DisplayNames(['en'], {type: 'region'}).of(animeInfo.countryOfOrigin as string)
+							}}
+						</div>
+					</div>
 					<h1 class="extra-info-title">Format:</h1>
 					<div class="extra-info-item-wrapper">
 						<div class="extra-info-item">
@@ -358,13 +371,16 @@ $mobile: 500px;
 
 			& .extra-info-item-wrapper {
 				& .extra-info-item {
-					width: 62vw;
+					width: 180px;
 					margin-left: 20px;
-					padding: 6px 12px;
+					padding: 0px 12px;
 					margin-bottom: 10px;
 					border-radius: 10px;
 					background-color: transparent;
 					transition: 0.3s all ease;
+					color: #999999;
+					font-weight: 500;
+					font-size: 16px;
 				}
 			}
 		}
@@ -623,6 +639,12 @@ $mobile: 500px;
 
 			& .extra-info-tab-wrapper {
 				width: 100vw;
+
+				& .extra-info-item-wrapper {
+					& .extra-info-item {
+						width: 62vw;
+					}
+				}
 			}
 
 			& .episode-tab-wrapper {
@@ -644,6 +666,7 @@ $mobile: 500px;
 					flex-direction: column;
 					margin-bottom: 0;
 					overflow-x: hidden;
+					height: fit-content;
 
 					& .episode-wrapper {
 						flex-direction: row;
