@@ -424,7 +424,7 @@ $mobile: 500px;
 			& .extra-info-item-wrapper {
 				& .extra-info-item {
 					width: 180px;
-					margin-left: 20px;
+					margin-left: 4px;
 					padding: 0px 12px;
 					margin-bottom: 10px;
 					border-radius: 10px;
