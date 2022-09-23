@@ -211,24 +211,24 @@ async function goToInfo(id: string) {
 function changeTab(index) {
 	let tabWrapper = document.querySelector('.tabs-wrapper') as HTMLElement;
 	let currentTab = document.querySelector('.navbar-list').children[index] as HTMLElement;
-	let width = currentTab.offsetWidth + 2;
-	let x = currentTab.offsetLeft + 10;
-	console.log({ x });
 	let tabIndicator = document.querySelector('.selected-tab') as HTMLElement;
-	tabIndicator.style.width = width + 'px';
-	tabIndicator.style.paddingLeft = '0';
-	tabIndicator.style.paddingRight = '0';
-	tabIndicator.style.left = x + 'px';
 	if (index == 0) {
 		tabWrapper.style.transform = 'translateX(0%)';
+		tabIndicator.style.width = "20%";
+		tabIndicator.style.transform = "translateX(0%)";
 	} else if (index == 1) {
 		tabWrapper.style.transform = 'translateX(-100%)';
+		tabIndicator.style.width = "20%";
+		tabIndicator.style.transform = "translateX(124%)";
 	} else if (index == 2) {
 		tabWrapper.style.transform = 'translateX(-200%)';
+		tabIndicator.style.width = "22%";
+		tabIndicator.style.transform = "translateX(222%)";
 	} else if (index == 3) {
 		tabWrapper.style.transform = 'translateX(-300%)';
+		tabIndicator.style.width = "18%";
+		tabIndicator.style.transform = "translateX(420%)";
 	}
-	//tabWrapper.style.height = '659px';
 }
 
 function secondsToDhms(seconds: number) {
@@ -922,12 +922,17 @@ $mobile: 500px;
 	& .selected-tab {
 		position: absolute;
 		background-color: #1E222C;
-		width: 20%;
+		//width: 18%; //smaller width
+		width: 20%; //normal width
+		//width: 22%; //bigger width
 		height: 50%;
-		left: calc(12px + 25%);
+		left: 9px;
 		top: 25%;
 		border-radius: 18px;
 		transition: 0.3s all ease;
+		transform: translateX(124%); //episode tab
+		//transform: translateX(222%); //characters tab
+		//transform: translateX(420%); //related tab
 	}
 
 	& .navbar-list {
@@ -935,11 +940,10 @@ $mobile: 500px;
 		text-decoration: none;
 		list-style: none;
 		display: flex;
-		justify-content: space-evenly;
+		justify-content: space-around;
 		align-items: center;
 		height: 100%;
-		margin: 0 10px;
-		width: calc(100vw - 60px);
+		width: calc(100vw - 40px);
 
 		& .navbar-item {
 			background-color: transparent;
