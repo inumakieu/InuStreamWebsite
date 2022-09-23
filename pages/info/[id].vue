@@ -100,25 +100,31 @@
 				<div class="character-tab-wrapper">
 					<div class="character-info-wrapper" v-for="character in animeInfo.characters">
 						<div class="voice-actor-image-wrapper">
-							<img class="character-image" :src="character.image" alt="">
-							<div class="voice-actor-text">{{ character.role }}</div>
+							<img class="character-image" :src="character.image ?? ''" alt="">
+							<div class="voice-actor-text">{{ character.role ?? "" }}</div>
 						</div>
 						<div class="character-text-wrapper">
 							<div class="character-detail-wrapper">
-								<div class="character-name">{{ character.name.userPreferred }}</div>
-								<div class="character-name-native">{{ character.name.native }}</div>
+								<div class="character-name">{{ character.name ? character.name.userPreferred : "" }}
+								</div>
+								<div class="character-name-native">{{ character.name ? character.name.native : ""}}
+								</div>
 							</div>
 							<div class="voice-actor-detail-wrapper">
-								<div class="voice-actor-name">{{ character.voiceActors[0].name.userPreferred }}</div>
+								<div class="voice-actor-name">{{ character.voiceActors[0] ?
+								character.voiceActors[0].name.userPreferred : "" }}
+								</div>
 							</div>
 						</div>
 						<div class="voice-actor-image-wrapper">
-							<img class="voice-actor-image" :src="character.voiceActors[0].image" alt="">
+							<img class="voice-actor-image"
+								:src="character.voiceActors[0] ? character.voiceActors[0].image : ''" alt="">
 						</div>
 					</div>
 				</div>
 				<div class="related-tab-wrapper">
-					<div class="related-anime-wrapper" v-for="related in animeInfo.relations">
+					<div class="related-anime-wrapper" v-for="related in animeInfo.relations"
+						v-on:click="goToInfo(related.id)">
 						<img class="related-anime-image" :src="related.image" alt="">
 						<div class="related-anime-info-wrapper">
 							<div class="related-anime-type">{{ (related.relationType as string) }}
@@ -195,6 +201,11 @@ onMounted(async () => {
 
 async function goToEpisode(episode: IAnimeEpisode) {
 	await navigateTo('/stream/' + animeInfo.id + '/' + ((animeInfo.title as ITitle).english ? (animeInfo.title as ITitle).english.toLowerCase().replaceAll(' ', '-') : (animeInfo.title as ITitle).native.toLowerCase().replaceAll(' ', '-')) + '-ep-' + episode.number);
+}
+
+async function goToInfo(id: string) {
+	console.log("RELATED MOVE");
+	await navigateTo('/info/' + id);
 }
 
 function changeTab(index) {
