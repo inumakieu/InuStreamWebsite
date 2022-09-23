@@ -68,6 +68,7 @@
 </template>
 
 <script setup lang="ts">
+import 'https://fonts.googleapis.com/css?family=Inter';
 // IMPORTS
 import { useHead, useRoute } from '#app';
 import { META, ANIME } from '@consumet/extensions';

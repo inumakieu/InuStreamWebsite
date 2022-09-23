@@ -152,6 +152,7 @@
 </template>
 
 <script setup lang="ts">
+import 'https://fonts.googleapis.com/css?family=Inter';
 // IMPORTS
 import { useFetch, useHead } from '#app';
 import { META, ANIME } from '@consumet/extensions';
