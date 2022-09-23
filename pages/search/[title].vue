@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import 'https://fonts.googleapis.com/css?family=Inter';
-
 export default {
     data: () => ({
         animeName: null,

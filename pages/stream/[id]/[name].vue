@@ -118,7 +118,6 @@
 </template>
 
 <script setup>
-    import 'https://fonts.googleapis.com/css?family=Inter';
 import { useFetch, useHead, useRoute } from '#app';
 
 const route = useRoute();
