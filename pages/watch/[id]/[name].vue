@@ -273,11 +273,8 @@ let option = {
     ],
     settings: [
 		{
-			html: "SETTINGS",
-			onSelect: function(item) {
-				console.log(item);
-				return
-			}
+			html: 'SETTINGS',
+			name: "settingstitle",
 		},
         {
             width: 300,
@@ -326,6 +323,8 @@ function getInstance(art) {
     console.log(art);
     art.on("ready", async (...args) => {
 		artPlayer = art;
+		art.layers.intro.style.display = 'none';
+		document.querySelector('.art-settings').firstElementChild.style.pointerEvents = "none";
 	});
 
     art.on("subtitleUpdate", (text) => {
@@ -352,17 +351,17 @@ function getInstance(art) {
         art.layers.intro.style.display = art.currentTime >= streamingData.value.intro.start && art.currentTime <= streamingData.value.intro.end ? 'block' : 'none';
     });
 
-	art.on('mousemove', (...args) => {
-		art.layers.title.style.display = state || !art.playing ? 'block' : 'none';
-	});
-
 	art.on('blur', (...args) => {
 		art.template.$subtitle.style.bottom = '30px';
 	});
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+
+[data-name="settingstitle"] {
+    pointer-events: none;
+}
 .artplayer {
     width: 100vw;
     height: 100vh;
