@@ -296,7 +296,7 @@ let option = {
             selector: qualities,
             onSelect: function (item, $dom, event) {
                 console.info(item, $dom, event);
-                art.switchQuality(item.url, item.html);
+                artPlayer.switchQuality(item.url, item.html);
 
                 // Change the tooltip
                 return item.html;
