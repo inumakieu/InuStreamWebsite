@@ -129,7 +129,7 @@ var episodeNumber = parameters[1].split('-ep-')[1];
 
 console.log(parameters);
 
-const { error, data: episodes } = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + parameters[0] + '?provider=zoro');
+const { error, data: episodes } = await useFetch('https://api.consumet.org/meta/anilist/info/' + parameters[0] + '?provider=zoro');
 if (error.value || !episodes.value) {
     throw createError({ statusCode: 404, message: "Episode not found" })
 }
@@ -479,13 +479,13 @@ export default {
             var parameters = this.$route.path.replace("/stream/", "").split('/')
             this.episodeNumber = parameters[1].split('-ep-')[1]
 
-            this.anilistJson = await fetch('https://consumet-api.herokuapp.com/meta/anilist/info/' + parameters[0] + '?provider=zoro').then(function (response) {
+            this.anilistJson = await fetch('https://api.consumet.org/meta/anilist/info/' + parameters[0] + '?provider=zoro').then(function (response) {
                 return response.json();
             }).then(function (data) {
                 return data;
             });
 
-            this.streamingData = await fetch('https://consumet-api.herokuapp.com/meta/anilist/watch/' + this.anilistJson.episodes[this.episodeNumber - 1].id + '?provider=zoro').then(function (response) {
+            this.streamingData = await fetch('https://api.consumet.org/meta/anilist/watch/' + this.anilistJson.episodes[this.episodeNumber - 1].id + '?provider=zoro').then(function (response) {
                 return response.json();
             }).then(function (data) {
                 return data;
@@ -497,7 +497,7 @@ export default {
             }
 
             console.log(this.streamingData)
-            /* this.streamingData = await fetch('https://consumet-api.herokuapp.com/anime/zoro/watch?episodeId=' + this.anilistJson.episodes[this.episodeNumber - 1].id).then(function (response) {
+            /* this.streamingData = await fetch('https://api.consumet.org/anime/zoro/watch?episodeId=' + this.anilistJson.episodes[this.episodeNumber - 1].id).then(function (response) {
                 return response.json();
             }).then(function (data) {
                 return data;

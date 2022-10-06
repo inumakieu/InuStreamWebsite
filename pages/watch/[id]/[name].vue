@@ -315,6 +315,7 @@ function getInstance(art) {
     console.log(art);
     art.on("ready", async (...args) => {
 		artPlayer = art;
+		art.layers.show = false;
 	});
 
     art.on("subtitleUpdate", (text) => {

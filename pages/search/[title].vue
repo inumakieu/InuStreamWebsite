@@ -38,7 +38,7 @@ export default {
     }),
     methods: {
         async fetch() {
-            this.searchJson = await fetch('https://consumet-api.herokuapp.com/meta/anilist/' + this.animeName + '?provider=zoro').then(function (response) {
+            this.searchJson = await fetch('https://api.consumet.org/meta/anilist/' + this.animeName + '?provider=zoro').then(function (response) {
                 // The response is a Response instance.
                 // You parse the data into a useable format using `.json()`
                 return response.json();
@@ -56,7 +56,7 @@ export default {
             });
         },
         async searchAnime() {
-            this.searchJson = await fetch('https://consumet-api.herokuapp.com/meta/anilist/' + this.animeName + '?provider=zoro').then(function (response) {
+            this.searchJson = await fetch('https://api.consumet.org/meta/anilist/' + this.animeName + '?provider=zoro').then(function (response) {
                 // The response is a Response instance.
                 // You parse the data into a useable format using `.json()`
                 return response.json();

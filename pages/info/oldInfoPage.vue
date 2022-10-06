@@ -294,7 +294,7 @@ const vMyDirective = {
 		const {
 			episodeError,
 			data: episodeResponse
-		} = await useFetch('https://consumet-api.herokuapp.com/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
+		} = await useFetch('https://api.consumet.org/meta/anilist/episodes/' + id + '?provider=zoro', { key: 'episodes' + id });
 		//const episodeResponse = await ANILIST.fetchEpisodesListById(id);
 		console.log(episodeResponse.value);
 
