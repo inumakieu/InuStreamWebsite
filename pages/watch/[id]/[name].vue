@@ -19,13 +19,17 @@ console.log("testing");
 
 var parameters = route.path.replace("/watch/", "").split("/");
 var episodeNumber = parseInt(parameters[1].split("-ep-")[1]);
+var provider = "gogoanime";
+
+var providers = [{ html: "gogoanime" }, { html: "zoro" }];
 
 console.log(parameters);
 
-const { error, data: episodes } = await useFetch(
+var { error, data: episodes } = await useFetch(
     "https://api.consumet.org/meta/anilist/info/" +
         parameters[0] +
-        "?provider=zoro"
+        "?provider=" +
+        provider
 );
 if (error.value || !episodes.value) {
     throw createError({ statusCode: 404, message: "Episode not found" });
@@ -35,166 +39,66 @@ var anime = episodes.value;
 console.log(anime.episodes[episodeNumber - 1].id);
 //console.log(anime.episodes[episodeNumber - 1].id);
 
-const { errorData, data: streamingData } = await useFetch(
+var { errorData, data: streamingData } = await useFetch(
     "https://api.consumet.org/meta/anilist/watch/" +
         anime.episodes[episodeNumber - 1].id +
-        "?provider=zoro"
+        "?provider=" +
+        provider
 );
 if (!streamingData.value) {
     throw createError({ statusCode: 404, message: "Streaming Data not found" });
 }
+let streamData = streamingData.value;
 
 var subtitles = [];
 let artPlayer;
 let sIndex = 0;
-//console.log(streamingData.value);
-subtitles.push({
-    html: "Show Subs",
-	icon: '',
-    switch: true,
-    onSwitch: function (item) {
-        artPlayer.subtitle.show = !item.switch;
-        return !item.switch;
-    },
-});
-for (let i = 0; i < streamingData.value.subtitles.length; i++) {
-    if (streamingData.value.subtitles[i].lang == "English") {
-        sIndex = i;
-        subtitles.push({
-            default: true,
-            url: streamingData.value.subtitles[i].url,
-            html: streamingData.value.subtitles[i].lang,
-        });
-    } else if (streamingData.value.subtitles[i].lang == "Thumbnails") {
-        // do nothing
-    } else {
-        subtitles.push({
-            url: streamingData.value.subtitles[i].url,
-            html: streamingData.value.subtitles[i].lang,
-        });
+//console.log(streamData);
+if (provider == "zoro") {
+    subtitles.push({
+        html: "Show Subs",
+        icon: "",
+        switch: true,
+        onSwitch: function (item) {
+            artPlayer.subtitle.show = !item.switch;
+            return !item.switch;
+        },
+    });
+    for (let i = 0; i < streamData.subtitles.length; i++) {
+        if (streamData.subtitles[i].lang == "English") {
+            sIndex = i;
+            subtitles.push({
+                default: true,
+                url: streamData.subtitles[i].url,
+                html: streamData.subtitles[i].lang,
+            });
+        } else if (streamData.subtitles[i].lang == "Thumbnails") {
+            // do nothing
+        } else {
+            subtitles.push({
+                url: streamData.subtitles[i].url,
+                html: streamData.subtitles[i].lang,
+            });
+        }
     }
 }
-console.log(subtitles);
-console.log(streamingData.value.sources);
 
 let qualities = [];
 let qIndex = 0;
-for (let i = 0; i < streamingData.value.sources.length; i++) {
-    if (streamingData.value.sources[i].quality == "1080p") {
+for (let i = 0; i < streamData.sources.length; i++) {
+    if (streamData.sources[i].quality == "1080p") {
         qIndex = i;
         qualities.push({
             default: true,
-            html: streamingData.value.sources[i].quality,
-            url: streamingData.value.sources[i].url,
+            html: streamData.sources[i].quality,
+            url: streamData.sources[i].url,
         });
     } else {
         qualities.push({
-            html: streamingData.value.sources[i].quality,
-            url: streamingData.value.sources[i].url,
+            html: streamData.sources[i].quality,
+            url: streamData.sources[i].url,
         });
     }
-}
-
-var base = streamingData.value.subtitles[
-    streamingData.value.subtitles.length - 1
-].url.substring(
-    0,
-    streamingData.value.subtitles[streamingData.value.subtitles.length - 1].url
-        .length - 4
-);
-var urls = Array(3)
-    .fill()
-    .map((_, i) => `${base}${i}.jpg`);
-
-function artplayerPluginThumbnails(option) {
-    return (art) => {
-        art.controls.add({
-            name: "thumbnails",
-            position: "top",
-            index: 20,
-            mounted: ($control) => {
-                const {
-                    template: { $progress },
-                    events: { proxy },
-                    constructor: {
-                        utils: { setStyle, clamp },
-                    },
-                } = art;
-
-                const cache = [];
-                const { urls, width, height } = option;
-                setStyle($control, "display", "none");
-                setStyle($control, "height", `${height}px`);
-                setStyle($control, "width", `${width}px`);
-                setStyle($control, "backgroundSize", "contain");
-
-                proxy($progress, "mousemove", (event) => {
-                    setStyle($control, "display", "block");
-                    const { left: progressLeft, width: progressWidth } =
-                        $progress.getBoundingClientRect();
-                    const eventLeft = clamp(
-                        event.pageX - progressLeft,
-                        0,
-                        progressWidth
-                    );
-                    const perWidth = progressWidth / urls.length;
-                    const index = clamp(
-                        Math.ceil(eventLeft / perWidth) - 1,
-                        0,
-                        urls.length - 1
-                    );
-
-                    if (cache[index]) {
-                        if (cache[index].startsWith("blob:")) {
-                            setStyle(
-                                $control,
-                                "backgroundImage",
-                                `url(${cache[index]})`
-                            );
-                        }
-                    } else {
-                        cache[index] = "loading";
-                        fetch(urls[index])
-                            .then(function (response) {
-                                return response.blob();
-                            })
-                            .then((blob) => {
-                                cache[index] = URL.createObjectURL(blob);
-                                setStyle(
-                                    $control,
-                                    "backgroundImage",
-                                    `url(${cache[index]})`
-                                );
-                            });
-                    }
-
-                    if (eventLeft <= width / 2) {
-                        setStyle($control, "left", 0);
-                    } else if (eventLeft > progressWidth - width / 2) {
-                        setStyle(
-                            $control,
-                            "left",
-                            `${progressWidth - width}px`
-                        );
-                    } else {
-                        setStyle(
-                            $control,
-                            "left",
-                            `${eventLeft - width / 2}px`
-                        );
-                    }
-                });
-
-                proxy($progress, "mouseout", () => {
-                    setStyle($control, "display", "none");
-                });
-            },
-        });
-
-        return {
-            name: "artplayerPluginThumbnails",
-        };
-    };
 }
 
 var introRight = "20px";
@@ -202,7 +106,7 @@ let animeTitle = anime.title.english ?? anime.title.romaji;
 let episodeTitle = anime.episodes[episodeNumber - 1].title;
 
 let option = {
-    url: streamingData.value.sources[qIndex].url,
+    url: streamData.sources[qIndex].url,
     customType: {
         m3u8: function (video, url) {
             if (Hls.isSupported()) {
@@ -227,15 +131,16 @@ let option = {
     autoOrientation: true,
     pip: true,
     setting: true,
+    backdrop: false,
     theme: "#ffffff",
     subtitle: {
-        url: streamingData.value.subtitles[sIndex].url,
+        url: streamData.subtitles ? streamData.subtitles[sIndex].url : "",
         type: "vtt",
         encoding: "utf-8",
         style: {
-			position: 'absolute',
-			transition: '0.3s all ease',
-			bottom: '70px',
+            position: "absolute",
+            transition: "0.3s all ease",
+            bottom: "70px",
             color: "#ffffff",
             "font-size": "30px",
             "text-shadow":
@@ -244,42 +149,48 @@ let option = {
     },
     layers: [
         {
-			name: 'intro',
+            name: "intro",
             html: "SKIP OPENING",
             click: function () {
-                artPlayer.seek = streamingData.value.intro.end;
+                if (streamData.intro != null) {
+                    artPlayer.seek = streamData.intro.end;
+                }
             },
             style: {
                 position: "absolute",
                 bottom: "60px",
-                right: '20px',
+                right: "20px",
                 opacity: "1.0",
                 padding: "12px 20px",
                 borderRadius: "8px",
                 backgroundColor: "#464E6C",
                 color: "white",
+                display: "none",
                 fontWeight: "bold",
                 zIndex: 100,
                 transition: "0.3s all ease",
             },
         },
-		{
-            name: 'title',
+        {
+            name: "title",
             html: `<div style="transition: 0.3s all ease;padding: 20px 0 0 0;background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);display: flex; flex-direction: column; align-items: center; width: 100vw; font-weight: 500;"><div style="font-size: 20px; font-weight: bold;">${animeTitle} - <span style="color: #999999">EP: ${episodeNumber}</span></div>${episodeTitle}</div`,
             style: {
-                position: 'absolute',
+                position: "absolute",
             },
         },
     ],
     settings: [
-		{
-			html: 'SETTINGS',
-			name: "settingstitle",
-		},
+        {
+            html: "SETTINGS",
+            name: "settingstitle",
+        },
         {
             width: 300,
             html: "Subtitle",
-            tooltip: streamingData.value.subtitles[sIndex].lang,
+            name: "subs",
+            tooltip: streamData.subtitles
+                ? streamData.subtitles[sIndex].lang
+                : "Unavailable",
             icon: '<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M0 96C0 60.7 28.7 32 64 32H512c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 208c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48s21.5-48 48-48zm144 48c0-26.5 21.5-48 48-48c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48z"/></svg>',
             selector: subtitles,
             onSelect: function (item) {
@@ -289,10 +200,11 @@ let option = {
                 return item.html;
             },
         },
-		{
-            html: 'Select Quality',
+        {
+            html: "Select Quality",
+            name: "qualities",
             width: 150,
-            tooltip: streamingData.value.sources[qIndex].quality,
+            tooltip: streamData.sources[qIndex].quality,
             selector: qualities,
             onSelect: function (item, $dom, event) {
                 console.info(item, $dom, event);
@@ -302,17 +214,92 @@ let option = {
                 return item.html;
             },
         },
-		{
-			width: 240,
-			html: "Provider",
-			tooltip: 'Zoro',
-			selector: [
-				{
-					default: true,
-					html: 'Zoro',
-				}
-			]
-		}
+        {
+            width: 240,
+            html: "Provider",
+            name: "provider",
+            tooltip: provider,
+            selector: providers,
+            onSelect: async function (item) {
+                provider = item.html;
+
+                var { data: episodes } = await useFetch(
+                    "https://api.consumet.org/meta/anilist/info/" +
+                        parameters[0] +
+                        "?provider=" +
+                        provider
+                );
+                anime = episodes.value;
+                console.log(episodes.value);
+                var { data: stream } = await useFetch(
+                    "https://api.consumet.org/meta/anilist/watch/" +
+                        episodes.value.episodes[episodeNumber - 1].id +
+                        "?provider=" +
+                        provider
+                );
+                streamData = stream.value;
+                artPlayer.switchUrl(
+                    streamData.sources[0].url,
+                    streamData.sources[0].quality
+                );
+
+                qualities = [];
+                qIndex = 0;
+                for (let i = 0; i < streamData.sources.length; i++) {
+                    if (streamData.sources[i].quality == "1080p") {
+                        qIndex = i;
+                        qualities.push({
+                            default: true,
+                            html: streamData.sources[i].quality,
+                            url: streamData.sources[i].url,
+                        });
+                    } else {
+                        qualities.push({
+                            html: streamData.sources[i].quality,
+                            url: streamData.sources[i].url,
+                        });
+                    }
+                }
+
+                if (provider == "zoro") {
+                    subtitles.push({
+                        html: "Show Subs",
+                        icon: "",
+                        switch: true,
+                        onSwitch: function (item) {
+                            artPlayer.subtitle.show = !item.switch;
+                            return !item.switch;
+                        },
+                    });
+                    for (let i = 0; i < streamData.subtitles.length; i++) {
+                        if (streamData.subtitles[i].lang == "English") {
+                            sIndex = i;
+                            subtitles.push({
+                                default: true,
+                                url: streamData.subtitles[i].url,
+                                html: streamData.subtitles[i].lang,
+                            });
+                        } else if (
+                            streamData.subtitles[i].lang == "Thumbnails"
+                        ) {
+                            // do nothing
+                        } else {
+                            subtitles.push({
+                                url: streamData.subtitles[i].url,
+                                html: streamData.subtitles[i].lang,
+                            });
+                        }
+                    }
+
+					artPlayer.subtitle.url = streamData.subtitles[sIndex].url
+					artPlayer.setting.option[1].tooltip =streamData.subtitles[sIndex].lang
+                }
+
+
+
+                return "Subtitles";
+            },
+        },
     ],
     icons: {
         state: "",
@@ -322,10 +309,15 @@ let option = {
 function getInstance(art) {
     console.log(art);
     art.on("ready", async (...args) => {
-		artPlayer = art;
-		art.layers.intro.style.display = 'none';
-		document.querySelector('.art-setting-panel').firstElementChild.style.pointerEvents = "none";
-	});
+        artPlayer = art;
+        art.layers.intro.style.display = "none";
+        document.querySelector(
+            ".art-setting-panel"
+        ).firstElementChild.style.pointerEvents = "none";
+        var panels = (document.querySelector(
+            ".art-setting-panel"
+        ).style.backgroundColor = "#1E222C");
+    });
 
     art.on("subtitleUpdate", (text) => {
         console.log(text);
@@ -339,26 +331,31 @@ function getInstance(art) {
             .replaceAll("&lt;/b&gt;", "</b>");
     });
 
-	art.on('pause', () => {
-		art.layers.title.style.display = 'block';
-	});
-
-	art.on('play', () => {
-		art.layers.title.style.display = 'none';
-	});
-
-    art.on("video:timeupdate", (...args) => {
-        art.layers.intro.style.display = art.currentTime >= streamingData.value.intro.start && art.currentTime <= streamingData.value.intro.end ? 'block' : 'none';
+    art.on("pause", () => {
+        art.layers.title.style.display = "block";
     });
 
-	art.on('blur', (...args) => {
-		art.template.$subtitle.style.bottom = '30px';
-	});
+    art.on("play", () => {
+        art.layers.title.style.display = "none";
+    });
+
+    art.on("video:timeupdate", (...args) => {
+        if (provider == "zoro") {
+            art.layers.intro.style.display =
+                art.currentTime >= streamData.intro.start &&
+                art.currentTime <= streamData.intro.end
+                    ? "block"
+                    : "none";
+        }
+    });
+
+    art.on("blur", (...args) => {
+        art.template.$subtitle.style.bottom = "30px";
+    });
 }
 </script>
 
 <style scoped>
-
 [data-name="settingstitle"] {
     pointer-events: none;
 }
@@ -366,5 +363,12 @@ function getInstance(art) {
     width: 100vw;
     height: 100vh;
     background-color: black;
+}
+
+.art-setting-panel {
+    background-color: "#1E222C";
+}
+.art-setting-panel.art-current {
+    background-color: "red";
 }
 </style>
