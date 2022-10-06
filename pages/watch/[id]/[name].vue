@@ -324,7 +324,7 @@ function getInstance(art) {
     art.on("ready", async (...args) => {
 		artPlayer = art;
 		art.layers.intro.style.display = 'none';
-		document.querySelector('.art-settings').firstElementChild.style.pointerEvents = "none";
+		document.querySelector('.art-setting-panel').firstElementChild.style.pointerEvents = "none";
 	});
 
     art.on("subtitleUpdate", (text) => {
