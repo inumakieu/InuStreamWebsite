@@ -221,7 +221,7 @@ let option = {
             }
         },
     },
-    autoPlayback: true,
+    autoplay: true,
     fullscreen: true,
     fullscreenWeb: true,
     autoOrientation: true,
