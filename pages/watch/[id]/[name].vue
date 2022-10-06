@@ -198,6 +198,8 @@ function artplayerPluginThumbnails(option) {
 }
 
 var introRight = "20px";
+let animeTitle = anime.title.english ?? anime.title.romaji;
+let episodeTitle = anime.episodes[episodeNumber - 1].title;
 
 let option = {
     url: streamingData.value.sources[qIndex].url,
@@ -232,6 +234,7 @@ let option = {
         encoding: "utf-8",
         style: {
 			position: 'absolute',
+			transition: '0.3s all ease',
 			bottom: '70px',
             color: "#ffffff",
             "font-size": "30px",
@@ -241,6 +244,7 @@ let option = {
     },
     layers: [
         {
+			name: 'intro',
             html: "SKIP OPENING",
             click: function () {
                 artPlayer.seek = streamingData.value.intro.end;
@@ -257,6 +261,13 @@ let option = {
                 fontWeight: "bold",
                 zIndex: 100,
                 transition: "0.3s all ease",
+            },
+        },
+		{
+            name: 'title',
+            html: `<div style="transition: 0.3s all ease;padding: 20px 0 0 0;background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);display: flex; flex-direction: column; align-items: center; width: 100vw; font-weight: 500;"><div style="font-size: 20px; font-weight: bold;">${animeTitle} - <span style="color: #999999">EP: ${episodeNumber}</span></div>${episodeTitle}</div`,
+            style: {
+                position: 'absolute',
             },
         },
     ],
@@ -315,7 +326,6 @@ function getInstance(art) {
     console.log(art);
     art.on("ready", async (...args) => {
 		artPlayer = art;
-		art.layers.show = false;
 	});
 
     art.on("subtitleUpdate", (text) => {
@@ -330,12 +340,24 @@ function getInstance(art) {
             .replaceAll("&lt;/b&gt;", "</b>");
     });
 
+	art.on('pause', () => {
+		art.layers.title.style.display = 'block';
+	});
+
+	art.on('play', () => {
+		art.layers.title.style.display = 'none';
+	});
+
     art.on("video:timeupdate", (...args) => {
-        art.layers.show = art.currentTime >= streamingData.value.intro.start && art.currentTime <= streamingData.value.intro.end ? true : false;
+        art.layers.intro.style.display = art.currentTime >= streamingData.value.intro.start && art.currentTime <= streamingData.value.intro.end ? 'block' : 'none';
     });
 
-	art.on('hover', (state) => {
-		art.template.$subtitle.style.bottom = state || !art.playing ? '70px' : '30px';
+	art.on('mousemove', (...args) => {
+		art.layers.title.style.display = state || !art.playing ? 'block' : 'none';
+	});
+
+	art.on('blur', (...args) => {
+		art.template.$subtitle.style.bottom = '30px';
 	});
 }
 </script>
