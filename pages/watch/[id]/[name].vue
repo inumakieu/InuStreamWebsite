@@ -15,15 +15,11 @@ import { useFetch, useHead, useRoute } from "#app";
 
 const route = useRoute();
 
-console.log("testing");
-
 var parameters = route.path.replace("/watch/", "").split("/");
 var episodeNumber = parseInt(parameters[1].split("-ep-")[1]);
 var provider = "gogoanime";
 
 var providers = [{ html: "gogoanime" }, { html: "zoro" }];
-
-console.log(parameters);
 
 var { error, data: episodes } = await useFetch(
     "https://api.consumet.org/meta/anilist/info/" +
@@ -36,8 +32,6 @@ if (error.value || !episodes.value) {
 }
 
 var anime = episodes.value;
-console.log(anime.episodes[episodeNumber - 1].id);
-//console.log(anime.episodes[episodeNumber - 1].id);
 
 var { errorData, data: streamingData } = await useFetch(
     "https://api.consumet.org/meta/anilist/watch/" +
@@ -53,7 +47,7 @@ let streamData = streamingData.value;
 var subtitles = [];
 let artPlayer;
 let sIndex = 0;
-//console.log(streamData);
+
 if (provider == "zoro") {
     subtitles.push({
         html: "Show Subs",
@@ -81,6 +75,11 @@ if (provider == "zoro") {
             });
         }
     }
+} else {
+	subtitles.push({
+		html: "English",
+		default: true,
+	});
 }
 
 let qualities = [];
@@ -101,7 +100,6 @@ for (let i = 0; i < streamData.sources.length; i++) {
     }
 }
 
-var introRight = "20px";
 let animeTitle = anime.title.english ?? anime.title.romaji;
 let episodeTitle = anime.episodes[episodeNumber - 1].title;
 
@@ -188,12 +186,11 @@ let option = {
             width: 300,
             html: "Subtitle",
             name: "subs",
-            tooltip: streamData.subtitles
-                ? streamData.subtitles[sIndex].lang
-                : "Unavailable",
+            tooltip: subtitles[sIndex].html,
             icon: '<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M0 96C0 60.7 28.7 32 64 32H512c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 208c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48s21.5-48 48-48zm144 48c0-26.5 21.5-48 48-48c14.2 0 27 6.1 35.8 16c8.8 9.9 24 10.7 33.9 1.9s10.7-24 1.9-33.9c-17.5-19.6-43.1-32-71.5-32c-53 0-96 43-96 96s43 96 96 96c28.4 0 54-12.4 71.5-32c8.8-9.9 8-25-1.9-33.9s-25-8-33.9 1.9c-8.8 9.9-21.6 16-35.8 16c-26.5 0-48-21.5-48-48z"/></svg>',
             selector: subtitles,
             onSelect: function (item) {
+				console.log("PLZZZZZ");
                 art.subtitle.switch(item.url, {
                     name: item.html,
                 });
@@ -205,9 +202,11 @@ let option = {
             name: "qualities",
             width: 150,
             tooltip: streamData.sources[qIndex].quality,
+			icon: '<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M0 96C0 60.7 28.7 32 64 32H512c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zm304 88V328c0 13.3 10.7 24 24 24h56c53 0 96-43 96-96s-43-96-96-96H328c-13.3 0-24 10.7-24 24zm80 24c26.5 0 48 21.5 48 48s-21.5 48-48 48H352V208h32zM160 184c0-13.3-10.7-24-24-24s-24 10.7-24 24v72 72c0 13.3 10.7 24 24 24s24-10.7 24-24V280h64v48c0 13.3 10.7 24 24 24s24-10.7 24-24V256 184c0-13.3-10.7-24-24-24s-24 10.7-24 24v48H160V184z"/></svg>',
             selector: qualities,
             onSelect: function (item, $dom, event) {
                 console.info(item, $dom, event);
+				sIndex = subtitles.findIndex(item);
                 artPlayer.switchQuality(item.url, item.html);
 
                 // Change the tooltip
@@ -219,6 +218,7 @@ let option = {
             html: "Provider",
             name: "provider",
             tooltip: provider,
+			icon: '<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zm64 32c0 17.7 14.3 32 32 32s32-14.3 32-32s-14.3-32-32-32s-32 14.3-32 32zm384 0c0-13.3-10.7-24-24-24H184c-13.3 0-24 10.7-24 24s10.7 24 24 24H424c13.3 0 24-10.7 24-24z"/></svg>',
             selector: providers,
             onSelect: async function (item) {
                 provider = item.html;
@@ -262,6 +262,8 @@ let option = {
                 }
 
                 if (provider == "zoro") {
+					subtitles = []
+
                     subtitles.push({
                         html: "Show Subs",
                         icon: "",
@@ -292,36 +294,45 @@ let option = {
                     }
 
 					artPlayer.subtitle.url = streamData.subtitles[sIndex].url
-					artPlayer.setting.option[1].tooltip =streamData.subtitles[sIndex].lang
-                }
+					artPlayer.setting.option[1].tooltip = streamData.subtitles[sIndex].lang
+					artPlayer.setting.option[1].html = streamData.subtitles[sIndex].lang
 
 
+                } else {
+					subtitles = [];
+					subtitles.push({
+						html: "English",
+						default: true,
+					});
+				}
 
-                return "Subtitles";
+				artPlayer.setting.update();
+
+                return item.html;
             },
         },
     ],
     icons: {
         state: "",
+		indicator: "",
     },
 };
 
 function getInstance(art) {
+	artPlayer = art
     console.log(art);
     art.on("ready", async (...args) => {
-        artPlayer = art;
         art.layers.intro.style.display = "none";
         document.querySelector(
             ".art-setting-panel"
         ).firstElementChild.style.pointerEvents = "none";
         var panels = (document.querySelector(
             ".art-setting-panel"
-        ).style.backgroundColor = "#1E222C");
+        ));
+		panels.style.backgroundColor = "#1E222C";
     });
 
     art.on("subtitleUpdate", (text) => {
-        console.log(text);
-        //art.template.$subtitle.innerHTML.replaceAll('<p>', '').replaceAll('</p>', ' ').replaceAll('&lt;i&gt;', '<i>').replaceAll('&lt;/i&gt;', '</i>').replaceAll('&lt;b&gt;', '<b>').replaceAll('&lt;/b&gt;', '</b>')
         art.template.$subtitle.innerHTML = text
             .replaceAll("<p>", "")
             .replaceAll("</p>", " ")
@@ -370,5 +381,14 @@ function getInstance(art) {
 }
 .art-setting-panel.art-current {
     background-color: "red";
+}
+
+.art-video-player .art-bottom .art-progress .art-control-progress .art-control-progress-inner .art-progress-tip {
+	color: black;
+	background-color: white;
+}
+
+.art-bottom:hover .art-progress-indicator {
+	visibility: hidden;
 }
 </style>
