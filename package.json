@@ -26,7 +26,6 @@
     "@vime/core": "^5.3.3",
     "@vime/vue-next": "^5.3.3",
     "artplayer": "^4.5.8",
-    "crypto": "^1.0.1",
     "hls.js": "^1.2.3",
     "just-detect-adblock": "^1.1.0",
     "nuxt-seo": "^1.6.1",
